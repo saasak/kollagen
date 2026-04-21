@@ -7,14 +7,8 @@
 		{
 			name: 'open',
 			type: 'boolean',
-			default: '—',
-			description: 'Controlled open state. Supports bind:open'
-		},
-		{
-			name: 'defaultOpen',
-			type: 'boolean',
 			default: 'false',
-			description: 'Initial open state for uncontrolled mode'
+			description: 'Controlled open state. Supports bind:open'
 		},
 		{ name: 'title', type: 'string', default: '—', description: 'Drawer heading text' },
 		{
@@ -36,52 +30,16 @@
 			description: 'Snap points as fractions (0–1) or pixel strings'
 		},
 		{
-			name: 'defaultSnapPoint',
-			type: 'number | string',
-			default: '—',
-			description: 'Initial snap point when the drawer opens'
-		},
-		{
-			name: 'onSnapPointChange',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when the active snap point changes'
-		},
-		{
-			name: 'snapToSequentialPoints',
-			type: 'boolean',
-			default: 'false',
-			description: 'Force sequential snapping between snap points'
-		},
-		{
 			name: 'modal',
 			type: 'boolean',
 			default: 'true',
 			description: 'Whether the drawer blocks outside interaction'
 		},
 		{
-			name: 'closeOnEscape',
-			type: 'boolean',
-			default: 'true',
-			description: 'Close on Escape key press'
-		},
-		{
 			name: 'closeOnInteractOutside',
 			type: 'boolean',
 			default: 'true',
-			description: 'Close when clicking outside'
-		},
-		{
-			name: 'preventScroll',
-			type: 'boolean',
-			default: 'true',
-			description: 'Prevent background scrolling when open'
-		},
-		{
-			name: 'role',
-			type: '"dialog" | "alertdialog"',
-			default: '"dialog"',
-			description: 'Semantic role for the drawer'
+			description: 'Close when clicking outside (maps to vaul dismissible)'
 		},
 		{
 			name: 'disabled',
@@ -91,7 +49,7 @@
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when open state changes'
 		},
@@ -129,7 +87,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Drawer</h1>
 		<p class="text-kl-muted-content mt-2">
-			Slide-in panel that overlays content from any edge. Built on bits-ui's Drawer with
+			Slide-in panel that overlays content from any edge. Built on vaul-svelte with
 			swipe-to-dismiss, snap points, and grabber handle.
 		</p>
 	</div>
@@ -234,8 +192,6 @@
 			code={`<Drawer
   title="Explore nearby"
   snapPoints={[0.25, 0.5, 1]}
-  defaultSnapPoint={0.5}
-  snapToSequentialPoints
 >
   {#snippet trigger()}
     <button class="btn">Open Map Drawer</button>
@@ -247,8 +203,6 @@
 				title="Explore nearby"
 				description="Drag the grabber to snap between positions."
 				snapPoints={[0.25, 0.5, 1]}
-				defaultSnapPoint={0.5}
-				snapToSequentialPoints
 			>
 				{#snippet trigger()}
 					<button

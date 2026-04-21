@@ -9,14 +9,8 @@
 		{
 			name: 'value',
 			type: 'string[]',
-			default: '—',
+			default: '[]',
 			description: 'Controlled tag values. Supports bind:value'
-		},
-		{
-			name: 'defaultValue',
-			type: 'string[]',
-			default: '—',
-			description: 'Initial tags for uncontrolled mode'
 		},
 		{
 			name: 'placeholder',
@@ -39,12 +33,6 @@
 			description: 'Character to split tags on input and paste'
 		},
 		{
-			name: 'editable',
-			type: 'boolean',
-			default: 'true',
-			description: 'Allow editing tags by double-clicking or pressing Enter'
-		},
-		{
 			name: 'addOnPaste',
 			type: 'boolean',
 			default: 'false',
@@ -58,7 +46,7 @@
 		},
 		{
 			name: 'validate',
-			type: '(details) => boolean',
+			type: '(details: { inputValue: string; value: string[] }) => boolean',
 			default: '—',
 			description: 'Custom validation function for new tags'
 		},
@@ -67,12 +55,6 @@
 			type: '(details: { value: string[] }) => void',
 			default: '—',
 			description: 'Callback when tags change'
-		},
-		{
-			name: 'onValueInvalid',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when a tag is invalid (duplicate, max reached)'
 		},
 		{
 			name: 'class',
@@ -87,8 +69,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">TagsInput</h1>
 		<p class="text-kl-muted-content mt-2">
-			Multi-value text input for adding and managing tags. Supports keyboard navigation, editing,
-			paste, and validation. Built on bits-ui.
+			Multi-value text input for adding and managing tags. Supports keyboard navigation, paste, and
+			validation.
 		</p>
 	</div>
 
@@ -97,21 +79,21 @@
 
 		<DemoCard
 			title="Basic"
-			description="Type and press Enter or comma to add tags. Click × to remove."
-			code={`<TagsInput placeholder="Add tag..." defaultValue={["svelte", "bits-ui"]} />`}
+			description="Type and press Enter or comma to add tags. Click x to remove."
+			code={`<TagsInput placeholder="Add tag..." value={["svelte", "bits-ui"]} />`}
 		>
 			<div class="max-w-sm">
-				<TagsInput placeholder="Add tag..." defaultValue={['svelte', 'ark-ui']} />
+				<TagsInput placeholder="Add tag..." value={['svelte', 'bits-ui']} />
 			</div>
 		</DemoCard>
 
 		<DemoCard
 			title="Max tags"
 			description="Limit the number of tags that can be added."
-			code={`<TagsInput placeholder="Max 3 tags..." max={3} defaultValue={["one", "two"]} />`}
+			code={`<TagsInput placeholder="Max 3 tags..." max={3} value={["one", "two"]} />`}
 		>
 			<div class="max-w-sm">
-				<TagsInput placeholder="Max 3 tags..." max={3} defaultValue={['one', 'two']} />
+				<TagsInput placeholder="Max 3 tags..." max={3} value={['one', 'two']} />
 			</div>
 		</DemoCard>
 
@@ -146,10 +128,10 @@
 		<DemoCard
 			title="Disabled"
 			description="Tags input in disabled state."
-			code={`<TagsInput disabled={true} defaultValue={["locked"]} />`}
+			code={`<TagsInput disabled={true} value={["locked"]} />`}
 		>
 			<div class="max-w-sm">
-				<TagsInput disabled={true} defaultValue={['locked']} />
+				<TagsInput disabled={true} value={['locked']} />
 			</div>
 		</DemoCard>
 
@@ -170,7 +152,7 @@
 					}}
 					class="space-y-3"
 				>
-					<TagsInput name="tags" placeholder="Add tags..." defaultValue={['example']} />
+					<TagsInput name="tags" placeholder="Add tags..." value={['example']} />
 					<button
 						type="submit"
 						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"

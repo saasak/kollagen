@@ -25,8 +25,8 @@
 			description: 'Whether the avatar is disabled (reduces opacity)'
 		},
 		{
-			name: 'onStatusChange',
-			type: '(details: { status: "loaded" | "error" }) => void',
+			name: 'onLoadingStatusChange',
+			type: '(status: "loading" | "loaded" | "error") => void',
 			default: '—',
 			description: 'Callback when the image load status changes'
 		},
@@ -116,5 +116,5 @@
 	</DemoCard>
 
 	<h2 class="text-kl-base-content mt-12 text-xl font-semibold">Props</h2>
-	<PropsTable props={propsData} />
+	<PropsTable items={propsData} />
 </div>

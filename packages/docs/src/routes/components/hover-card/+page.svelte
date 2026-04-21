@@ -11,12 +11,6 @@
 			description: 'Controlled open state. Supports bind:open'
 		},
 		{
-			name: 'defaultOpen',
-			type: 'boolean',
-			default: '—',
-			description: 'Initial open state for uncontrolled mode'
-		},
-		{
 			name: 'openDelay',
 			type: 'number',
 			default: '600',
@@ -35,14 +29,32 @@
 			description: 'Prevent the hover card from opening'
 		},
 		{
-			name: 'positioning',
-			type: 'PositioningOptions',
-			default: '—',
-			description: 'Popper.js positioning options (placement, offset, etc.)'
+			name: 'side',
+			type: '"top" | "bottom" | "left" | "right"',
+			default: '"bottom"',
+			description: 'Side placement'
+		},
+		{
+			name: 'sideOffset',
+			type: 'number',
+			default: '8',
+			description: 'Offset from the trigger'
+		},
+		{
+			name: 'align',
+			type: '"start" | "center" | "end"',
+			default: '"center"',
+			description: 'Alignment along the side'
+		},
+		{
+			name: 'alignOffset',
+			type: 'number',
+			default: '0',
+			description: 'Alignment offset'
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details: { open: boolean }) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when the hover card opens or closes'
 		},
@@ -148,7 +160,7 @@
 		<DemoCard
 			title="Custom placement"
 			description="Position the hover card on different sides of the trigger."
-			code={`<HoverCard positioning={{ placement: "right" }}>
+			code={`<HoverCard side="right">
   {#snippet trigger()}
     <span>Hover right</span>
   {/snippet}
@@ -156,7 +168,7 @@
 </HoverCard>`}
 		>
 			<div class="flex gap-6">
-				<HoverCard positioning={{ placement: 'top' }}>
+				<HoverCard side="top">
 					{#snippet trigger()}
 						<span
 							class="rounded-kl-field border-kl-base-300 cursor-pointer border px-3 py-1.5 text-sm"
@@ -165,7 +177,7 @@
 					{/snippet}
 					<p>Hover card on top.</p>
 				</HoverCard>
-				<HoverCard positioning={{ placement: 'right' }}>
+				<HoverCard side="right">
 					{#snippet trigger()}
 						<span
 							class="rounded-kl-field border-kl-base-300 cursor-pointer border px-3 py-1.5 text-sm"
@@ -174,7 +186,7 @@
 					{/snippet}
 					<p>Hover card on the right.</p>
 				</HoverCard>
-				<HoverCard positioning={{ placement: 'bottom' }}>
+				<HoverCard side="bottom">
 					{#snippet trigger()}
 						<span
 							class="rounded-kl-field border-kl-base-300 cursor-pointer border px-3 py-1.5 text-sm"

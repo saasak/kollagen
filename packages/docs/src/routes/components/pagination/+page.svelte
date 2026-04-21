@@ -10,44 +10,20 @@
 		{
 			name: 'page',
 			type: 'number',
-			default: '—',
+			default: '1',
 			description: 'Controlled current page. Supports bind:page'
 		},
 		{
-			name: 'defaultPage',
-			type: 'number',
-			default: '1',
-			description: 'Initial page for uncontrolled mode'
-		},
-		{
-			name: 'pageSize',
-			type: 'number',
-			default: '—',
-			description: 'Controlled items per page. Supports bind:pageSize'
-		},
-		{
-			name: 'defaultPageSize',
+			name: 'perPage',
 			type: 'number',
 			default: '10',
-			description: 'Initial page size for uncontrolled mode'
+			description: 'Items per page. Supports bind:perPage'
 		},
 		{
 			name: 'siblingCount',
 			type: 'number',
 			default: '1',
 			description: 'Number of pages shown beside the active page'
-		},
-		{
-			name: 'type',
-			type: '"button" | "link"',
-			default: '"button"',
-			description: 'Whether pagination triggers render as buttons or links'
-		},
-		{
-			name: 'getPageUrl',
-			type: '(details: { page: number; pageSize: number }) => string',
-			default: '—',
-			description: 'Href generator when type is "link"'
 		},
 		{
 			name: 'showPageInfo',
@@ -69,15 +45,9 @@
 		},
 		{
 			name: 'onPageChange',
-			type: '(details: { page: number; pageSize: number }) => void',
+			type: '(page: number) => void',
 			default: '—',
 			description: 'Callback when the current page changes'
-		},
-		{
-			name: 'onPageSizeChange',
-			type: '(details: { pageSize: number }) => void',
-			default: '—',
-			description: 'Callback when the page size changes'
 		},
 		{
 			name: 'class',
@@ -92,8 +62,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">Pagination</h1>
 		<p class="text-kl-muted-content mt-2">
-			Navigate between pages of content. Supports controlled and uncontrolled modes, page info, page
-			size control, and link-based navigation. Built on bits-ui.
+			Navigate between pages of content. Supports controlled mode, page info, and page size control.
+			Built on bits-ui.
 		</p>
 	</div>
 
@@ -103,35 +73,35 @@
 		<DemoCard
 			title="Basic"
 			description="Simple pagination with 100 items and 10 per page."
-			code={`<Pagination count={100} defaultPageSize={10} />`}
+			code={`<Pagination count={100} perPage={10} />`}
 		>
-			<Pagination count={100} defaultPageSize={10} />
+			<Pagination count={100} perPage={10} />
 		</DemoCard>
 
 		<DemoCard
 			title="Custom page size"
 			description="Show 5 items per page with more page buttons."
-			code={`<Pagination count={100} defaultPageSize={5} />`}
+			code={`<Pagination count={100} perPage={5} />`}
 		>
-			<Pagination count={100} defaultPageSize={5} />
+			<Pagination count={100} perPage={5} />
 		</DemoCard>
 
 		<DemoCard
 			title="More siblings"
 			description="Show 2 sibling pages beside the active page for wider ranges."
-			code={`<Pagination count={200} defaultPageSize={10} siblingCount={2} />`}
+			code={`<Pagination count={200} perPage={10} siblingCount={2} />`}
 		>
-			<Pagination count={200} defaultPageSize={10} siblingCount={2} />
+			<Pagination count={200} perPage={10} siblingCount={2} />
 		</DemoCard>
 
 		<DemoCard
 			title="Controlled"
 			description="Bind to a page variable for external control."
-			code={`<Pagination count={100} defaultPageSize={10} bind:page />
+			code={`<Pagination count={100} perPage={10} bind:page />
 <p>Current page: {page}</p>`}
 		>
 			<div class="space-y-3">
-				<Pagination count={100} defaultPageSize={10} bind:page={controlledPage} />
+				<Pagination count={100} perPage={10} bind:page={controlledPage} />
 				<p class="text-kl-muted-content text-sm">
 					Current page: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
 						>{controlledPage}</code
@@ -143,17 +113,17 @@
 		<DemoCard
 			title="With page info"
 			description="Show the current item range and total count."
-			code={`<Pagination count={100} defaultPageSize={10} showPageInfo />`}
+			code={`<Pagination count={100} perPage={10} showPageInfo />`}
 		>
-			<Pagination count={100} defaultPageSize={10} showPageInfo />
+			<Pagination count={100} perPage={10} showPageInfo />
 		</DemoCard>
 
 		<DemoCard
 			title="With page size control"
 			description="Let users choose how many items per page."
-			code={`<Pagination count={100} defaultPageSize={10} showPageSizeControl />`}
+			code={`<Pagination count={100} perPage={10} showPageSizeControl />`}
 		>
-			<Pagination count={100} defaultPageSize={10} showPageSizeControl />
+			<Pagination count={100} perPage={10} showPageSizeControl />
 		</DemoCard>
 
 		<DemoCard
@@ -161,7 +131,7 @@
 			description="Page info, page size control, and pagination together."
 			code={`<Pagination
   count={100}
-  defaultPageSize={10}
+  perPage={10}
   showPageInfo
   showPageSizeControl
   pageSizeOptions={[5, 10, 25, 50]}
@@ -169,7 +139,7 @@
 		>
 			<Pagination
 				count={100}
-				defaultPageSize={10}
+				perPage={10}
 				showPageInfo
 				showPageSizeControl
 				pageSizeOptions={[5, 10, 25, 50]}
@@ -179,9 +149,9 @@
 		<DemoCard
 			title="Few pages"
 			description="When there are few pages, no ellipsis is shown."
-			code={`<Pagination count={30} defaultPageSize={10} />`}
+			code={`<Pagination count={30} perPage={10} />`}
 		>
-			<Pagination count={30} defaultPageSize={10} />
+			<Pagination count={30} perPage={10} />
 		</DemoCard>
 	</section>
 

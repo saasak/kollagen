@@ -23,14 +23,8 @@
 		{
 			name: 'value',
 			type: 'number[]',
-			default: '—',
-			description: 'Controlled value (array for range mode). Supports bind:value'
-		},
-		{
-			name: 'defaultValue',
-			type: 'number[]',
 			default: '[50]',
-			description: 'Default value for uncontrolled mode'
+			description: 'Controlled value (array for range mode). Supports bind:value'
 		},
 		{ name: 'min', type: 'number', default: '0', description: 'Minimum value' },
 		{ name: 'max', type: 'number', default: '100', description: 'Maximum value' },
@@ -41,19 +35,7 @@
 			default: '"horizontal"',
 			description: 'Slider orientation'
 		},
-		{
-			name: 'origin',
-			type: '"start" | "center" | "end"',
-			default: '"start"',
-			description: 'Origin of the filled range'
-		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the slider' },
-		{
-			name: 'readOnly',
-			type: 'boolean',
-			default: 'false',
-			description: 'Make the slider read-only'
-		},
 		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{
 			name: 'showValue',
@@ -68,34 +50,16 @@
 			description: 'Show step markers at given values'
 		},
 		{
-			name: 'minStepsBetweenThumbs',
-			type: 'number',
-			default: '0',
-			description: 'Minimum steps between thumbs in range mode'
-		},
-		{
-			name: 'getAriaValueText',
-			type: '(details) => string',
-			default: '—',
-			description: 'Function to format the displayed value text'
-		},
-		{
 			name: 'onValueChange',
-			type: '(details) => void',
+			type: '(value: number[]) => void',
 			default: '—',
-			description: 'Callback when value changes'
+			description: 'Callback when value changes (during drag)'
 		},
 		{
-			name: 'onValueChangeEnd',
-			type: '(details) => void',
+			name: 'onValueCommit',
+			type: '(value: number[]) => void',
 			default: '—',
 			description: 'Callback when dragging ends'
-		},
-		{
-			name: 'onFocusChange',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when focused thumb changes'
 		},
 		{
 			name: 'class',
@@ -133,9 +97,9 @@
 		<DemoCard
 			title="Custom range"
 			description="Set min, max, and step."
-			code={`<Slider label="Temperature" showValue min={0} max={40} step={0.5} defaultValue={[22]} />`}
+			code={`<Slider label="Temperature" showValue min={0} max={40} step={0.5} value={[22]} />`}
 		>
-			<Slider label="Temperature" showValue min={0} max={40} step={0.5} defaultValue={[22]} />
+			<Slider label="Temperature" showValue min={0} max={40} step={0.5} value={[22]} />
 		</DemoCard>
 
 		<DemoCard
@@ -157,10 +121,10 @@
 		<DemoCard
 			title="Range"
 			description="Two thumbs for selecting a range of values."
-			code={`<Slider label="Price range" showValue bind:value={rangeValue} minStepsBetweenThumbs={5} />`}
+			code={`<Slider label="Price range" showValue bind:value={rangeValue} />`}
 		>
 			<div class="space-y-2">
-				<Slider label="Price range" showValue bind:value={rangeValue} minStepsBetweenThumbs={5} />
+				<Slider label="Price range" showValue bind:value={rangeValue} />
 				<p class="text-kl-muted-content text-sm">
 					Range: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
 						>{rangeValue[0]}–{rangeValue[1]}</code
@@ -175,14 +139,6 @@
 			code={`<Slider label="Rating" showValue markers={[0, 25, 50, 75, 100]} />`}
 		>
 			<Slider label="Rating" showValue markers={[0, 25, 50, 75, 100]} />
-		</DemoCard>
-
-		<DemoCard
-			title="Center origin"
-			description="Fill the range from the center. Useful for offset values."
-			code={`<Slider label="Pan" showValue origin="center" defaultValue={[0]} min={-50} max={50} />`}
-		>
-			<Slider label="Pan" showValue origin="center" defaultValue={[0]} min={-50} max={50} />
 		</DemoCard>
 
 		<DemoCard

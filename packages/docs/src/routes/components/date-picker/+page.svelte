@@ -10,15 +10,9 @@
 	const propsData = [
 		{
 			name: 'value',
-			type: 'DateValue[]',
+			type: 'DateValue | DateValue[] | DateRange | undefined',
 			default: '—',
 			description: 'Controlled selected date(s). Supports bind:value'
-		},
-		{
-			name: 'defaultValue',
-			type: 'DateValue[]',
-			default: '—',
-			description: 'Initial value for uncontrolled mode'
 		},
 		{
 			name: 'name',
@@ -28,9 +22,9 @@
 		},
 		{
 			name: 'placeholder',
-			type: 'string',
-			default: '—',
-			description: 'Placeholder text in the input'
+			type: 'DateValue',
+			default: 'today()',
+			description: 'Placeholder date for calendar navigation'
 		},
 		{
 			name: 'selectionMode',
@@ -45,7 +39,6 @@
 			default: 'false',
 			description: 'Make the date picker read-only'
 		},
-		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
 		{
 			name: 'closeOnSelect',
@@ -53,41 +46,51 @@
 			default: 'true (false for multiple)',
 			description: 'Close calendar after selection'
 		},
-		{ name: 'min', type: 'DateValue', default: '—', description: 'Minimum selectable date' },
-		{ name: 'max', type: 'DateValue', default: '—', description: 'Maximum selectable date' },
 		{
-			name: 'numOfMonths',
+			name: 'minValue',
+			type: 'DateValue',
+			default: '—',
+			description: 'Minimum selectable date'
+		},
+		{
+			name: 'maxValue',
+			type: 'DateValue',
+			default: '—',
+			description: 'Maximum selectable date'
+		},
+		{
+			name: 'numberOfMonths',
 			type: 'number',
-			default: '1',
+			default: '—',
 			description: 'Number of months to display'
 		},
 		{
-			name: 'startOfWeek',
-			type: 'number',
-			default: '0',
+			name: 'weekStartsOn',
+			type: '0 | 1 | 2 | 3 | 4 | 5 | 6',
+			default: '—',
 			description: 'First day of the week (0=Sun, 1=Mon, ..., 6=Sat)'
 		},
 		{
 			name: 'isDateUnavailable',
-			type: '(date, locale) => boolean',
+			type: '(date: DateValue) => boolean',
 			default: '—',
 			description: 'Function to mark specific dates as unavailable'
 		},
 		{
+			name: 'isDateDisabled',
+			type: '(date: DateValue) => boolean',
+			default: '—',
+			description: 'Function to check if a date is disabled'
+		},
+		{
 			name: 'locale',
 			type: 'string',
-			default: '"en-US"',
+			default: '"en"',
 			description: 'Locale for date formatting (BCP 47 tag)'
 		},
 		{
-			name: 'format',
-			type: '(date, details) => string',
-			default: '—',
-			description: 'Custom date format function'
-		},
-		{
 			name: 'onValueChange',
-			type: '(details) => void',
+			type: '(value: DateValue | DateValue[] | DateRange | undefined) => void',
 			default: '—',
 			description: 'Callback when selected value changes'
 		},
@@ -150,12 +153,12 @@
 			code={`import { parseDate } from "@internationalized/date";
 
 <DatePicker
-  min={parseDate("2025-01-01")}
-  max={parseDate("2025-12-31")}
+  minValue={parseDate("2025-01-01")}
+  maxValue={parseDate("2025-12-31")}
 />`}
 		>
 			<div class="max-w-sm">
-				<DatePicker min={parseDate('2025-01-01')} max={parseDate('2025-12-31')} />
+				<DatePicker minValue={parseDate('2025-01-01')} maxValue={parseDate('2025-12-31')} />
 			</div>
 		</DemoCard>
 

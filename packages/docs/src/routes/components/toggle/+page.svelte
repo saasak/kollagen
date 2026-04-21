@@ -10,14 +10,8 @@
 		{
 			name: 'pressed',
 			type: 'boolean',
-			default: '—',
+			default: 'false',
 			description: 'Controlled pressed state. Supports bind:pressed'
-		},
-		{
-			name: 'defaultPressed',
-			type: 'boolean',
-			default: '—',
-			description: 'Initial state for uncontrolled mode'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the toggle' },
 		{
@@ -103,12 +97,12 @@
 			description="Toggle in disabled state."
 			code={`<div class="flex gap-2">
   <Toggle disabled>Disabled off</Toggle>
-  <Toggle disabled defaultPressed>Disabled on</Toggle>
+  <Toggle disabled pressed={true}>Disabled on</Toggle>
 </div>`}
 		>
 			<div class="flex gap-2">
 				<Toggle disabled>Disabled off</Toggle>
-				<Toggle disabled defaultPressed>Disabled on</Toggle>
+				<Toggle disabled pressed={true}>Disabled on</Toggle>
 			</div>
 		</DemoCard>
 	</section>

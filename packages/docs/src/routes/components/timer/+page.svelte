@@ -13,7 +13,7 @@
 			default: 'false',
 			description: 'Count down instead of up'
 		},
-		{ name: 'startMs', type: 'number', default: '—', description: 'Start value in milliseconds' },
+		{ name: 'startMs', type: 'number', default: '0', description: 'Start value in milliseconds' },
 		{
 			name: 'targetMs',
 			type: 'number',
@@ -29,7 +29,7 @@
 		},
 		{
 			name: 'segments',
-			type: 'TimePart[]',
+			type: "('days' | 'hours' | 'minutes' | 'seconds')[]",
 			default: '["hours","minutes","seconds"]',
 			description: 'Time segments to display'
 		},
@@ -42,9 +42,9 @@
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable all interaction' },
 		{
 			name: 'onTick',
-			type: '(details: TickDetails) => void',
+			type: '(details: { time: number; segments: Record<TimePart, number> }) => void',
 			default: '—',
-			description: 'Callback on each tick'
+			description: 'Callback on each tick with elapsed time and segment values'
 		},
 		{
 			name: 'onComplete',
@@ -66,8 +66,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Timer</h1>
 		<p class="text-kl-muted-content mt-2">
-			Countdown and count-up timer with configurable segments and built-in controls. Built on bits-ui
-			UI.
+			Countdown and count-up timer with configurable segments and built-in controls.
 		</p>
 	</div>
 
@@ -94,17 +93,6 @@
 />`}
 		>
 			<Timer countdown startMs={5 * 60 * 1000} autoStart segments={['minutes', 'seconds']} />
-		</DemoCard>
-
-		<DemoCard
-			title="Millisecond precision"
-			description="High-frequency timer updating every 100ms showing milliseconds."
-			code={`<Timer
-  segments={["seconds", "milliseconds"]}
-  interval={100}
-/>`}
-		>
-			<Timer segments={['seconds', 'milliseconds']} interval={100} />
 		</DemoCard>
 
 		<DemoCard
@@ -136,7 +124,7 @@
 					startMs={10 * 1000}
 					segments={['seconds']}
 					onTick={(details) => {
-						if (completed && details.value > 0) {
+						if (completed && details.time > 0) {
 							completed = false;
 							tickCount = 0;
 						}

@@ -10,14 +10,8 @@
 		{
 			name: 'value',
 			type: 'number',
-			default: '—',
+			default: '0',
 			description: 'Controlled value. Supports bind:value'
-		},
-		{
-			name: 'defaultValue',
-			type: 'number',
-			default: '—',
-			description: 'Initial value for uncontrolled mode'
 		},
 		{ name: 'count', type: 'number', default: '5', description: 'Total number of stars' },
 		{
@@ -53,15 +47,9 @@
 		},
 		{
 			name: 'onValueChange',
-			type: '(details: RatingGroup.ValueChangeDetails) => void',
+			type: '(value: number) => void',
 			default: '—',
 			description: 'Callback when the rating value changes'
-		},
-		{
-			name: 'onHoverChange',
-			type: '(details: RatingGroup.HoverChangeDetails) => void',
-			default: '—',
-			description: 'Callback when the hovered star changes'
 		},
 		{
 			name: 'ariaLabel',
@@ -94,10 +82,10 @@
 
 		<DemoCard
 			title="Basic"
-			description="Simple uncontrolled star rating with a label."
-			code={`<RatingGroup label="Rate this" defaultValue={3} />`}
+			description="Simple star rating with a label."
+			code={`<RatingGroup label="Rate this" value={3} />`}
 		>
-			<RatingGroup label="Rate this" defaultValue={3} />
+			<RatingGroup label="Rate this" value={3} />
 		</DemoCard>
 
 		<DemoCard
@@ -119,40 +107,40 @@
 		<DemoCard
 			title="Half stars"
 			description="Enable half-star increments with allowHalf. Hover between stars to select 0.5 values."
-			code={`<RatingGroup label="Precision rating" allowHalf={true} defaultValue={3.5} />`}
+			code={`<RatingGroup label="Precision rating" allowHalf={true} value={3.5} />`}
 		>
-			<RatingGroup label="Precision rating" allowHalf={true} defaultValue={3.5} />
+			<RatingGroup label="Precision rating" allowHalf={true} value={3.5} />
 		</DemoCard>
 
 		<DemoCard
 			title="Custom count"
 			description="Use a 10-star scale instead of the default 5."
-			code={`<RatingGroup label="Out of 10" count={10} defaultValue={7} />`}
+			code={`<RatingGroup label="Out of 10" count={10} value={7} />`}
 		>
-			<RatingGroup label="Out of 10" count={10} defaultValue={7} />
+			<RatingGroup label="Out of 10" count={10} value={7} />
 		</DemoCard>
 
 		<DemoCard
 			title="Read-only"
 			description="Display a rating without allowing interaction — useful for showing scores."
-			code={`<RatingGroup label="Average score" readOnly={true} defaultValue={4} />`}
+			code={`<RatingGroup label="Average score" readOnly={true} value={4} />`}
 		>
-			<RatingGroup label="Average score" readOnly={true} defaultValue={4} />
+			<RatingGroup label="Average score" readOnly={true} value={4} />
 		</DemoCard>
 
 		<DemoCard
 			title="Disabled"
 			description="Fully disabled state with reduced opacity."
-			code={`<RatingGroup label="Disabled" disabled={true} defaultValue={2} />`}
+			code={`<RatingGroup label="Disabled" disabled={true} value={2} />`}
 		>
-			<RatingGroup label="Disabled" disabled={true} defaultValue={2} />
+			<RatingGroup label="Disabled" disabled={true} value={2} />
 		</DemoCard>
 
 		<DemoCard
 			title="Form integration"
 			description="Native form submission using the name prop. Submit to see the value."
 			code={`<form onsubmit={handleSubmit}>
-  <RatingGroup name="rating" label="Rate your experience" defaultValue={0} />
+  <RatingGroup name="rating" label="Rate your experience" />
   <button type="submit">Submit</button>
 </form>`}
 		>
@@ -165,7 +153,7 @@
 					}}
 					class="space-y-3"
 				>
-					<RatingGroup name="rating" label="Rate your experience" defaultValue={0} />
+					<RatingGroup name="rating" label="Rate your experience" value={0} />
 					<button
 						type="submit"
 						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"

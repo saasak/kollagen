@@ -3,22 +3,22 @@
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	let agreedToTerms = $state<boolean | 'indeterminate'>(false);
+	let agreedToTerms = $state(false);
 	let formResult = $state('');
 
 	const propsData = [
 		{ name: 'label', type: 'string', default: '—', description: 'Display label text' },
 		{
 			name: 'checked',
-			type: 'boolean | "indeterminate"',
-			default: '—',
+			type: 'boolean',
+			default: 'false',
 			description: 'Controlled checked state. Supports bind:checked'
 		},
 		{
-			name: 'defaultChecked',
-			type: 'boolean | "indeterminate"',
-			default: '—',
-			description: 'Initial state for uncontrolled mode'
+			name: 'indeterminate',
+			type: 'boolean',
+			default: 'false',
+			description: 'Controlled indeterminate state. Supports bind:indeterminate'
 		},
 		{
 			name: 'name',
@@ -33,12 +33,11 @@
 			description: 'Form submission value when checked'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the checkbox' },
-		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
-		{ name: 'readOnly', type: 'boolean', default: 'false', description: 'Make read-only' },
+		{ name: 'readonly', type: 'boolean', default: 'false', description: 'Make read-only' },
 		{
 			name: 'onCheckedChange',
-			type: '(details) => void',
+			type: '(checked: boolean) => void',
 			default: '—',
 			description: 'Callback when checked state changes'
 		},
@@ -92,29 +91,29 @@
 		<DemoCard
 			title="Indeterminate"
 			description="Third state for partial selections (e.g., &quot;select all&quot; with some items checked)."
-			code="<Checkbox label=&quot;Select all&quot; defaultChecked=&quot;indeterminate&quot; />"
+			code="<Checkbox label=&quot;Select all&quot; indeterminate />"
 		>
-			<Checkbox label="Select all" defaultChecked="indeterminate" />
+			<Checkbox label="Select all" indeterminate />
 		</DemoCard>
 
 		<DemoCard
 			title="Disabled"
 			description="Checkbox in disabled state."
 			code={`<Checkbox label="Disabled unchecked" disabled />
-<Checkbox label="Disabled checked" disabled defaultChecked={true} />`}
+<Checkbox label="Disabled checked" disabled checked />`}
 		>
 			<div class="flex flex-col gap-2">
 				<Checkbox label="Disabled unchecked" disabled />
-				<Checkbox label="Disabled checked" disabled defaultChecked={true} />
+				<Checkbox label="Disabled checked" disabled checked />
 			</div>
 		</DemoCard>
 
 		<DemoCard
-			title="Invalid"
-			description="Shows error styling when validation fails."
-			code="<Checkbox label=&quot;Required field&quot; invalid required />"
+			title="Required"
+			description="Marks the checkbox as required for form validation."
+			code="<Checkbox label=&quot;Required field&quot; required />"
 		>
-			<Checkbox label="Required field" invalid required />
+			<Checkbox label="Required field" required />
 		</DemoCard>
 
 		<DemoCard

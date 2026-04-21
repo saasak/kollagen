@@ -17,12 +17,6 @@
 			description: 'Controlled open state. Supports bind:open'
 		},
 		{
-			name: 'defaultOpen',
-			type: 'boolean',
-			default: '—',
-			description: 'Initial open state for uncontrolled mode'
-		},
-		{
 			name: 'openDelay',
 			type: 'number',
 			default: '400',
@@ -35,44 +29,38 @@
 			description: 'Delay in ms before the tooltip closes'
 		},
 		{
-			name: 'interactive',
-			type: 'boolean',
-			default: 'false',
-			description: 'Keep tooltip open when hovering its content'
-		},
-		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
 			description: 'Prevent the tooltip from opening'
 		},
 		{
-			name: 'closeOnPointerDown',
-			type: 'boolean',
-			default: 'true',
-			description: 'Close tooltip on pointer down'
+			name: 'side',
+			type: '"top" | "bottom" | "left" | "right"',
+			default: '"top"',
+			description: 'Which side of the trigger to place the tooltip on'
 		},
 		{
-			name: 'closeOnEscape',
-			type: 'boolean',
-			default: 'true',
-			description: 'Close tooltip on Escape key'
+			name: 'sideOffset',
+			type: 'number',
+			default: '6',
+			description: 'Distance in px between the tooltip and the trigger'
 		},
 		{
-			name: 'closeOnScroll',
-			type: 'boolean',
-			default: 'true',
-			description: 'Close tooltip on scroll'
+			name: 'align',
+			type: '"start" | "center" | "end"',
+			default: '"center"',
+			description: 'Alignment of the tooltip along the trigger edge'
 		},
 		{
-			name: 'positioning',
-			type: 'PositioningOptions',
-			default: '—',
-			description: 'Popper.js positioning options (placement, offset, etc.)'
+			name: 'alignOffset',
+			type: 'number',
+			default: '0',
+			description: 'Offset in px from the aligned edge'
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details: { open: boolean }) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when the tooltip opens or closes'
 		},
@@ -95,8 +83,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">Tooltip</h1>
 		<p class="text-kl-muted-content mt-2">
-			Informational popup that appears on hover or focus. Supports delays, interactive content, and
-			custom positioning. Built on bits-ui.
+			Informational popup that appears on hover or focus. Supports configurable delays, side/align
+			positioning, and controlled state. Built on bits-ui.
 		</p>
 	</div>
 
@@ -122,30 +110,30 @@
 		<DemoCard
 			title="Custom placement"
 			description="Position the tooltip on different sides of the trigger."
-			code={`<Tooltip content="Right side" positioning={{ placement: "right" }}>
+			code={`<Tooltip content="Right side" side="right">
   <button>Right</button>
 </Tooltip>`}
 		>
 			<div class="flex gap-4">
-				<Tooltip content="Top tooltip" positioning={{ placement: 'top' }}>
+				<Tooltip content="Top tooltip" side="top">
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
 						>Top</button
 					>
 				</Tooltip>
-				<Tooltip content="Right tooltip" positioning={{ placement: 'right' }}>
+				<Tooltip content="Right tooltip" side="right">
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
 						>Right</button
 					>
 				</Tooltip>
-				<Tooltip content="Bottom tooltip" positioning={{ placement: 'bottom' }}>
+				<Tooltip content="Bottom tooltip" side="bottom">
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
 						>Bottom</button
 					>
 				</Tooltip>
-				<Tooltip content="Left tooltip" positioning={{ placement: 'left' }}>
+				<Tooltip content="Left tooltip" side="left">
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
 						>Left</button
@@ -164,20 +152,6 @@
 			<Tooltip content="No delay!" openDelay={0}>
 				<button class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm">
 					Instant tooltip
-				</button>
-			</Tooltip>
-		</DemoCard>
-
-		<DemoCard
-			title="Interactive"
-			description="Tooltip stays open when hovering over its content."
-			code={`<Tooltip content="You can select this text" interactive={true}>
-  <button>Interactive</button>
-</Tooltip>`}
-		>
-			<Tooltip content="You can select this text" interactive={true}>
-				<button class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm">
-					Interactive tooltip
 				</button>
 			</Tooltip>
 		</DemoCard>

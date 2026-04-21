@@ -3,7 +3,7 @@
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	let controlledValue = $state<string[]>(['', '', '', '']);
+	let controlledValue = $state('');
 	let completedCode = $state('');
 	let formResult = $state('');
 
@@ -17,15 +17,9 @@
 		{ name: 'count', type: 'number', default: '4', description: 'Number of input fields' },
 		{
 			name: 'value',
-			type: 'string[]',
-			default: '—',
-			description: 'Controlled value. Supports bind:value'
-		},
-		{
-			name: 'defaultValue',
-			type: 'string[]',
-			default: '—',
-			description: 'Initial value for uncontrolled mode'
+			type: 'string',
+			default: '""',
+			description: 'Controlled value as a string. Supports bind:value'
 		},
 		{
 			name: 'name',
@@ -41,7 +35,7 @@
 		},
 		{
 			name: 'type',
-			type: '"numeric" | "alphanumeric" | "alphabetic"',
+			type: '"alphanumeric" | "numeric" | "alphabetic"',
 			default: '"numeric"',
 			description: 'Allowed input type'
 		},
@@ -51,57 +45,25 @@
 			default: 'false',
 			description: 'Mask input like a password field'
 		},
-		{
-			name: 'otp',
-			type: 'boolean',
-			default: 'true',
-			description: 'Enable one-time-code autocomplete'
-		},
-		{
-			name: 'autoFocus',
-			type: 'boolean',
-			default: 'false',
-			description: 'Auto-focus the first input on mount'
-		},
-		{
-			name: 'blurOnComplete',
-			type: 'boolean',
-			default: 'false',
-			description: 'Blur inputs when all fields are filled'
-		},
-		{
-			name: 'selectOnFocus',
-			type: 'boolean',
-			default: 'true',
-			description: 'Select input value on focus'
-		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable all inputs' },
 		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
-		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
-		{ name: 'readOnly', type: 'boolean', default: 'false', description: 'Make read-only' },
 		{
-			name: 'pattern',
-			type: 'string',
-			default: '—',
-			description: 'Regex pattern to validate input'
+			name: 'textalign',
+			type: '"left" | "center" | "right"',
+			default: '"center"',
+			description: 'Text alignment within cells'
 		},
 		{
 			name: 'onValueChange',
-			type: '(details) => void',
+			type: '(value: string) => void',
 			default: '—',
 			description: 'Callback when value changes'
 		},
 		{
-			name: 'onValueComplete',
-			type: '(details) => void',
+			name: 'onComplete',
+			type: '(value: string) => void',
 			default: '—',
 			description: 'Callback when all inputs are filled'
-		},
-		{
-			name: 'onValueInvalid',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when an invalid value is entered'
 		},
 		{
 			name: 'class',
@@ -137,13 +99,13 @@
 			title="Controlled"
 			description="Manage value externally with bind:value."
 			code={`<PinInput label="Enter PIN" bind:value={controlledValue} />
-<p>Value: {controlledValue.join("")}</p>`}
+<p>Value: {controlledValue}</p>`}
 		>
 			<div class="space-y-2">
 				<PinInput label="Enter PIN" bind:value={controlledValue} />
 				<p class="text-kl-muted-content text-sm">
 					Value: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
-						>{controlledValue.join('')}</code
+						>{controlledValue}</code
 					>
 				</p>
 			</div>
@@ -178,11 +140,11 @@
 			description="React when all fields are filled."
 			code={`<PinInput
   label="Enter code"
-  onValueComplete={(d) => completedCode = d.valueAsString}
+  onComplete={(value) => completedCode = value}
 />`}
 		>
 			<div class="space-y-2">
-				<PinInput label="Enter code" onValueComplete={(d) => (completedCode = d.valueAsString)} />
+				<PinInput label="Enter code" onComplete={(value) => (completedCode = value)} />
 				{#if completedCode}
 					<p class="text-kl-muted-content text-sm">
 						Completed: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
@@ -196,9 +158,9 @@
 		<DemoCard
 			title="Disabled"
 			description="Disabled state."
-			code={`<PinInput label="Disabled" disabled defaultValue={["1","2","3","4"]} />`}
+			code="<PinInput label=&quot;Disabled&quot; disabled value=&quot;1234&quot; />"
 		>
-			<PinInput label="Disabled" disabled defaultValue={['1', '2', '3', '4']} />
+			<PinInput label="Disabled" disabled value="1234" />
 		</DemoCard>
 
 		<DemoCard

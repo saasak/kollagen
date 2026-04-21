@@ -31,12 +31,6 @@
 			description: 'Controlled selected tab value. Supports bind:value'
 		},
 		{
-			name: 'defaultValue',
-			type: 'string',
-			default: '—',
-			description: 'Initial tab value for uncontrolled mode'
-		},
-		{
 			name: 'orientation',
 			type: '"horizontal" | "vertical"',
 			default: '"horizontal"',
@@ -49,29 +43,17 @@
 			description: 'Whether tabs activate on focus (automatic) or on click (manual)'
 		},
 		{
-			name: 'loopFocus',
+			name: 'loop',
 			type: 'boolean',
 			default: 'true',
 			description: 'Loop keyboard navigation at list boundaries'
 		},
-		{
-			name: 'deselectable',
-			type: 'boolean',
-			default: 'false',
-			description: 'Allow deselecting the active tab by clicking it again'
-		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable all tabs' },
 		{
 			name: 'onValueChange',
-			type: '(details: { value: string }) => void',
+			type: '(value: string) => void',
 			default: '—',
 			description: 'Callback when the selected tab changes'
-		},
-		{
-			name: 'onFocusChange',
-			type: '(details: { focusedValue: string }) => void',
-			default: '—',
-			description: 'Callback when the focused tab changes'
 		},
 		{
 			name: 'content',
@@ -115,7 +97,7 @@
     { value: "password", label: "Password" },
     { value: "notifications", label: "Notifications" },
   ]}
-  defaultValue="account"
+  value="account"
 >
   {#snippet content(value)}
     {#if value === "account"}Account settings here.{/if}
@@ -124,7 +106,7 @@
   {/snippet}
 </Tabs>`}
 		>
-			<Tabs items={basicTabs} defaultValue="account">
+			<Tabs items={basicTabs} value="account">
 				{#snippet content(value)}
 					{#if value === 'account'}
 						<p class="text-kl-base-content text-sm">Manage your account details and preferences.</p>
@@ -144,12 +126,12 @@
 		<DemoCard
 			title="Vertical orientation"
 			description="Tabs laid out vertically with up/down arrow navigation."
-			code={`<Tabs items={tabs} orientation="vertical" defaultValue="account">
+			code={`<Tabs items={tabs} orientation="vertical" value="account">
   {#snippet content(value)}...{/snippet}
 </Tabs>`}
 		>
 			<div class="flex">
-				<Tabs items={basicTabs} orientation="vertical" defaultValue="account">
+				<Tabs items={basicTabs} orientation="vertical" value="account">
 					{#snippet content(value)}
 						{#if value === 'account'}
 							<p class="text-kl-base-content pl-4 text-sm">Account panel content.</p>
@@ -168,11 +150,11 @@
 		<DemoCard
 			title="Manual activation"
 			description="Tabs only activate on click or Enter, not on focus."
-			code={`<Tabs items={tabs} activationMode="manual" defaultValue="account">
+			code={`<Tabs items={tabs} activationMode="manual" value="account">
   {#snippet content(value)}...{/snippet}
 </Tabs>`}
 		>
-			<Tabs items={basicTabs} activationMode="manual" defaultValue="account">
+			<Tabs items={basicTabs} activationMode="manual" value="account">
 				{#snippet content(value)}
 					{#if value === 'account'}
 						<p class="text-kl-base-content text-sm">Account — activated manually.</p>
@@ -196,12 +178,12 @@
     { value: "security", label: "Security", disabled: true },
     { value: "billing", label: "Billing" },
   ]}
-  defaultValue="general"
+  value="general"
 >
   {#snippet content(value)}...{/snippet}
 </Tabs>`}
 		>
-			<Tabs items={withDisabled} defaultValue="general">
+			<Tabs items={withDisabled} value="general">
 				{#snippet content(value)}
 					{#if value === 'general'}
 						<p class="text-kl-base-content text-sm">General settings.</p>
@@ -220,7 +202,7 @@
 			title="Form integration"
 			description="Hidden input submits the selected tab value with the form."
 			code={`<form onsubmit={handleSubmit}>
-  <Tabs items={tabs} name="tab" defaultValue="account">
+  <Tabs items={tabs} name="tab" value="account">
     {#snippet content(value)}...{/snippet}
   </Tabs>
   <button type="submit">Submit</button>
@@ -235,7 +217,7 @@
 					}}
 					class="space-y-3"
 				>
-					<Tabs items={basicTabs} name="tab" defaultValue="account">
+					<Tabs items={basicTabs} name="tab" value="account">
 						{#snippet content(value)}
 							{#if value === 'account'}
 								<p class="text-kl-base-content text-sm">Account tab selected.</p>

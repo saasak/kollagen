@@ -99,26 +99,14 @@
 		{
 			name: 'selectedValue',
 			type: 'string[]',
-			default: '—',
+			default: '[]',
 			description: 'Controlled selected node values. Supports bind:selectedValue'
-		},
-		{
-			name: 'defaultSelectedValue',
-			type: 'string[]',
-			default: '—',
-			description: 'Initial selected node values for uncontrolled mode'
 		},
 		{
 			name: 'expandedValue',
 			type: 'string[]',
-			default: '—',
+			default: '[]',
 			description: 'Controlled expanded branch values. Supports bind:expandedValue'
-		},
-		{
-			name: 'defaultExpandedValue',
-			type: 'string[]',
-			default: '—',
-			description: 'Initial expanded branch values for uncontrolled mode'
 		},
 		{
 			name: 'selectionMode',
@@ -128,13 +116,13 @@
 		},
 		{
 			name: 'onSelectionChange',
-			type: '(details) => void',
+			type: '(details: { value: string[] }) => void',
 			default: '—',
 			description: 'Callback when selection changes'
 		},
 		{
 			name: 'onExpandedChange',
-			type: '(details) => void',
+			type: '(details: { value: string[] }) => void',
 			default: '—',
 			description: 'Callback when expanded branches change'
 		},
@@ -153,7 +141,7 @@
 		<h1 class="text-3xl font-bold">TreeView</h1>
 		<p class="text-kl-muted-content mt-2">
 			Hierarchical tree structure for displaying nested data. Supports single and multiple
-			selection, keyboard navigation, and controlled state. Built on bits-ui.
+			selection, keyboard navigation, and controlled state.
 		</p>
 	</div>
 
@@ -227,14 +215,14 @@
 
 		<DemoCard
 			title="Pre-expanded branches"
-			description="Use defaultExpandedValue to open branches on mount."
+			description="Use expandedValue to open branches on mount."
 			code={`<TreeView
   nodes={fileSystem}
-  defaultExpandedValue={['src', 'components']}
+  expandedValue={['src', 'components']}
 />`}
 		>
 			<div class="max-w-xs">
-				<TreeView nodes={fileSystem} defaultExpandedValue={['src', 'components']} />
+				<TreeView nodes={fileSystem} expandedValue={['src', 'components']} />
 			</div>
 		</DemoCard>
 	</section>

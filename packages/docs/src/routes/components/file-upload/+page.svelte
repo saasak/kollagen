@@ -28,22 +28,21 @@
 		},
 		{
 			name: 'accept',
-			type: 'Record<string, string[]> | FileMimeType | FileMimeType[]',
+			type: 'string',
 			default: '—',
-			description: 'Accepted file types (MIME types or extensions)'
+			description: 'Accepted file types (comma-separated MIME types or extensions)'
 		},
-		{ name: 'maxFiles', type: 'number', default: '1', description: 'Maximum number of files' },
+		{
+			name: 'maxFiles',
+			type: 'number',
+			default: '1',
+			description: 'Maximum number of files (set >1 for multi-upload)'
+		},
 		{
 			name: 'maxFileSize',
 			type: 'number',
-			default: 'Infinity',
+			default: '—',
 			description: 'Maximum file size in bytes'
-		},
-		{
-			name: 'minFileSize',
-			type: 'number',
-			default: '0',
-			description: 'Minimum file size in bytes'
 		},
 		{
 			name: 'allowDrop',
@@ -60,11 +59,10 @@
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the file upload' },
 		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
-		{ name: 'readOnly', type: 'boolean', default: 'false', description: 'Mark as read-only' },
 		{
 			name: 'directory',
 			type: 'boolean',
-			default: '—',
+			default: 'false',
 			description: 'Accept directories (webkit only)'
 		},
 		{
@@ -76,32 +74,14 @@
 		{
 			name: 'acceptedFiles',
 			type: 'File[]',
-			default: '—',
+			default: '[]',
 			description: 'Controlled accepted files. Supports bind:acceptedFiles'
 		},
 		{
-			name: 'defaultAcceptedFiles',
-			type: 'File[]',
-			default: '—',
-			description: 'Default accepted files for uncontrolled mode'
-		},
-		{
 			name: 'onFileChange',
-			type: '(details) => void',
+			type: '(details: { acceptedFiles: File[]; rejectedFiles: File[] }) => void',
 			default: '—',
 			description: 'Callback when files change (accepted or rejected)'
-		},
-		{
-			name: 'onFileAccept',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when files are accepted'
-		},
-		{
-			name: 'onFileReject',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when files are rejected'
 		},
 		{
 			name: 'class',
@@ -117,7 +97,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">FileUpload</h1>
 		<p class="text-kl-muted-content mt-2">
-			A file upload component with drag-and-drop, previews, and validation. Built on bits-ui.
+			A file upload component with drag-and-drop, previews, and validation.
 		</p>
 	</div>
 
@@ -146,13 +126,10 @@
 			description="Restrict to image files with accept."
 			code={`<FileUpload
   label="Profile picture"
-  accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
+  accept="image/png, image/jpeg, image/webp"
 />`}
 		>
-			<FileUpload
-				label="Profile picture"
-				accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.webp'] }}
-			/>
+			<FileUpload label="Profile picture" accept="image/png, image/jpeg, image/webp" />
 		</DemoCard>
 
 		<DemoCard
@@ -161,14 +138,14 @@
 			code={`<FileUpload
   label="Upload (max 1 MB)"
   maxFileSize={1_048_576}
-  onFileReject={(d) => rejectedInfo = d.files.map(r => r.errors.join(", ")).join("; ")}
+  onFileChange={(d) => rejectedInfo = d.rejectedFiles.map(f => f.name).join(", ")}
 />`}
 		>
 			<div class="space-y-2">
 				<FileUpload
 					label="Upload (max 1 MB)"
 					maxFileSize={1_048_576}
-					onFileReject={(d) => (rejectedInfo = d.files.map((r) => r.errors.join(', ')).join('; '))}
+					onFileChange={(d) => (rejectedInfo = d.rejectedFiles.map((f) => f.name).join(', '))}
 				/>
 				{#if rejectedInfo}
 					<p class="text-kl-error text-sm">

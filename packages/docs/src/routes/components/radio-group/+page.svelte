@@ -31,12 +31,6 @@
 			default: '—',
 			description: 'Controlled selected value. Supports bind:value'
 		},
-		{
-			name: 'defaultValue',
-			type: 'string',
-			default: '—',
-			description: 'Initial value for uncontrolled mode'
-		},
 		{ name: 'label', type: 'string', default: '—', description: 'Display label for the group' },
 		{
 			name: 'name',
@@ -45,7 +39,6 @@
 			description: 'Form field name for native submission'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable all options' },
-		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
 		{ name: 'readOnly', type: 'boolean', default: 'false', description: 'Make read-only' },
 		{
@@ -55,8 +48,14 @@
 			description: 'Layout orientation of the group'
 		},
 		{
+			name: 'loop',
+			type: 'boolean',
+			default: 'true',
+			description: 'Loop keyboard navigation through items'
+		},
+		{
 			name: 'onValueChange',
-			type: '(details) => void',
+			type: '(value: string) => void',
 			default: '—',
 			description: 'Callback when value changes'
 		},
@@ -74,7 +73,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">RadioGroup</h1>
 		<p class="text-kl-muted-content mt-2">
-			A set of mutually exclusive options where only one can be selected at a time. Built on bits-ui.
+			A set of mutually exclusive options where only one can be selected at a time. Built on
+			bits-ui.
 		</p>
 	</div>
 
@@ -114,14 +114,6 @@
 		</DemoCard>
 
 		<DemoCard
-			title="Default value"
-			description="Start with a pre-selected option using defaultValue."
-			code={`<RadioGroup label="Fruit" items={fruits} defaultValue="cherry" />`}
-		>
-			<RadioGroup label="Fruit" items={fruits} defaultValue="cherry" />
-		</DemoCard>
-
-		<DemoCard
 			title="Horizontal"
 			description="Lay out options in a row with orientation."
 			code={`<RadioGroup label="Fruit" items={fruits} orientation="horizontal" />`}
@@ -147,17 +139,9 @@
 		<DemoCard
 			title="Disabled group"
 			description="Disable all options at once."
-			code={`<RadioGroup label="Fruit" items={fruits} disabled defaultValue="apple" />`}
+			code={`<RadioGroup label="Fruit" items={fruits} disabled value="apple" />`}
 		>
-			<RadioGroup label="Fruit" items={fruits} disabled defaultValue="apple" />
-		</DemoCard>
-
-		<DemoCard
-			title="Invalid"
-			description="Shows error styling when validation fails."
-			code={`<RadioGroup label="Required selection" items={fruits} invalid required />`}
-		>
-			<RadioGroup label="Required selection" items={fruits} invalid required />
+			<RadioGroup label="Fruit" items={fruits} disabled value="apple" />
 		</DemoCard>
 
 		<DemoCard

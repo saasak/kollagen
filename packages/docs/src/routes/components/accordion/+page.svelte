@@ -36,22 +36,10 @@
 			description: 'Controlled expanded item(s). Supports bind:value'
 		},
 		{
-			name: 'defaultValue',
-			type: 'string[]',
-			default: '—',
-			description: 'Initial expanded item(s) for uncontrolled mode'
-		},
-		{
 			name: 'multiple',
 			type: 'boolean',
 			default: 'false',
 			description: 'Allow multiple items open simultaneously'
-		},
-		{
-			name: 'collapsible',
-			type: 'boolean',
-			default: 'true',
-			description: 'Allow collapsing an open item by clicking again'
 		},
 		{
 			name: 'disabled',
@@ -67,15 +55,9 @@
 		},
 		{
 			name: 'onValueChange',
-			type: '(details) => void',
+			type: '(value: string[]) => void',
 			default: '—',
 			description: 'Callback when expanded items change'
-		},
-		{
-			name: 'onFocusChange',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when focused item changes'
 		},
 		{
 			name: 'class',
@@ -143,15 +125,15 @@
 
 		<DemoCard
 			title="Default expanded"
-			description="Start with specific items expanded using defaultValue."
-			code={`<Accordion items={faqItems} defaultValue={["install", "theme"]}>
+			description="Start with specific items expanded by passing an initial value."
+			code={`<Accordion items={faqItems} value={["install", "theme"]} multiple>
   {#snippet children(item)}
     <p>{faqContent[item.value]}</p>
   {/snippet}
 </Accordion>`}
 		>
 			<div class="max-w-lg">
-				<Accordion items={faqItems} defaultValue={['install', 'theme']} multiple={true}>
+				<Accordion items={faqItems} value={['install', 'theme']} multiple={true}>
 					{#snippet children(item)}
 						<p>{faqContent[item.value]}</p>
 					{/snippet}

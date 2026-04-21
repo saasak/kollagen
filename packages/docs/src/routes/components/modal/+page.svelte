@@ -9,14 +9,8 @@
 		{
 			name: 'open',
 			type: 'boolean',
-			default: '—',
-			description: 'Controlled open state. Supports bind:open'
-		},
-		{
-			name: 'defaultOpen',
-			type: 'boolean',
 			default: 'false',
-			description: 'Initial open state for uncontrolled mode'
+			description: 'Controlled open state. Supports bind:open'
 		},
 		{ name: 'title', type: 'string', default: '—', description: 'Modal heading text' },
 		{
@@ -64,35 +58,11 @@
 			description: 'Prevent background scrolling when open'
 		},
 		{
-			name: 'role',
-			type: '"dialog" | "alertdialog"',
-			default: '"dialog"',
-			description: 'Semantic role for the modal'
-		},
-		{
 			name: 'snapPoints',
 			type: '(number | string)[]',
 			default: '—',
 			description:
 				'Snap points for the drawer as fractions (0–1) or pixel strings. Ignored in dialog mode.'
-		},
-		{
-			name: 'defaultSnapPoint',
-			type: 'number | string',
-			default: '—',
-			description: 'Initial snap point when the drawer opens. Ignored in dialog mode.'
-		},
-		{
-			name: 'onSnapPointChange',
-			type: '(details) => void',
-			default: '—',
-			description: 'Callback when the active snap point changes. Ignored in dialog mode.'
-		},
-		{
-			name: 'snapToSequentialPoints',
-			type: 'boolean',
-			default: 'false',
-			description: 'Force sequential snapping between snap points. Ignored in dialog mode.'
 		},
 		{
 			name: 'disabled',
@@ -102,7 +72,7 @@
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when open state changes'
 		},
@@ -195,8 +165,6 @@
   variant="drawer"
   title="Explore nearby"
   snapPoints={[0.25, 0.5, 1]}
-  defaultSnapPoint={0.5}
-  snapToSequentialPoints
 >
   {#snippet trigger()}
     <button class="btn">Open Map Drawer</button>
@@ -209,8 +177,6 @@
 				title="Explore nearby"
 				description="Drag the grabber to snap between positions."
 				snapPoints={[0.25, 0.5, 1]}
-				defaultSnapPoint={0.5}
-				snapToSequentialPoints
 			>
 				{#snippet trigger()}
 					<button

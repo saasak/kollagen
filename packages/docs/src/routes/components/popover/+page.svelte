@@ -10,12 +10,6 @@
 			default: '—',
 			description: 'Controlled open state. Supports bind:open'
 		},
-		{
-			name: 'defaultOpen',
-			type: 'boolean',
-			default: 'false',
-			description: 'Initial open state for uncontrolled mode'
-		},
 		{ name: 'title', type: 'string', default: '—', description: 'Popover heading text' },
 		{
 			name: 'description',
@@ -24,38 +18,32 @@
 			description: 'Popover description text below the title'
 		},
 		{
-			name: 'closeOnInteractOutside',
-			type: 'boolean',
-			default: 'true',
-			description: 'Close the popover when clicking outside'
+			name: 'side',
+			type: '"top" | "bottom" | "left" | "right"',
+			default: '"bottom"',
+			description: 'Side placement'
 		},
 		{
-			name: 'closeOnEscape',
-			type: 'boolean',
-			default: 'true',
-			description: 'Close the popover on Escape key'
+			name: 'sideOffset',
+			type: 'number',
+			default: '8',
+			description: 'Offset from the trigger'
 		},
 		{
-			name: 'modal',
-			type: 'boolean',
-			default: 'false',
-			description: 'Whether the popover traps focus like a modal'
+			name: 'align',
+			type: '"start" | "center" | "end"',
+			default: '"center"',
+			description: 'Alignment along the side'
 		},
 		{
-			name: 'autoFocus',
-			type: 'boolean',
-			default: 'true',
-			description: 'Auto-focus the first focusable element when opened'
-		},
-		{
-			name: 'positioning',
-			type: 'PositioningOptions',
-			default: '—',
-			description: 'Popper.js positioning options (placement, offset, etc.)'
+			name: 'alignOffset',
+			type: 'number',
+			default: '0',
+			description: 'Alignment offset'
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details: { open: boolean }) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when the popover opens or closes'
 		},
@@ -122,7 +110,7 @@
 		<DemoCard
 			title="Custom placement"
 			description="Position the popover on different sides."
-			code={`<Popover title="Settings" positioning={{ placement: "right" }}>
+			code={`<Popover title="Settings" side="right">
   {#snippet trigger()}
     <button>Right</button>
   {/snippet}
@@ -130,7 +118,7 @@
 </Popover>`}
 		>
 			<div class="flex gap-4">
-				<Popover title="Top" positioning={{ placement: 'top' }}>
+				<Popover title="Top" side="top">
 					{#snippet trigger()}
 						<button
 							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
@@ -139,7 +127,7 @@
 					{/snippet}
 					<p class="text-kl-muted-content text-sm">Popover positioned on top.</p>
 				</Popover>
-				<Popover title="Right" positioning={{ placement: 'right' }}>
+				<Popover title="Right" side="right">
 					{#snippet trigger()}
 						<button
 							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
@@ -148,7 +136,7 @@
 					{/snippet}
 					<p class="text-kl-muted-content text-sm">Popover positioned on the right.</p>
 				</Popover>
-				<Popover title="Bottom" positioning={{ placement: 'bottom' }}>
+				<Popover title="Bottom" side="bottom">
 					{#snippet trigger()}
 						<button
 							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
@@ -197,16 +185,16 @@
 		</DemoCard>
 
 		<DemoCard
-			title="Default open"
-			description="Start with the popover open using defaultOpen."
-			code={`<Popover title="Welcome" description="This popover opens by default." defaultOpen={true}>
+			title="Initially open"
+			description="Start with the popover open using bind:open."
+			code={`<Popover title="Welcome" description="This popover opens by default." open={true}>
   {#snippet trigger()}
     <button>Already open</button>
   {/snippet}
   <p>Popover content here.</p>
 </Popover>`}
 		>
-			<Popover title="Welcome" description="This popover opens by default." defaultOpen={true}>
+			<Popover title="Welcome" description="This popover opens by default." open={true}>
 				{#snippet trigger()}
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"

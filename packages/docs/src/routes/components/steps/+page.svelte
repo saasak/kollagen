@@ -93,7 +93,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">Steps</h1>
 		<p class="text-kl-muted-content mt-2">
-			Multi-step wizard with navigation, progress indicators, and completion state. Built on bits-ui.
+			Multi-step wizard with navigation, progress indicators, and completion state. Built on
+			bits-ui.
 		</p>
 	</div>
 

@@ -11,14 +11,8 @@
 		{
 			name: 'checked',
 			type: 'boolean',
-			default: '—',
+			default: 'false',
 			description: 'Controlled checked state. Supports bind:checked'
-		},
-		{
-			name: 'defaultChecked',
-			type: 'boolean',
-			default: '—',
-			description: 'Initial state for uncontrolled mode'
 		},
 		{
 			name: 'name',
@@ -33,12 +27,10 @@
 			description: 'Form submission value when checked'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the switch' },
-		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
-		{ name: 'readOnly', type: 'boolean', default: 'false', description: 'Make read-only' },
 		{
 			name: 'onCheckedChange',
-			type: '(details) => void',
+			type: '(checked: boolean) => void',
 			default: '—',
 			description: 'Callback when checked state changes'
 		},
@@ -90,30 +82,22 @@
 
 		<DemoCard
 			title="Default checked"
-			description="Start in the on state using defaultChecked."
-			code={`<Switch label="Dark mode" defaultChecked={true} />`}
+			description="Start in the on state by setting checked."
+			code={`<Switch label="Dark mode" checked={true} />`}
 		>
-			<Switch label="Dark mode" defaultChecked={true} />
+			<Switch label="Dark mode" checked={true} />
 		</DemoCard>
 
 		<DemoCard
 			title="Disabled"
 			description="Switch in disabled state."
 			code={`<Switch label="Disabled off" disabled />
-<Switch label="Disabled on" disabled defaultChecked={true} />`}
+<Switch label="Disabled on" disabled checked={true} />`}
 		>
 			<div class="flex flex-col gap-2">
 				<Switch label="Disabled off" disabled />
-				<Switch label="Disabled on" disabled defaultChecked={true} />
+				<Switch label="Disabled on" disabled checked={true} />
 			</div>
-		</DemoCard>
-
-		<DemoCard
-			title="Invalid"
-			description="Shows error styling when validation fails."
-			code="<Switch label=&quot;Required setting&quot; invalid />"
-		>
-			<Switch label="Required setting" invalid />
 		</DemoCard>
 
 		<DemoCard

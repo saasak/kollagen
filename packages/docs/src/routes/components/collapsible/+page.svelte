@@ -10,14 +10,8 @@
 		{
 			name: 'open',
 			type: 'boolean',
-			default: '—',
+			default: 'false',
 			description: 'Controlled open state. Supports bind:open'
-		},
-		{
-			name: 'defaultOpen',
-			type: 'boolean',
-			default: '—',
-			description: 'Initial open state for uncontrolled mode'
 		},
 		{
 			name: 'disabled',
@@ -27,21 +21,9 @@
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when open state changes'
-		},
-		{
-			name: 'lazyMount',
-			type: 'boolean',
-			default: 'false',
-			description: 'Lazy mount the content (only render when first opened)'
-		},
-		{
-			name: 'unmountOnExit',
-			type: 'boolean',
-			default: 'false',
-			description: 'Unmount content DOM when collapsed'
 		},
 		{
 			name: 'class',
@@ -94,12 +76,12 @@
 		<DemoCard
 			title="Default open"
 			description="Starts in the expanded state."
-			code={`<Collapsible label="Already open" defaultOpen={true}>
+			code={`<Collapsible label="Already open" open={true}>
   <p>This content is visible on load.</p>
 </Collapsible>`}
 		>
 			<div class="max-w-md">
-				<Collapsible label="Already open" defaultOpen={true}>
+				<Collapsible label="Already open" open={true}>
 					<p>This content is visible on load.</p>
 				</Collapsible>
 			</div>
@@ -138,20 +120,6 @@
 			<div class="max-w-md">
 				<Collapsible label="Cannot toggle" disabled={true}>
 					<p>You should not see this.</p>
-				</Collapsible>
-			</div>
-		</DemoCard>
-
-		<DemoCard
-			title="Lazy mount"
-			description="Content is only rendered in the DOM when first opened."
-			code={`<Collapsible label="Lazy content" lazyMount={true}>
-  <p>This was not in the DOM until you opened it.</p>
-</Collapsible>`}
-		>
-			<div class="max-w-md">
-				<Collapsible label="Lazy content" lazyMount={true}>
-					<p>This was not in the DOM until you opened it.</p>
 				</Collapsible>
 			</div>
 		</DemoCard>

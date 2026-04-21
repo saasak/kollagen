@@ -12,24 +12,12 @@
 			default: '—',
 			description: 'Controlled open state. Supports bind:open'
 		},
-		{
-			name: 'defaultOpen',
-			type: 'boolean',
-			default: 'false',
-			description: 'Initial open state for uncontrolled mode'
-		},
 		{ name: 'title', type: 'string', default: '—', description: 'Dialog heading text' },
 		{
 			name: 'description',
 			type: 'string',
 			default: '—',
 			description: 'Dialog description text below the title'
-		},
-		{
-			name: 'modal',
-			type: 'boolean',
-			default: 'true',
-			description: 'Whether the dialog blocks outside interaction'
 		},
 		{
 			name: 'closeOnEscape',
@@ -50,12 +38,6 @@
 			description: 'Prevent background scrolling when open'
 		},
 		{
-			name: 'role',
-			type: '"dialog" | "alertdialog"',
-			default: '"dialog"',
-			description: 'Semantic role for the dialog'
-		},
-		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
@@ -63,7 +45,7 @@
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when open state changes'
 		},
@@ -164,12 +146,11 @@
 		</DemoCard>
 
 		<DemoCard
-			title="Alert dialog"
-			description="Uses role=&quot;alertdialog&quot; for critical actions that require acknowledgement."
+			title="Persistent dialog"
+			description="Prevents closing by clicking outside, requiring explicit user action."
 			code={`<Dialog
   title="Delete item"
   description="This will permanently delete the item."
-  role="alertdialog"
   closeOnInteractOutside={false}
 >
   {#snippet trigger()}
@@ -185,7 +166,6 @@
 			<Dialog
 				title="Delete item"
 				description="This will permanently delete the item."
-				role="alertdialog"
 				closeOnInteractOutside={false}
 			>
 				{#snippet trigger()}

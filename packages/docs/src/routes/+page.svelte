@@ -39,8 +39,7 @@ npx kollagen add combobox</pre>
 			<div class="rounded-kl-box border-kl-base-300 border p-6">
 				<h3 class="text-kl-base-content text-lg font-semibold">Accessible</h3>
 				<p class="text-kl-muted-content mt-2 text-sm">
-					Built on bits-ui. WAI-ARIA compliant with keyboard navigation and screen reader
-					support.
+					Built on bits-ui. WAI-ARIA compliant with keyboard navigation and screen reader support.
 				</p>
 			</div>
 			<div class="rounded-kl-box border-kl-base-300 border p-6">

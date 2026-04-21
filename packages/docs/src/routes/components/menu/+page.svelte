@@ -63,12 +63,6 @@
 			description: 'Controlled open state. Supports bind:open'
 		},
 		{
-			name: 'defaultOpen',
-			type: 'boolean',
-			default: '—',
-			description: 'Initial open state for uncontrolled mode'
-		},
-		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
@@ -81,20 +75,20 @@
 			description: 'Close menu after an item is selected'
 		},
 		{
-			name: 'loopFocus',
+			name: 'loop',
 			type: 'boolean',
 			default: 'false',
 			description: 'Loop keyboard navigation at list boundaries'
 		},
 		{
 			name: 'onSelect',
-			type: '(details: { value: string }) => void',
+			type: '(value: string) => void',
 			default: '—',
 			description: 'Callback when a menu item is selected'
 		},
 		{
 			name: 'onOpenChange',
-			type: '(details: { open: boolean }) => void',
+			type: '(open: boolean) => void',
 			default: '—',
 			description: 'Callback when the menu opens or closes'
 		},
@@ -135,7 +129,7 @@
     { label: "Save", value: "save" },
     { label: "Export as PDF", value: "export-pdf" },
   ]}
-  onSelect={(d) => console.log(d.value)}
+  onSelect={(value) => console.log(value)}
 >
   {#snippet trigger()}File{/snippet}
 </Menu>`}
@@ -143,8 +137,8 @@
 			<div class="max-w-sm">
 				<Menu
 					items={fileItems}
-					onSelect={(d) => {
-						lastAction = d.value;
+					onSelect={(value) => {
+						lastAction = value;
 					}}
 				>
 					{#snippet trigger()}File{/snippet}

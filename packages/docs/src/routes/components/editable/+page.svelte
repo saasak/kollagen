@@ -16,14 +16,8 @@
 		{
 			name: 'value',
 			type: 'string',
-			default: '—',
+			default: '""',
 			description: 'Controlled value. Supports bind:value'
-		},
-		{
-			name: 'defaultValue',
-			type: 'string',
-			default: '—',
-			description: 'Initial value for uncontrolled mode'
 		},
 		{
 			name: 'placeholder',
@@ -58,12 +52,6 @@
 			description: 'What triggers saving the value'
 		},
 		{
-			name: 'autoResize',
-			type: 'boolean',
-			default: 'false',
-			description: 'Auto-expand input width with content'
-		},
-		{
 			name: 'selectOnFocus',
 			type: 'boolean',
 			default: 'true',
@@ -72,7 +60,7 @@
 		{ name: 'maxLength', type: 'number', default: '—', description: 'Maximum character count' },
 		{
 			name: 'onValueChange',
-			type: '(details) => void',
+			type: '(details: { value: string }) => void',
 			default: '—',
 			description: 'Callback when value changes'
 		},
@@ -90,7 +78,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Editable</h1>
 		<p class="text-kl-muted-content mt-2">
-			Inline text editing — click to edit, Enter to save, Escape to cancel. Built on bits-ui.
+			Inline text editing — click to edit, Enter to save, Escape to cancel.
 		</p>
 	</div>
 
@@ -100,31 +88,31 @@
 
 		<DemoCard
 			title="Basic"
-			description="Click the field or pencil icon to enter edit mode. Press Enter or click ✓ to save."
-			code="<Editable defaultValue=&quot;Edit me!&quot; />"
+			description="Click the field or pencil icon to enter edit mode. Press Enter or click the checkmark to save."
+			code="<Editable value=&quot;Edit me!&quot; />"
 		>
 			<div class="max-w-sm">
-				<Editable defaultValue="Edit me!" />
+				<Editable value="Edit me!" />
 			</div>
 		</DemoCard>
 
 		<DemoCard
 			title="With label"
 			description="Optional label prop renders above the field."
-			code="<Editable label=&quot;Display name&quot; defaultValue=&quot;Jane Doe&quot; />"
+			code="<Editable label=&quot;Display name&quot; value=&quot;Jane Doe&quot; />"
 		>
 			<div class="max-w-sm">
-				<Editable label="Display name" defaultValue="Jane Doe" />
+				<Editable label="Display name" value="Jane Doe" />
 			</div>
 		</DemoCard>
 
 		<DemoCard
 			title="Double-click to edit"
 			description="Set activationMode=&quot;dblclick&quot; to require a double-click before entering edit mode."
-			code="<Editable activationMode=&quot;dblclick&quot; defaultValue=&quot;Double-click to edit&quot; />"
+			code="<Editable activationMode=&quot;dblclick&quot; value=&quot;Double-click to edit&quot; />"
 		>
 			<div class="max-w-sm">
-				<Editable activationMode="dblclick" defaultValue="Double-click to edit" />
+				<Editable activationMode="dblclick" value="Double-click to edit" />
 			</div>
 		</DemoCard>
 
@@ -147,20 +135,20 @@
 		<DemoCard
 			title="Disabled"
 			description="Disabled state prevents all interaction."
-			code="<Editable disabled defaultValue=&quot;Can't touch this&quot; />"
+			code="<Editable disabled value=&quot;Can't touch this&quot; />"
 		>
 			<div class="max-w-sm">
-				<Editable disabled defaultValue="Can't touch this" />
+				<Editable disabled value="Can't touch this" />
 			</div>
 		</DemoCard>
 
 		<DemoCard
 			title="Invalid state"
 			description="Set invalid to show error-colored border and ring in edit mode."
-			code="<Editable invalid label=&quot;Username&quot; defaultValue=&quot;taken@email.com&quot; />"
+			code="<Editable invalid label=&quot;Username&quot; value=&quot;taken@email.com&quot; />"
 		>
 			<div class="max-w-sm">
-				<Editable invalid label="Username" defaultValue="taken@email.com" />
+				<Editable invalid label="Username" value="taken@email.com" />
 			</div>
 		</DemoCard>
 
@@ -168,7 +156,7 @@
 			title="Form integration"
 			description="Use the name prop for native form submission."
 			code={`<form onsubmit={handleSubmit}>
-  <Editable name="username" label="Username" defaultValue="janedoe" />
+  <Editable name="username" label="Username" value="janedoe" />
   <button type="submit">Submit</button>
 </form>`}
 		>
@@ -181,7 +169,7 @@
 					}}
 					class="space-y-3"
 				>
-					<Editable name="username" label="Username" defaultValue="janedoe" />
+					<Editable name="username" label="Username" value="janedoe" />
 					<button
 						type="submit"
 						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
