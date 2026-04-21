@@ -1,0 +1,79 @@
+@layer kollagen.theme {
+	[data-theme='sunset'] {
+		/* Brand */
+		--kl-primary: oklch(0.62 0.22 45);
+		--kl-primary-content: oklch(0.985 0 0);
+		--kl-secondary: oklch(0.58 0.24 25);
+		--kl-secondary-content: oklch(0.985 0 0);
+		--kl-accent: oklch(0.7 0.16 65);
+		--kl-accent-content: oklch(0.15 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.32 0.015 40);
+		--kl-neutral-content: oklch(0.985 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.98 0.012 60);
+		--kl-base-200: oklch(0.94 0.02 55);
+		--kl-base-300: oklch(0.89 0.025 50);
+		--kl-base-content: oklch(0.18 0.015 40);
+
+		/* Muted */
+		--kl-muted: oklch(0.94 0.015 55);
+		--kl-muted-content: oklch(0.52 0.02 40);
+
+		/* Status */
+		--kl-info: oklch(0.6 0.2 240);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.64 0.2 155);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.78 0.18 75);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.58 0.26 20);
+		--kl-error-content: oklch(0.985 0 0);
+
+		/* Overrides */
+		--kl-radius-selector: 0.5rem;
+		--kl-radius-field: 0.625rem;
+		--kl-radius-box: 1rem;
+	}
+
+	[data-theme='sunset'][data-mode='dark'] {
+		/* Brand */
+		--kl-primary: oklch(0.7 0.2 45);
+		--kl-primary-content: oklch(0.14 0 0);
+		--kl-secondary: oklch(0.65 0.22 25);
+		--kl-secondary-content: oklch(0.14 0 0);
+		--kl-accent: oklch(0.75 0.14 65);
+		--kl-accent-content: oklch(0.14 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.8 0.012 40);
+		--kl-neutral-content: oklch(0.14 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.15 0.018 35);
+		--kl-base-200: oklch(0.2 0.022 38);
+		--kl-base-300: oklch(0.27 0.025 40);
+		--kl-base-content: oklch(0.94 0.012 55);
+
+		/* Muted */
+		--kl-muted: oklch(0.27 0.02 38);
+		--kl-muted-content: oklch(0.65 0.015 45);
+
+		/* Status */
+		--kl-info: oklch(0.65 0.18 240);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.68 0.18 155);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.8 0.16 75);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.62 0.24 20);
+		--kl-error-content: oklch(0.985 0 0);
+
+		/* Overrides */
+		--kl-radius-selector: 0.5rem;
+		--kl-radius-field: 0.625rem;
+		--kl-radius-box: 1rem;
+	}
+}

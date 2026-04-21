@@ -1,0 +1,31 @@
+{
+	"name": "@saasak/kollagen-docs",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"svelte:check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+	},
+	"devDependencies": {
+		"svelte-check": "latest",
+		"@sveltejs/adapter-static": "latest",
+		"@sveltejs/kit": "latest",
+		"@sveltejs/vite-plugin-svelte": "latest",
+		"svelte": "latest",
+		"vite": "latest",
+		"tailwindcss": "latest",
+		"@tailwindcss/vite": "latest",
+		"typescript": "^5.8.0",
+		"bits-ui": "latest",
+		"lucide-svelte": "latest",
+		"vaul-svelte": "latest",
+		"svelte-sonner": "latest",
+		"embla-carousel-svelte": "latest",
+		"embla-carousel-autoplay": "latest",
+		"paneforge": "latest",
+		"@internationalized/date": "latest",
+		"uqr": "latest"
+	}
+}

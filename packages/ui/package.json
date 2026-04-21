@@ -1,0 +1,39 @@
+{
+	"name": "@saasak/kollagen",
+	"version": "1.0.4",
+	"description": "Ready-to-use, themed SvelteKit components built on bits-ui",
+	"type": "module",
+	"bin": {
+		"kollagen": "dist/cli/index.js"
+	},
+	"scripts": {
+		"build": "tsup && cp -r src/templates/theme dist/themes",
+		"dev": "tsup --watch"
+	},
+	"files": [
+		"dist",
+		"src/templates"
+	],
+	"dependencies": {
+		"@clack/prompts": "^0.10.0",
+		"commander": "^13.1.0",
+		"nypm": "^0.6.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.13.10",
+		"tsup": "^8.4.0",
+		"typescript": "^5.8.2"
+	},
+	"keywords": [
+		"svelte",
+		"sveltekit",
+		"components",
+		"ui",
+		"bits-ui",
+		"jsrepo"
+	],
+	"license": "MIT",
+	"engines": {
+		"node": ">=22"
+	}
+}

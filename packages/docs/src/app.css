@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+@import '$theme/kollagen.css';
+@import '$theme/ocean.css';
+@import '$theme/forest.css';
+@import '$theme/sunset.css';
+@import '$theme/rose.css';
+@import '$theme/cyberpunk.css';
+@import '$theme/nord.css';
+@import '$theme/dracula.css';
+@import '$theme/emerald.css';
+@import '$theme/valentine.css';
+@import '$theme/autumn.css';
+@import '$theme/synthwave.css';
+@import '$theme/coffee.css';
+
+@source '../../ui/src/templates/components';

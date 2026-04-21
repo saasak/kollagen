@@ -1,0 +1,69 @@
+@layer kollagen.theme {
+	[data-theme='dracula'] {
+		/* Brand — dark-biased light variant */
+		--kl-primary: oklch(0.62 0.24 265);
+		--kl-primary-content: oklch(0.985 0 0);
+		--kl-secondary: oklch(0.68 0.2 330);
+		--kl-secondary-content: oklch(0.985 0 0);
+		--kl-accent: oklch(0.72 0.18 115);
+		--kl-accent-content: oklch(0.15 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.3 0.02 265);
+		--kl-neutral-content: oklch(0.985 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.97 0.008 265);
+		--kl-base-200: oklch(0.93 0.012 262);
+		--kl-base-300: oklch(0.88 0.015 260);
+		--kl-base-content: oklch(0.18 0.015 265);
+
+		/* Muted */
+		--kl-muted: oklch(0.93 0.01 262);
+		--kl-muted-content: oklch(0.52 0.015 265);
+
+		/* Status */
+		--kl-info: oklch(0.65 0.18 230);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.68 0.2 150);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.8 0.18 75);
+		--kl-warning-content: oklch(0.15 0 0);
+		--kl-error: oklch(0.62 0.25 5);
+		--kl-error-content: oklch(0.985 0 0);
+	}
+
+	[data-theme='dracula'][data-mode='dark'] {
+		/* Brand */
+		--kl-primary: oklch(0.68 0.22 265);
+		--kl-primary-content: oklch(0.95 0.005 265);
+		--kl-secondary: oklch(0.72 0.18 330);
+		--kl-secondary-content: oklch(0.12 0 0);
+		--kl-accent: oklch(0.75 0.16 115);
+		--kl-accent-content: oklch(0.12 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.82 0.008 265);
+		--kl-neutral-content: oklch(0.18 0 0);
+
+		/* Base surfaces — deep charcoal */
+		--kl-base-100: oklch(0.18 0.02 265);
+		--kl-base-200: oklch(0.22 0.022 262);
+		--kl-base-300: oklch(0.28 0.022 260);
+		--kl-base-content: oklch(0.94 0.008 265);
+
+		/* Muted */
+		--kl-muted: oklch(0.28 0.018 262);
+		--kl-muted-content: oklch(0.62 0.012 265);
+
+		/* Status */
+		--kl-info: oklch(0.68 0.16 230);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.72 0.18 150);
+		--kl-success-content: oklch(0.12 0 0);
+		--kl-warning: oklch(0.82 0.16 75);
+		--kl-warning-content: oklch(0.12 0 0);
+		--kl-error: oklch(0.65 0.24 5);
+		--kl-error-content: oklch(0.985 0 0);
+	}
+}

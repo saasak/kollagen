@@ -1,0 +1,151 @@
+/*
+ * Kollagen — Base Theme
+ * Semantic tokens (DaisyUI-inspired + ShadCN muted), OKLCH colors, Tailwind 4
+ */
+
+@layer kollagen.base, kollagen.theme;
+
+@layer kollagen.base {
+	:root {
+		/* Radius — semantic (DaisyUI v5) */
+		--kl-radius-selector: 0.375rem; /* checkboxes, toggles, badges */
+		--kl-radius-field: 0.5rem; /* inputs, buttons, tabs */
+		--kl-radius-box: 0.75rem; /* cards, modals, dropdowns */
+
+		/* Shadows */
+		--kl-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+		--kl-shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+		--kl-shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+
+		/* Transitions */
+		--kl-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+		--kl-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+		--kl-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+		/* Z-index */
+		--kl-z-dropdown: 50;
+		--kl-z-modal: 100;
+		--kl-z-popover: 40;
+		--kl-z-tooltip: 60;
+	}
+}
+
+@layer kollagen.theme {
+	/* Light theme (default) */
+	:root {
+		/* Brand */
+		--kl-primary: oklch(0.585 0.295 275);
+		--kl-primary-content: oklch(0.985 0 0);
+		--kl-secondary: oklch(0.62 0.26 330);
+		--kl-secondary-content: oklch(0.985 0 0);
+		--kl-accent: oklch(0.72 0.19 185);
+		--kl-accent-content: oklch(0.985 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.32 0.01 275);
+		--kl-neutral-content: oklch(0.985 0 0);
+
+		/* Base surfaces (DaisyUI elevation model) */
+		--kl-base-100: oklch(0.985 0.008 275);
+		--kl-base-200: oklch(0.935 0.012 275);
+		--kl-base-300: oklch(0.88 0.016 275);
+		--kl-base-content: oklch(0.145 0.01 275);
+
+		/* Muted (ShadCN — subdued/disabled states) */
+		--kl-muted: oklch(0.935 0.012 275);
+		--kl-muted-content: oklch(0.556 0.01 275);
+
+		/* Status */
+		--kl-info: oklch(0.635 0.235 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.66 0.24 150);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.78 0.2 80);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.6 0.27 25);
+		--kl-error-content: oklch(0.985 0 0);
+	}
+
+	/* Dark mode */
+	[data-mode='dark'] {
+		/* Brand */
+		--kl-primary: oklch(0.685 0.27 275);
+		--kl-primary-content: oklch(0.145 0 0);
+		--kl-secondary: oklch(0.7 0.24 330);
+		--kl-secondary-content: oklch(0.145 0 0);
+		--kl-accent: oklch(0.76 0.17 185);
+		--kl-accent-content: oklch(0.145 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.82 0.01 275);
+		--kl-neutral-content: oklch(0.145 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.145 0.012 275);
+		--kl-base-200: oklch(0.205 0.015 275);
+		--kl-base-300: oklch(0.269 0.015 275);
+		--kl-base-content: oklch(0.985 0 0);
+
+		/* Muted */
+		--kl-muted: oklch(0.269 0.015 275);
+		--kl-muted-content: oklch(0.708 0.01 275);
+
+		/* Status */
+		--kl-info: oklch(0.67 0.22 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.68 0.22 150);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.8 0.18 80);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.62 0.26 25);
+		--kl-error-content: oklch(0.985 0 0);
+	}
+}
+
+/* Tailwind 4 @theme mapping */
+@theme inline {
+	/* Brand */
+	--color-kl-primary: var(--kl-primary);
+	--color-kl-primary-content: var(--kl-primary-content);
+	--color-kl-secondary: var(--kl-secondary);
+	--color-kl-secondary-content: var(--kl-secondary-content);
+	--color-kl-accent: var(--kl-accent);
+	--color-kl-accent-content: var(--kl-accent-content);
+
+	/* Neutral */
+	--color-kl-neutral: var(--kl-neutral);
+	--color-kl-neutral-content: var(--kl-neutral-content);
+
+	/* Base surfaces */
+	--color-kl-base-100: var(--kl-base-100);
+	--color-kl-base-200: var(--kl-base-200);
+	--color-kl-base-300: var(--kl-base-300);
+	--color-kl-base-content: var(--kl-base-content);
+
+	/* Muted */
+	--color-kl-muted: var(--kl-muted);
+	--color-kl-muted-content: var(--kl-muted-content);
+
+	/* Status */
+	--color-kl-info: var(--kl-info);
+	--color-kl-info-content: var(--kl-info-content);
+	--color-kl-success: var(--kl-success);
+	--color-kl-success-content: var(--kl-success-content);
+	--color-kl-warning: var(--kl-warning);
+	--color-kl-warning-content: var(--kl-warning-content);
+	--color-kl-error: var(--kl-error);
+	--color-kl-error-content: var(--kl-error-content);
+
+	/* Radius — semantic */
+	--radius-kl-selector: var(--kl-radius-selector);
+	--radius-kl-field: var(--kl-radius-field);
+	--radius-kl-box: var(--kl-radius-box);
+
+	/* Shadows */
+	--shadow-kl-sm: var(--kl-shadow-sm);
+	--shadow-kl-md: var(--kl-shadow-md);
+	--shadow-kl-lg: var(--kl-shadow-lg);
+
+	/* Default border color */
+	--default-border-color: var(--color-kl-base-300);
+}

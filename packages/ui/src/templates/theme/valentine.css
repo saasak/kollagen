@@ -1,0 +1,79 @@
+@layer kollagen.theme {
+	[data-theme='valentine'] {
+		/* Brand — soft pastels */
+		--kl-primary: oklch(0.68 0.18 340);
+		--kl-primary-content: oklch(0.985 0 0);
+		--kl-secondary: oklch(0.72 0.14 280);
+		--kl-secondary-content: oklch(0.985 0 0);
+		--kl-accent: oklch(0.75 0.12 15);
+		--kl-accent-content: oklch(0.18 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.35 0.015 340);
+		--kl-neutral-content: oklch(0.985 0 0);
+
+		/* Base surfaces — blush pink */
+		--kl-base-100: oklch(0.98 0.014 340);
+		--kl-base-200: oklch(0.95 0.02 338);
+		--kl-base-300: oklch(0.91 0.025 335);
+		--kl-base-content: oklch(0.22 0.02 340);
+
+		/* Muted */
+		--kl-muted: oklch(0.95 0.016 338);
+		--kl-muted-content: oklch(0.55 0.02 340);
+
+		/* Status */
+		--kl-info: oklch(0.62 0.16 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.65 0.16 160);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.78 0.15 80);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.58 0.22 15);
+		--kl-error-content: oklch(0.985 0 0);
+
+		/* Soft, rounded */
+		--kl-radius-selector: 0.5rem;
+		--kl-radius-field: 0.75rem;
+		--kl-radius-box: 1.25rem;
+	}
+
+	[data-theme='valentine'][data-mode='dark'] {
+		/* Brand */
+		--kl-primary: oklch(0.72 0.16 340);
+		--kl-primary-content: oklch(0.14 0 0);
+		--kl-secondary: oklch(0.75 0.12 280);
+		--kl-secondary-content: oklch(0.14 0 0);
+		--kl-accent: oklch(0.78 0.1 15);
+		--kl-accent-content: oklch(0.14 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.8 0.01 340);
+		--kl-neutral-content: oklch(0.14 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.16 0.02 340);
+		--kl-base-200: oklch(0.21 0.024 338);
+		--kl-base-300: oklch(0.27 0.025 335);
+		--kl-base-content: oklch(0.94 0.012 340);
+
+		/* Muted */
+		--kl-muted: oklch(0.27 0.02 338);
+		--kl-muted-content: oklch(0.64 0.015 340);
+
+		/* Status */
+		--kl-info: oklch(0.65 0.15 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.68 0.15 160);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.8 0.14 80);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.62 0.2 15);
+		--kl-error-content: oklch(0.985 0 0);
+
+		/* Soft, rounded */
+		--kl-radius-selector: 0.5rem;
+		--kl-radius-field: 0.75rem;
+		--kl-radius-box: 1.25rem;
+	}
+}

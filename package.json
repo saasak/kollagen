@@ -1,0 +1,33 @@
+{
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm --filter @saasak/kollagen-docs dev",
+		"build": "pnpm -r build && jsrepo build",
+		"build:registry": "jsrepo build",
+		"build:ui": "pnpm --filter @saasak/kollagen build",
+		"build:docs": "pnpm --filter @saasak/kollagen-docs build",
+		"code:lint": "prettier --check . && eslint . && pnpm -r svelte:check",
+		"code:fix": "prettier --write . && eslint --fix .",
+		"docker:build": "docker build -f packages/docs/Dockerfile -t kollagen-docs .",
+		"docker:run": "docker run --rm -p 8080:80 kollagen-docs"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	},
+	"devDependencies": {
+		"@eslint/compat": "latest",
+		"@eslint/js": "latest",
+		"eslint": "latest",
+		"eslint-config-prettier": "latest",
+		"eslint-plugin-svelte": "latest",
+		"globals": "latest",
+		"jsrepo": "^3.7.0",
+		"prettier": "latest",
+		"prettier-plugin-svelte": "latest",
+		"prettier-plugin-tailwindcss": "latest",
+		"typescript-eslint": "latest"
+	}
+}

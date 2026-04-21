@@ -1,0 +1,69 @@
+@layer kollagen.theme {
+	[data-theme='rose'] {
+		/* Brand */
+		--kl-primary: oklch(0.6 0.22 350);
+		--kl-primary-content: oklch(0.985 0 0);
+		--kl-secondary: oklch(0.56 0.2 310);
+		--kl-secondary-content: oklch(0.985 0 0);
+		--kl-accent: oklch(0.65 0.15 15);
+		--kl-accent-content: oklch(0.985 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.32 0.015 350);
+		--kl-neutral-content: oklch(0.985 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.98 0.01 350);
+		--kl-base-200: oklch(0.94 0.016 348);
+		--kl-base-300: oklch(0.89 0.02 345);
+		--kl-base-content: oklch(0.18 0.015 350);
+
+		/* Muted */
+		--kl-muted: oklch(0.94 0.012 348);
+		--kl-muted-content: oklch(0.52 0.018 350);
+
+		/* Status */
+		--kl-info: oklch(0.62 0.2 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.64 0.2 155);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.78 0.17 80);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.58 0.25 20);
+		--kl-error-content: oklch(0.985 0 0);
+	}
+
+	[data-theme='rose'][data-mode='dark'] {
+		/* Brand */
+		--kl-primary: oklch(0.68 0.2 350);
+		--kl-primary-content: oklch(0.14 0 0);
+		--kl-secondary: oklch(0.65 0.18 310);
+		--kl-secondary-content: oklch(0.14 0 0);
+		--kl-accent: oklch(0.72 0.13 15);
+		--kl-accent-content: oklch(0.14 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.8 0.012 350);
+		--kl-neutral-content: oklch(0.14 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.15 0.015 350);
+		--kl-base-200: oklch(0.2 0.018 348);
+		--kl-base-300: oklch(0.26 0.02 345);
+		--kl-base-content: oklch(0.94 0.01 350);
+
+		/* Muted */
+		--kl-muted: oklch(0.26 0.016 348);
+		--kl-muted-content: oklch(0.64 0.015 350);
+
+		/* Status */
+		--kl-info: oklch(0.65 0.18 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.68 0.18 155);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.8 0.16 80);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.62 0.24 20);
+		--kl-error-content: oklch(0.985 0 0);
+	}
+}
