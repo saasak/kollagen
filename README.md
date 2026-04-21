@@ -58,11 +58,12 @@ DaisyUI-inspired theming system built on CSS variables:
 
 ## Component design
 
-- **bits-ui catalog** — priority on user-input components (ComboBox, Select, DatePicker, etc.)
+- **40 components + 1 block** — priority on user-input components (ComboBox, Select, DatePicker, etc.)
+- **Heterogeneous primitives** — bits-ui for most components, vaul-svelte (Drawer), svelte-sonner (Toast), embla-carousel-svelte (Carousel), paneforge (Splitter), plus custom implementations for niche components
 - **Async-ready** — components like ComboBox support async data fetching out of the box
 - **Form-ready** — `name` prop forwarded to the native input for proper form submission
 - **Controlled & uncontrolled** — supports both `bind:value` and `onValueChange` callbacks
-- **Accessible** — inherits bits-ui's full WAI-ARIA compliance
+- **Accessible** — inherits bits-ui's WAI-ARIA compliance; custom components include ARIA attributes
 - **Slots where it makes sense** — some components expose Svelte 5 snippets for custom rendering
 
 ## Project structure
@@ -84,7 +85,7 @@ pnpm install
 pnpm build
 
 # Run docs dev server
-pnpm dev:docs
+pnpm dev       # or pnpm dev:docs
 
 # Build CLI only
 pnpm build:ui

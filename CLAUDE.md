@@ -18,7 +18,7 @@ pnpm workspace with two packages:
 Root scripts:
 
 - `pnpm build` — build all packages
-- `pnpm dev:docs` — run docs dev server
+- `pnpm dev` / `pnpm dev:docs` — run docs dev server
 - `pnpm build:ui` / `pnpm build:docs` — build individual packages
 - `pnpm code:lint` / `pnpm code:fix` — lint and format
 - `pnpm docker:build` / `pnpm docker:run` — build and run docs Docker image
@@ -50,10 +50,12 @@ Components are distributed via [jsrepo](https://jsrepo.dev). The registry config
 ## Component design principles
 
 - Wrap bits-ui primitives into single ready-to-use components with clean props interfaces
+- Some components use alternative libraries: vaul-svelte (Drawer), svelte-sonner (Toast), embla-carousel-svelte (Carousel), paneforge (Splitter)
+- Some components are custom Svelte 5 implementations with no headless library (Timer, Editable, Steps, TagsInput, FileUpload, TreeView, Clipboard, QrCode, NumberInput, Marquee, PasswordInput, Field, Fieldset)
 - Both controlled (`bind:value`) and uncontrolled (`onValueChange`) APIs
 - Form submission handled natively by bits-ui (name prop forwarded to the visible input)
 - Async-ready where applicable (e.g., ComboBox)
-- A11y delegated entirely to bits-ui
+- A11y delegated to bits-ui where available; custom components include manual ARIA attributes
 - Svelte 5 snippets/slots used on a case-by-case basis
 - Users own the source — no passthrough props system, edit the component directly for deep customization
 
