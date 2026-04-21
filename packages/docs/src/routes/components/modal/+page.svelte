@@ -133,7 +133,7 @@
 		<h1 class="text-3xl font-bold">Modal</h1>
 		<p class="text-kl-muted-content mt-2">
 			Responsive modal that renders as a centered dialog on desktop and a bottom-sheet drawer on
-			mobile. Built on Ark UI Dialog + Drawer primitives.
+			mobile. Built on bits-ui Dialog + Drawer primitives.
 		</p>
 	</div>
 

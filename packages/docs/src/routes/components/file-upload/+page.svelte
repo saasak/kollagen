@@ -117,7 +117,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">FileUpload</h1>
 		<p class="text-kl-muted-content mt-2">
-			A file upload component with drag-and-drop, previews, and validation. Built on Ark UI.
+			A file upload component with drag-and-drop, previews, and validation. Built on bits-ui.
 		</p>
 	</div>
 

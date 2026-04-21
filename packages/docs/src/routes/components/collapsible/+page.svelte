@@ -69,7 +69,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Collapsible</h1>
 		<p class="text-kl-muted-content mt-2">
-			A panel that toggles between expanded and collapsed states. Built on Ark UI.
+			A panel that toggles between expanded and collapsed states. Built on bits-ui.
 		</p>
 	</div>
 

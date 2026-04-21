@@ -58,7 +58,7 @@
 		<h1 class="text-3xl font-bold">Fieldset</h1>
 		<p class="text-kl-muted-content mt-2">
 			Groups related form fields under a common legend with optional helper and error text. Built on
-			Ark UI.
+			bits-ui.
 		</p>
 	</div>
 

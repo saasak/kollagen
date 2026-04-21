@@ -118,7 +118,7 @@
 		<h1 class="text-3xl font-bold">Menu</h1>
 		<p class="text-kl-muted-content mt-2">
 			Dropdown menu for actions and navigation. Supports grouping, separators, and disabled items.
-			Built on Ark UI.
+			Built on bits-ui.
 		</p>
 	</div>
 

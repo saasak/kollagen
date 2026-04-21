@@ -96,7 +96,7 @@
 		<h1 class="text-3xl font-bold">Tooltip</h1>
 		<p class="text-kl-muted-content mt-2">
 			Informational popup that appears on hover or focus. Supports delays, interactive content, and
-			custom positioning. Built on Ark UI.
+			custom positioning. Built on bits-ui.
 		</p>
 	</div>
 

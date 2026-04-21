@@ -67,7 +67,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Splitter</h1>
 		<p class="text-kl-muted-content mt-2">
-			Resizable split panels for flexible layouts. Built on Ark UI.
+			Resizable split panels for flexible layouts. Built on bits-ui.
 		</p>
 	</div>
 

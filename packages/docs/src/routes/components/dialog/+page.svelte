@@ -94,7 +94,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Dialog</h1>
 		<p class="text-kl-muted-content mt-2">
-			Modal window appearing above the main content. Built on Ark UI with focus trapping, backdrop,
+			Modal window appearing above the main content. Built on bits-ui with focus trapping, backdrop,
 			and keyboard support.
 		</p>
 	</div>

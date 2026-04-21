@@ -111,7 +111,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">ComboBox</h1>
 		<p class="text-kl-muted-content mt-2">
-			Autocomplete input with sync filtering and async search support. Built on Ark UI.
+			Autocomplete input with sync filtering and async search support. Built on bits-ui.
 		</p>
 	</div>
 

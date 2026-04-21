@@ -84,7 +84,7 @@
 		<h1 class="text-3xl font-bold">RatingGroup</h1>
 		<p class="text-kl-muted-content mt-2">
 			Star rating input with support for half-stars, read-only display, and native form submission.
-			Built on Ark UI.
+			Built on bits-ui.
 		</p>
 	</div>
 

@@ -66,7 +66,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Password Input</h1>
 		<p class="text-kl-muted-content mt-2">
-			A password field with a show/hide toggle. Built on Ark UI.
+			A password field with a show/hide toggle. Built on bits-ui.
 		</p>
 	</div>
 

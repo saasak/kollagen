@@ -69,7 +69,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Field</h1>
 		<p class="text-kl-muted-content mt-2">
-			A structured form field with label, input, helper text, and error message. Built on Ark UI.
+			A structured form field with label, input, helper text, and error message. Built on bits-ui.
 		</p>
 	</div>
 

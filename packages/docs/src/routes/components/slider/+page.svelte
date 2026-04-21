@@ -111,7 +111,7 @@
 		<h1 class="text-3xl font-bold">Slider</h1>
 		<p class="text-kl-muted-content mt-2">
 			A slider control for selecting numeric values from a range. Supports single thumb, range mode,
-			markers, and vertical orientation. Built on Ark UI.
+			markers, and vertical orientation. Built on bits-ui.
 		</p>
 	</div>
 

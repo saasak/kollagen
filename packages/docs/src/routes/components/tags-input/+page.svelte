@@ -88,7 +88,7 @@
 		<h1 class="text-3xl font-bold">TagsInput</h1>
 		<p class="text-kl-muted-content mt-2">
 			Multi-value text input for adding and managing tags. Supports keyboard navigation, editing,
-			paste, and validation. Built on Ark UI.
+			paste, and validation. Built on bits-ui.
 		</p>
 	</div>
 
@@ -98,7 +98,7 @@
 		<DemoCard
 			title="Basic"
 			description="Type and press Enter or comma to add tags. Click × to remove."
-			code={`<TagsInput placeholder="Add tag..." defaultValue={["svelte", "ark-ui"]} />`}
+			code={`<TagsInput placeholder="Add tag..." defaultValue={["svelte", "bits-ui"]} />`}
 		>
 			<div class="max-w-sm">
 				<TagsInput placeholder="Add tag..." defaultValue={['svelte', 'ark-ui']} />

@@ -25,7 +25,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">ScrollArea</h1>
 		<p class="text-kl-muted-content mt-2">
-			A scrollable container with custom-styled scrollbars. Built on Ark UI.
+			A scrollable container with custom-styled scrollbars. Built on bits-ui.
 		</p>
 	</div>
 

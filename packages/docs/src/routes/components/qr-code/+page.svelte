@@ -57,7 +57,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">QrCode</h1>
 		<p class="text-kl-muted-content mt-2">
-			Generates and displays a QR code from any string value. Built on Ark UI and uqr.
+			Generates and displays a QR code from any string value. Built on bits-ui and uqr.
 		</p>
 	</div>
 

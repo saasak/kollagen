@@ -153,7 +153,7 @@
 		<h1 class="text-3xl font-bold">TreeView</h1>
 		<p class="text-kl-muted-content mt-2">
 			Hierarchical tree structure for displaying nested data. Supports single and multiple
-			selection, keyboard navigation, and controlled state. Built on Ark UI.
+			selection, keyboard navigation, and controlled state. Built on bits-ui.
 		</p>
 	</div>
 

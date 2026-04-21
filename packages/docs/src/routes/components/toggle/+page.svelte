@@ -46,7 +46,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Toggle</h1>
 		<p class="text-kl-muted-content mt-2">
-			A two-state button that can be either on or off. Built on Ark UI.
+			A two-state button that can be either on or off. Built on bits-ui.
 		</p>
 	</div>
 

@@ -99,7 +99,7 @@
 		<h1 class="text-3xl font-bold">Tabs</h1>
 		<p class="text-kl-muted-content mt-2">
 			Tabbed interface for organizing content into panels. Supports keyboard navigation, vertical
-			layout, and form integration. Built on Ark UI.
+			layout, and form integration. Built on bits-ui.
 		</p>
 	</div>
 

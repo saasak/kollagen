@@ -57,7 +57,7 @@
 		<h1 class="text-3xl font-bold">Checkbox</h1>
 		<p class="text-kl-muted-content mt-2">
 			A control that allows toggling between checked, unchecked, and indeterminate states. Built on
-			Ark UI.
+			bits-ui.
 		</p>
 	</div>
 

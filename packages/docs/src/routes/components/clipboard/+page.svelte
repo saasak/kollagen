@@ -63,7 +63,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Clipboard</h1>
 		<p class="text-kl-muted-content mt-2">
-			Copy-to-clipboard input with visual feedback. Built on Ark UI.
+			Copy-to-clipboard input with visual feedback. Built on bits-ui.
 		</p>
 	</div>
 

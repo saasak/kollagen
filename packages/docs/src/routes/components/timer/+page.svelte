@@ -66,7 +66,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Timer</h1>
 		<p class="text-kl-muted-content mt-2">
-			Countdown and count-up timer with configurable segments and built-in controls. Built on Ark
+			Countdown and count-up timer with configurable segments and built-in controls. Built on bits-ui
 			UI.
 		</p>
 	</div>

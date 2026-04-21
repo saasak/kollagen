@@ -8,8 +8,8 @@
 		{ name: 'TypeScript', color: 'text-blue-500' },
 		{ name: 'Tailwind', color: 'text-cyan-500' },
 		{ name: 'Vite', color: 'text-purple-500' },
-		{ name: 'Ark UI', color: 'text-green-500' },
-		{ name: 'Zag.js', color: 'text-yellow-500' }
+		{ name: 'bits-ui', color: 'text-green-500' },
+		{ name: 'bits-ui', color: 'text-yellow-500' }
 	];
 
 	const reviews = [
@@ -130,7 +130,7 @@
 		<h1 class="text-3xl font-bold">Marquee</h1>
 		<p class="text-kl-muted-content mt-2">
 			Continuously scrolling content strip with support for auto-fill, pause on interaction, and
-			edge gradients. Built on Ark UI.
+			edge gradients. Built on bits-ui.
 		</p>
 	</div>
 

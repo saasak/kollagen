@@ -78,7 +78,7 @@
 		<h1 class="text-3xl font-bold">HoverCard</h1>
 		<p class="text-kl-muted-content mt-2">
 			Rich content popup that appears when hovering over a trigger. Ideal for user profiles, link
-			previews, and contextual information. Built on Ark UI.
+			previews, and contextual information. Built on bits-ui.
 		</p>
 	</div>
 
@@ -94,7 +94,7 @@
   {/snippet}
   <div class="space-y-2">
     <p class="font-semibold">Kollagen UI</p>
-    <p class="text-kl-muted-content">Ready-to-use, themed SvelteKit components built on Ark UI.</p>
+    <p class="text-kl-muted-content">Ready-to-use, themed SvelteKit components built on bits-ui.</p>
   </div>
 </HoverCard>`}
 		>
@@ -105,7 +105,7 @@
 				<div class="space-y-2">
 					<p class="font-semibold">Kollagen UI</p>
 					<p class="text-kl-muted-content">
-						Ready-to-use, themed SvelteKit components built on Ark UI.
+						Ready-to-use, themed SvelteKit components built on bits-ui.
 					</p>
 				</div>
 			</HoverCard>

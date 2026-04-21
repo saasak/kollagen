@@ -129,7 +129,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Drawer</h1>
 		<p class="text-kl-muted-content mt-2">
-			Slide-in panel that overlays content from any edge. Built on Ark UI's Drawer with
+			Slide-in panel that overlays content from any edge. Built on bits-ui's Drawer with
 			swipe-to-dismiss, snap points, and grabber handle.
 		</p>
 	</div>

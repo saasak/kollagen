@@ -93,7 +93,7 @@
 		<h1 class="text-3xl font-bold">Pagination</h1>
 		<p class="text-kl-muted-content mt-2">
 			Navigate between pages of content. Supports controlled and uncontrolled modes, page info, page
-			size control, and link-based navigation. Built on Ark UI.
+			size control, and link-based navigation. Built on bits-ui.
 		</p>
 	</div>
 

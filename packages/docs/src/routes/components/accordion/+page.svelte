@@ -11,7 +11,7 @@
 	];
 
 	const faqContent: Record<string, string> = {
-		what: 'Kollagen is a CLI tool that copies ready-to-use, themed SvelteKit components into your project. Built on Ark UI primitives.',
+		what: 'Kollagen is a CLI tool that copies ready-to-use, themed SvelteKit components into your project. Built on bits-ui primitives.',
 		install:
 			'Run npx kollagen init to scaffold your project, then npx kollagen add <component> to add individual components.',
 		theme:
@@ -97,7 +97,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Accordion</h1>
 		<p class="text-kl-muted-content mt-2">
-			Vertically stacked collapsible sections. Built on Ark UI.
+			Vertically stacked collapsible sections. Built on bits-ui.
 		</p>
 	</div>
 

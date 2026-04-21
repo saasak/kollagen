@@ -106,7 +106,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Select</h1>
 		<p class="text-kl-muted-content mt-2">
-			Dropdown select for picking one or more items from a list. Built on Ark UI.
+			Dropdown select for picking one or more items from a list. Built on bits-ui.
 		</p>
 	</div>
 

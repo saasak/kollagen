@@ -104,7 +104,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">DatePicker</h1>
 		<p class="text-kl-muted-content mt-2">
-			Calendar-based date input with single, multiple, and range selection modes. Built on Ark UI.
+			Calendar-based date input with single, multiple, and range selection modes. Built on bits-ui.
 		</p>
 	</div>
 

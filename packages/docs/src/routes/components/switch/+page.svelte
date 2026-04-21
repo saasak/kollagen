@@ -56,7 +56,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Switch</h1>
 		<p class="text-kl-muted-content mt-2">
-			A toggle control for switching between on and off states. Built on Ark UI.
+			A toggle control for switching between on and off states. Built on bits-ui.
 		</p>
 	</div>
 

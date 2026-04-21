@@ -80,7 +80,7 @@
 		<h1 class="text-3xl font-bold">NumberInput</h1>
 		<p class="text-kl-muted-content mt-2">
 			A numeric input with increment/decrement controls. Supports min/max, step, formatting, and
-			form submission. Built on Ark UI.
+			form submission. Built on bits-ui.
 		</p>
 	</div>
 

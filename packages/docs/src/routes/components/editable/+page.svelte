@@ -90,7 +90,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Editable</h1>
 		<p class="text-kl-muted-content mt-2">
-			Inline text editing — click to edit, Enter to save, Escape to cancel. Built on Ark UI.
+			Inline text editing — click to edit, Enter to save, Escape to cancel. Built on bits-ui.
 		</p>
 	</div>
 

@@ -80,7 +80,7 @@
 		<h1 class="text-3xl font-bold">Popover</h1>
 		<p class="text-kl-muted-content mt-2">
 			A floating panel anchored to a trigger element. Ideal for contextual forms, details, or
-			actions. Built on Ark UI.
+			actions. Built on bits-ui.
 		</p>
 	</div>
 

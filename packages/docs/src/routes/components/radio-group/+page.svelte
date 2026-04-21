@@ -74,7 +74,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">RadioGroup</h1>
 		<p class="text-kl-muted-content mt-2">
-			A set of mutually exclusive options where only one can be selected at a time. Built on Ark UI.
+			A set of mutually exclusive options where only one can be selected at a time. Built on bits-ui.
 		</p>
 	</div>
 
