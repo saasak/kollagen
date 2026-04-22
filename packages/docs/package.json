@@ -20,7 +20,7 @@
 		"typescript": "^5.8.0",
 		"bits-ui": "latest",
 		"lucide-svelte": "latest",
-		"vaul-svelte": "latest",
+		"vaul-svelte": "1.0.0-next.7",
 		"svelte-sonner": "latest",
 		"embla-carousel-svelte": "latest",
 		"embla-carousel-autoplay": "latest",
