@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@internationalized/date': 3.12.1
+
 importers:
 
   .:
@@ -45,7 +48,7 @@ importers:
   packages/docs:
     devDependencies:
       '@internationalized/date':
-        specifier: latest
+        specifier: 3.12.1
         version: 3.12.1
       '@sveltejs/adapter-static':
         specifier: latest
@@ -1027,7 +1030,7 @@ packages:
     resolution: {integrity: sha512-GLOBZRVy3hxNHIQ2MpD/+5aK9KcBFZRhUJtZ1UDABXdlVR4K6zFpgt4T+Rwuhf2sQzlc6yK1q/DprHPjwT4Pjw==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@internationalized/date': ^3.8.1
+      '@internationalized/date': 3.12.1
       svelte: ^5.33.0
 
   brace-expansion@5.0.5:

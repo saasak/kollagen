@@ -25,7 +25,7 @@
 		"embla-carousel-svelte": "latest",
 		"embla-carousel-autoplay": "latest",
 		"paneforge": "latest",
-		"@internationalized/date": "latest",
+		"@internationalized/date": "^3.8.2",
 		"uqr": "latest"
 	}
 }

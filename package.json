@@ -15,7 +15,10 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild"
-		]
+		],
+		"overrides": {
+			"@internationalized/date": "3.12.1"
+		}
 	},
 	"devDependencies": {
 		"@eslint/compat": "latest",

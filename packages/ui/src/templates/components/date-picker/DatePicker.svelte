@@ -106,7 +106,7 @@
 				<DateRangePicker.Input type="start">
 					{#snippet children({ segments })}
 						<div class="flex items-center px-3 py-2">
-							{#each segments as { part, value: segValue } (part)}
+							{#each segments as { part, value: segValue }, si (si)}
 								<DateRangePicker.Segment
 									{part}
 									class="text-kl-base-content data-[type=literal]:text-kl-muted-content focus:bg-kl-primary focus:text-kl-primary-content rounded-sm px-0.5 text-sm outline-none"
@@ -121,7 +121,7 @@
 				<DateRangePicker.Input type="end">
 					{#snippet children({ segments })}
 						<div class="flex items-center px-3 py-2">
-							{#each segments as { part, value: segValue } (part)}
+							{#each segments as { part, value: segValue }, si (si)}
 								<DateRangePicker.Segment
 									{part}
 									class="text-kl-base-content data-[type=literal]:text-kl-muted-content focus:bg-kl-primary focus:text-kl-primary-content rounded-sm px-0.5 text-sm outline-none"
@@ -236,7 +236,7 @@
 				<DatePicker.Input>
 					{#snippet children({ segments })}
 						<div class="flex items-center px-3 py-2">
-							{#each segments as { part, value: segValue } (part)}
+							{#each segments as { part, value: segValue }, si (si)}
 								<DatePicker.Segment
 									{part}
 									class="text-kl-base-content data-[type=literal]:text-kl-muted-content focus:bg-kl-primary focus:text-kl-primary-content rounded-sm px-0.5 text-sm outline-none"
