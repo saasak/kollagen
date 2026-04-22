@@ -1,49 +1,43 @@
 <script lang="ts">
 	import { DatePicker } from '$ui/date-picker';
-	import { parseDate } from '@internationalized/date';
+	import { parseDate, type DateValue } from '@internationalized/date';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	let controlledValue = $state<import('@internationalized/date').DateValue[]>([]);
+	let controlledValue = $state<DateValue | undefined>();
 	let formResult = $state('');
 
 	const propsData = [
 		{
 			name: 'value',
-			type: 'DateValue | DateValue[] | DateRange | undefined',
+			type: 'DateValue | undefined',
 			default: '—',
-			description: 'Controlled selected date(s). Supports bind:value'
+			description: 'Controlled selected date. Supports bind:value'
 		},
 		{
 			name: 'name',
 			type: 'string',
 			default: '—',
-			description: 'Form field name for native submission'
+			description: 'Form field name for native submission (on DatePicker.Input)'
 		},
 		{
 			name: 'placeholder',
 			type: 'DateValue',
-			default: 'today()',
-			description: 'Placeholder date for calendar navigation'
-		},
-		{
-			name: 'selectionMode',
-			type: '"single" | "multiple" | "range"',
-			default: '"single"',
-			description: 'Date selection mode'
+			default: '—',
+			description: 'Placeholder date controlling which month is displayed'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the date picker' },
 		{
-			name: 'readOnly',
+			name: 'readonly',
 			type: 'boolean',
 			default: 'false',
 			description: 'Make the date picker read-only'
 		},
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
 		{
-			name: 'closeOnSelect',
+			name: 'closeOnDateSelect',
 			type: 'boolean',
-			default: 'true (false for multiple)',
+			default: 'true',
 			description: 'Close calendar after selection'
 		},
 		{
@@ -90,7 +84,7 @@
 		},
 		{
 			name: 'onValueChange',
-			type: '(value: DateValue | DateValue[] | DateRange | undefined) => void',
+			type: '(value: DateValue | undefined) => void',
 			default: '—',
 			description: 'Callback when selected value changes'
 		},
@@ -107,7 +101,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">DatePicker</h1>
 		<p class="text-kl-muted-content mt-2">
-			Calendar-based date input with single, multiple, and range selection modes. Built on bits-ui.
+			Calendar-based date input with segment editing and popover calendar. Built on bits-ui.
 		</p>
 	</div>
 
@@ -129,21 +123,9 @@
 				<DatePicker bind:value={controlledValue} />
 				<p class="text-kl-muted-content text-sm">
 					Selected: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
-						>{controlledValue.length
-							? controlledValue.map((d) => d.toString()).join(', ')
-							: '(none)'}</code
+						>{controlledValue ? controlledValue.toString() : '(none)'}</code
 					>
 				</p>
-			</div>
-		</DemoCard>
-
-		<DemoCard
-			title="Range selection"
-			description="Select a date range with two inputs."
-			code="<DatePicker selectionMode=&quot;range&quot; />"
-		>
-			<div class="max-w-md">
-				<DatePicker selectionMode="range" />
 			</div>
 		</DemoCard>
 
