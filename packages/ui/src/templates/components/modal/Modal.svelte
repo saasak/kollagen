@@ -57,11 +57,15 @@
 {#if showDrawer}
 	<Drawer.Root bind:open {snapPoints} {onOpenChange}>
 		{#if trigger}
-			<Drawer.Trigger
-				{disabled}
-				class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-			>
-				{@render trigger()}
+			<Drawer.Trigger {disabled}>
+				{#snippet child({ props })}
+					<button
+						{...props}
+						class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
+					>
+						{@render trigger()}
+					</button>
+				{/snippet}
 			</Drawer.Trigger>
 		{/if}
 

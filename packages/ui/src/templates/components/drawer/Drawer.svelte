@@ -51,29 +51,36 @@
 
 <Drawer.Root bind:open {direction} {snapPoints} {modal} {dismissible} {onOpenChange}>
 	{#if trigger}
-		<Drawer.Trigger
-			{disabled}
-			class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-		>
-			{@render trigger()}
+		<Drawer.Trigger {disabled}>
+			{#snippet child({ props })}
+				<button
+					{...props}
+					class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
+				>
+					{@render trigger()}
+				</button>
+			{/snippet}
 		</Drawer.Trigger>
 	{/if}
 
+	<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 	<Drawer.Portal>
-		<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 		<Drawer.Content
 			class="{contentClass} border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-modal)] {className ??
 				''}"
 		>
 			{#if isVertical}
-				<Drawer.Handle class="bg-kl-base-300 mx-auto mt-3 mb-1 h-1.5 w-12 rounded-full" />
+				<div class="flex justify-center pt-3 pb-1">
+					<div class="bg-kl-base-300 h-1.5 w-12 rounded-full"></div>
+				</div>
 			{/if}
 
-			<Drawer.Close
+			<button
+				onclick={() => (open = false)}
 				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 z-10 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"
 			>
 				<X size={16} />
-			</Drawer.Close>
+			</button>
 
 			<div
 				class="overflow-y-auto {isVertical
@@ -81,15 +88,11 @@
 					: 'h-full p-6'}"
 			>
 				{#if title}
-					<Drawer.Title class="text-kl-base-content pr-8 text-lg font-semibold">
-						{title}
-					</Drawer.Title>
+					<h2 class="text-kl-base-content pr-8 text-lg font-semibold">{title}</h2>
 				{/if}
 
 				{#if description}
-					<Drawer.Description class="text-kl-muted-content mt-1 text-sm">
-						{description}
-					</Drawer.Description>
+					<p class="text-kl-muted-content mt-1 text-sm">{description}</p>
 				{/if}
 
 				{#if children}
