@@ -22,7 +22,6 @@
 		items: MenuEntry[];
 		open?: boolean;
 		disabled?: boolean;
-		closeOnSelect?: boolean;
 		loop?: boolean;
 		onSelect?: (value: string) => void;
 		onOpenChange?: (open: boolean) => void;
@@ -32,9 +31,8 @@
 
 	let {
 		items,
-		open = $bindable(),
+		open = $bindable(false),
 		disabled = false,
-		closeOnSelect = true,
 		loop = false,
 		onSelect,
 		onOpenChange,
@@ -51,13 +49,13 @@
 	}
 
 	const itemClass =
-		'flex cursor-pointer items-center rounded-kl-selector px-3 py-2 text-sm text-kl-base-content transition-colors duration-150 data-[highlighted]:bg-kl-base-200 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50';
+		'flex cursor-pointer items-center rounded-kl-selector px-3 py-2 text-sm text-kl-base-content transition-colors duration-150 data-[highlighted]:bg-kl-base-200 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 outline-none';
 </script>
 
 <DropdownMenu.Root bind:open {onOpenChange}>
 	<DropdownMenu.Trigger
 		{disabled}
-		class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 focus-visible:border-kl-primary focus-visible:outline-kl-primary inline-flex cursor-pointer items-center gap-1.5 border px-3 py-2 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+		class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
 	>
 		{@render trigger()}
 	</DropdownMenu.Trigger>
@@ -66,7 +64,7 @@
 		<DropdownMenu.Content
 			{loop}
 			sideOffset={4}
-			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-[8rem] border p-1 {className ??
+			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-[8rem] border p-1 outline-none {className ??
 				''}"
 		>
 			{#each items as entry, i (i)}
@@ -81,7 +79,6 @@
 						</DropdownMenu.GroupHeading>
 						{#each entry.items as item (item.value)}
 							<DropdownMenu.Item
-								{closeOnSelect}
 								disabled={item.disabled}
 								class={itemClass}
 								onSelect={() => onSelect?.(item.value)}
@@ -92,7 +89,6 @@
 					</DropdownMenu.Group>
 				{:else}
 					<DropdownMenu.Item
-						{closeOnSelect}
 						disabled={entry.disabled}
 						class={itemClass}
 						onSelect={() => onSelect?.(entry.value)}

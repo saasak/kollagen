@@ -1,41 +1,22 @@
 <script lang="ts">
 	import { Dialog } from 'bits-ui';
-	import { Drawer as VaulDrawer } from 'vaul-svelte';
+	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		/** Controlled open state. Supports bind:open */
 		open?: boolean;
-		/** Modal heading */
 		title?: string;
-		/** Modal description text */
 		description?: string;
-		/** Display mode: "responsive" auto-switches Dialog/Drawer, "drawer" always uses Drawer */
 		variant?: 'responsive' | 'drawer';
-		/** Breakpoint in px below which Drawer is used (only for variant="responsive") */
 		breakpoint?: number;
-		/** Whether the modal blocks outside interaction */
-		modal?: boolean;
-		/** Close on Escape key press */
-		closeOnEscape?: boolean;
-		/** Close when clicking outside */
-		closeOnInteractOutside?: boolean;
-		/** Prevent background scrolling when open */
 		preventScroll?: boolean;
-		/** Snap points for the drawer as fractions (0–1) or pixel strings. Ignored in dialog mode */
 		snapPoints?: (number | string)[];
-		/** Disable the trigger */
 		disabled?: boolean;
-		/** Callback when open state changes */
 		onOpenChange?: (open: boolean) => void;
-		/** Trigger button content */
 		trigger?: Snippet;
-		/** Footer content (e.g. action buttons) */
 		footer?: Snippet;
-		/** Modal body content */
 		children?: Snippet;
-		/** Additional CSS classes on the content panel */
 		class?: string;
 	}
 
@@ -45,9 +26,6 @@
 		description,
 		variant = 'responsive',
 		breakpoint = 768,
-		modal = true,
-		closeOnEscape = true,
-		closeOnInteractOutside = true,
 		preventScroll = true,
 		snapPoints,
 		disabled = false,
@@ -77,24 +55,19 @@
 </script>
 
 {#if showDrawer}
-	<VaulDrawer.Root
-		bind:open
-		{modal}
-		dismissible={closeOnInteractOutside}
-		{snapPoints}
-		{onOpenChange}
-	>
+	<Drawer.Root bind:open {snapPoints} {onOpenChange}>
 		{#if trigger}
-			<VaulDrawer.Trigger {disabled} class="inline-flex">
+			<Drawer.Trigger
+				{disabled}
+				class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
+			>
 				{@render trigger()}
-			</VaulDrawer.Trigger>
+			</Drawer.Trigger>
 		{/if}
 
-		<VaulDrawer.Portal>
-			<VaulDrawer.Overlay
-				class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm"
-			/>
-			<VaulDrawer.Content
+		<Drawer.Portal>
+			<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
+			<Drawer.Content
 				class="border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed inset-x-0 bottom-0 z-[var(--kl-z-modal)] max-h-[85dvh] w-full rounded-t-2xl border-x border-t {className ??
 					''}"
 			>
@@ -103,22 +76,19 @@
 				</div>
 
 				<div class="overflow-y-auto px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-					<VaulDrawer.Close
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex items-center justify-center p-1 transition-colors duration-150"
+					<button
+						onclick={() => (open = false)}
+						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"
 					>
 						<X size={16} />
-					</VaulDrawer.Close>
+					</button>
 
 					{#if title}
-						<VaulDrawer.Title class="text-kl-base-content text-lg font-semibold">
-							{title}
-						</VaulDrawer.Title>
+						<h2 class="text-kl-base-content text-lg font-semibold">{title}</h2>
 					{/if}
 
 					{#if description}
-						<VaulDrawer.Description class="text-kl-muted-content mt-1 text-sm">
-							{description}
-						</VaulDrawer.Description>
+						<p class="text-kl-muted-content mt-1 text-sm">{description}</p>
 					{/if}
 
 					{#if children}
@@ -133,33 +103,29 @@
 						</div>
 					{/if}
 				</div>
-			</VaulDrawer.Content>
-		</VaulDrawer.Portal>
-	</VaulDrawer.Root>
+			</Drawer.Content>
+		</Drawer.Portal>
+	</Drawer.Root>
 {:else}
-	<Dialog.Root
-		bind:open
-		{preventScroll}
-		escapeKeydownBehavior={closeOnEscape ? 'close' : 'ignore'}
-		interactOutsideBehavior={closeOnInteractOutside ? 'close' : 'ignore'}
-		{onOpenChange}
-	>
+	<Dialog.Root bind:open {onOpenChange}>
 		{#if trigger}
-			<Dialog.Trigger {disabled} class="inline-flex">
+			<Dialog.Trigger
+				{disabled}
+				class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
+			>
 				{@render trigger()}
 			</Dialog.Trigger>
 		{/if}
 
 		<Dialog.Portal>
-			<Dialog.Overlay
-				class="data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm"
-			/>
+			<Dialog.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 			<Dialog.Content
-				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:zoom-out-95 fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6 {className ??
+				{preventScroll}
+				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6 {className ??
 					''}"
 			>
 				<Dialog.Close
-					class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex items-center justify-center p-1 transition-colors duration-150"
+					class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"
 				>
 					<X size={16} />
 				</Dialog.Close>

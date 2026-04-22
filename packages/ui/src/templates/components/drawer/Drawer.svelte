@@ -1,36 +1,23 @@
 <script lang="ts">
-	import { Drawer as VaulDrawer } from 'vaul-svelte';
+	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	type Direction = 'left' | 'right' | 'top' | 'bottom';
 
 	interface Props {
-		/** Controlled open state. Supports bind:open */
 		open?: boolean;
-		/** Drawer heading */
 		title?: string;
-		/** Drawer description text */
 		description?: string;
-		/** Side the drawer slides in from */
 		direction?: Direction;
-		/** Snap points as fractions (0–1) or pixel strings */
 		snapPoints?: (number | string)[];
-		/** Whether the drawer blocks outside interaction */
 		modal?: boolean;
-		/** Close when clicking outside */
-		closeOnInteractOutside?: boolean;
-		/** Disable the trigger */
+		dismissible?: boolean;
 		disabled?: boolean;
-		/** Callback when open state changes */
 		onOpenChange?: (open: boolean) => void;
-		/** Trigger button content */
 		trigger?: Snippet;
-		/** Footer content (e.g. action buttons) */
 		footer?: Snippet;
-		/** Drawer body content */
 		children?: Snippet;
-		/** Additional CSS classes on the content panel */
 		class?: string;
 	}
 
@@ -41,7 +28,7 @@
 		direction = 'bottom',
 		snapPoints,
 		modal = true,
-		closeOnInteractOutside = true,
+		dismissible = true,
 		disabled = false,
 		onOpenChange,
 		trigger,
@@ -51,7 +38,6 @@
 	}: Props = $props();
 
 	let isVertical = $derived(direction === 'bottom' || direction === 'top');
-	let showGrabber = $derived(isVertical);
 
 	let contentClass = $derived(
 		{
@@ -63,39 +49,34 @@
 	);
 </script>
 
-<VaulDrawer.Root
-	bind:open
-	{direction}
-	{snapPoints}
-	{modal}
-	dismissible={closeOnInteractOutside}
-	{onOpenChange}
->
+<Drawer.Root bind:open {direction} {snapPoints} {modal} {dismissible} {onOpenChange}>
 	{#if trigger}
-		<VaulDrawer.Trigger {disabled} class="inline-flex">
+		<Drawer.Trigger
+			{disabled}
+			class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
+		>
 			{@render trigger()}
-		</VaulDrawer.Trigger>
+		</Drawer.Trigger>
 	{/if}
 
-	<VaulDrawer.Portal>
-		<VaulDrawer.Overlay
-			class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm"
-		/>
-		<VaulDrawer.Content
+	<Drawer.Portal>
+		<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
+		<Drawer.Content
 			class="{contentClass} border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-modal)] {className ??
 				''}"
 		>
-			{#if showGrabber}
+			{#if isVertical}
 				<div class="flex justify-center pt-3 pb-1">
 					<div class="bg-kl-base-300 h-1.5 w-12 rounded-full"></div>
 				</div>
 			{/if}
 
-			<VaulDrawer.Close
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 z-10 flex items-center justify-center p-1 transition-colors duration-150"
+			<button
+				onclick={() => (open = false)}
+				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 z-10 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"
 			>
 				<X size={16} />
-			</VaulDrawer.Close>
+			</button>
 
 			<div
 				class="overflow-y-auto {isVertical
@@ -103,15 +84,11 @@
 					: 'h-full p-6'}"
 			>
 				{#if title}
-					<VaulDrawer.Title class="text-kl-base-content pr-8 text-lg font-semibold">
-						{title}
-					</VaulDrawer.Title>
+					<h2 class="text-kl-base-content pr-8 text-lg font-semibold">{title}</h2>
 				{/if}
 
 				{#if description}
-					<VaulDrawer.Description class="text-kl-muted-content mt-1 text-sm">
-						{description}
-					</VaulDrawer.Description>
+					<p class="text-kl-muted-content mt-1 text-sm">{description}</p>
 				{/if}
 
 				{#if children}
@@ -126,6 +103,6 @@
 					</div>
 				{/if}
 			</div>
-		</VaulDrawer.Content>
-	</VaulDrawer.Portal>
-</VaulDrawer.Root>
+		</Drawer.Content>
+	</Drawer.Portal>
+</Drawer.Root>

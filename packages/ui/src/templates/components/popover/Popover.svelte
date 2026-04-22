@@ -4,32 +4,21 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		/** Controlled open state. Supports bind:open */
 		open?: boolean;
-		/** Popover heading */
 		title?: string;
-		/** Popover description text */
 		description?: string;
-		/** Side placement */
 		side?: 'top' | 'bottom' | 'left' | 'right';
-		/** Offset from the trigger */
 		sideOffset?: number;
-		/** Alignment along the side */
 		align?: 'start' | 'center' | 'end';
-		/** Alignment offset */
 		alignOffset?: number;
-		/** Callback when open state changes */
 		onOpenChange?: (open: boolean) => void;
-		/** Trigger content */
 		trigger?: Snippet;
-		/** Popover body content */
 		children?: Snippet;
-		/** Additional CSS classes on the content panel */
 		class?: string;
 	}
 
 	let {
-		open = $bindable(),
+		open = $bindable(false),
 		title,
 		description,
 		side = 'bottom',
@@ -45,12 +34,8 @@
 
 <Popover.Root bind:open {onOpenChange}>
 	{#if trigger}
-		<Popover.Trigger>
-			{#snippet child({ props })}
-				<span {...props} class="inline-flex">
-					{@render trigger()}
-				</span>
-			{/snippet}
+		<Popover.Trigger class="inline-flex cursor-pointer items-center">
+			{@render trigger()}
 		</Popover.Trigger>
 	{/if}
 
@@ -60,11 +45,9 @@
 			{sideOffset}
 			{align}
 			{alignOffset}
-			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:zoom-out-95 z-[var(--kl-z-popover)] w-72 border p-4 {className ??
+			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-popover)] w-72 border p-4 {className ??
 				''}"
 		>
-			<Popover.Arrow class="border-kl-base-300" />
-
 			<div class="flex items-start justify-between gap-2">
 				<div>
 					{#if title}
@@ -80,11 +63,12 @@
 					{/if}
 				</div>
 
-				<Popover.Close
-					class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex shrink-0 items-center justify-center p-1 transition-colors duration-150"
+				<button
+					onclick={() => (open = false)}
+					class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex shrink-0 cursor-pointer items-center justify-center p-1 transition-colors duration-150"
 				>
 					<X size={14} />
-				</Popover.Close>
+				</button>
 			</div>
 
 			{#if children}
