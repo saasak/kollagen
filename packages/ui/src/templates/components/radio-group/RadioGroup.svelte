@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RadioGroup } from 'bits-ui';
+	import { RadioGroup, Label, useId } from 'bits-ui';
 
 	export interface Item {
 		value: string;
@@ -14,6 +14,7 @@
 		name?: string;
 		disabled?: boolean;
 		required?: boolean;
+		readonly?: boolean;
 		orientation?: 'horizontal' | 'vertical';
 		loop?: boolean;
 		onValueChange?: (value: string) => void;
@@ -22,11 +23,12 @@
 
 	let {
 		items,
-		value = $bindable(),
+		value = $bindable(''),
 		label,
 		name,
 		disabled = false,
 		required = false,
+		readonly = false,
 		orientation = 'vertical',
 		loop = true,
 		onValueChange,
@@ -49,32 +51,30 @@
 		{name}
 		{disabled}
 		{required}
+		{readonly}
 		{orientation}
 		{loop}
 		{onValueChange}
 		class="flex {orientation === 'horizontal' ? 'flex-row gap-4' : 'flex-col gap-2'}"
 	>
-		{#each items as item (item.value)}
-			<RadioGroup.Item
-				value={item.value}
-				disabled={item.disabled}
-				class="flex cursor-pointer items-center gap-2 select-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
-			>
-				{#snippet children({ checked })}
-					<span
-						class="border-kl-base-300 bg-kl-base-100 flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-150 {checked
-							? 'border-kl-primary'
-							: ''}"
-					>
-						<span
-							class="bg-kl-primary h-2.5 w-2.5 rounded-full transition-opacity duration-150 {checked
-								? 'opacity-100'
-								: 'opacity-0'}"
-						></span>
-					</span>
-					<span class="text-kl-base-content text-sm">{item.label}</span>
-				{/snippet}
-			</RadioGroup.Item>
+		{#each items as item}
+			{@const id = useId()}
+			<div class="flex items-center gap-2">
+				<RadioGroup.Item
+					{id}
+					value={item.value}
+					disabled={item.disabled}
+					class="border-kl-base-300 bg-kl-base-100 hover:border-kl-muted-content data-[state=checked]:border-kl-primary data-[state=checked]:border-[5px] h-5 w-5 shrink-0 cursor-default rounded-full border-2 transition-all duration-100 ease-in-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+				/>
+				<Label.Root
+					for={id}
+					class="text-kl-base-content text-sm {item.disabled || disabled
+						? 'text-kl-muted-content'
+						: ''}"
+				>
+					{item.label}
+				</Label.Root>
+			</div>
 		{/each}
 	</RadioGroup.Root>
 </div>
