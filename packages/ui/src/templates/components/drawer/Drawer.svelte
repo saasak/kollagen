@@ -51,12 +51,13 @@
 
 <Drawer.Root bind:open {direction} {snapPoints} {modal} {dismissible} {onOpenChange}>
 	{#if trigger}
-		<Drawer.Trigger
+		<button
 			{disabled}
+			onclick={() => (open = true)}
 			class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
 		>
 			{@render trigger()}
-		</Drawer.Trigger>
+		</button>
 	{/if}
 
 	<Drawer.Portal>
