@@ -24,6 +24,7 @@
 
 		/* Z-index */
 		--kl-z-dropdown: 50;
+		--kl-z-overlay: 90;
 		--kl-z-modal: 100;
 		--kl-z-popover: 40;
 		--kl-z-tooltip: 60;

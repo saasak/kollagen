@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
-	import type { Snippet } from 'svelte';
+	import { tick, type Snippet } from 'svelte';
 
 	type Direction = 'left' | 'right' | 'top' | 'bottom';
 
@@ -37,19 +37,41 @@
 		class: className
 	}: Props = $props();
 
+	let activeSnapPoint = $state<string | number | null>(null);
+
+	$effect(() => {
+		if (open && snapPoints && snapPoints.length > 0 && activeSnapPoint === null) {
+			tick().then(() => {
+				activeSnapPoint = snapPoints[0];
+			});
+		}
+	});
+
 	let isVertical = $derived(direction === 'bottom' || direction === 'top');
+	let isLastSnapPoint = $derived(
+		snapPoints && snapPoints.length > 0 && activeSnapPoint === snapPoints[snapPoints.length - 1]
+	);
 
 	let contentClass = $derived(
 		{
-			bottom: 'fixed inset-x-0 bottom-0 w-full max-h-[85dvh] rounded-t-2xl border-t border-x',
-			top: 'fixed inset-x-0 top-0 w-full max-h-[85dvh] rounded-b-2xl border-b border-x',
+			bottom:
+				'fixed inset-x-0 bottom-0 flex h-full w-full max-h-[85dvh] flex-col rounded-t-2xl border-t border-x',
+			top: 'fixed inset-x-0 top-0 flex h-full w-full max-h-[85dvh] flex-col rounded-b-2xl border-b border-x',
 			left: 'fixed inset-y-0 left-0 h-full w-full max-w-sm rounded-r-2xl border-r border-y',
 			right: 'fixed inset-y-0 right-0 h-full w-full max-w-sm rounded-l-2xl border-l border-y'
 		}[direction]
 	);
 </script>
 
-<Drawer.Root bind:open {direction} {snapPoints} {modal} {dismissible} {onOpenChange}>
+<Drawer.Root
+	bind:open
+	{direction}
+	{snapPoints}
+	bind:activeSnapPoint
+	{modal}
+	{dismissible}
+	{onOpenChange}
+>
 	{#if trigger}
 		<Drawer.Trigger {disabled}>
 			{#snippet child({ props })}
@@ -70,9 +92,7 @@
 				''}"
 		>
 			{#if isVertical}
-				<div class="flex justify-center pt-3 pb-1">
-					<div class="bg-kl-base-300 h-1.5 w-12 rounded-full"></div>
-				</div>
+				<Drawer.Handle class="bg-kl-base-300 mx-auto mt-3 mb-1 h-1.5 w-12 shrink-0 rounded-full" />
 			{/if}
 
 			<button
@@ -83,9 +103,10 @@
 			</button>
 
 			<div
-				class="overflow-y-auto {isVertical
-					? 'px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]'
-					: 'h-full p-6'}"
+				class={isVertical
+					? `flex-1 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] ${isLastSnapPoint ? 'overflow-y-auto' : 'overflow-hidden'}`
+					: 'h-full overflow-y-auto p-6'}
+				data-vaul-no-drag
 			>
 				{#if title}
 					<h2 class="text-kl-base-content pr-8 text-lg font-semibold">{title}</h2>
