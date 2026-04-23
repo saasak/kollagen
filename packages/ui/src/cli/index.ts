@@ -7,7 +7,7 @@ const program = new Command();
 
 program
 	.name('kollagen')
-	.description('Ready-to-use, themed SvelteKit components built on Ark UI/Zag.JS')
+	.description('Ready-to-use, themed SvelteKit components built on bits-ui')
 	.version('1.0.4');
 
 program.addCommand(initCommand);

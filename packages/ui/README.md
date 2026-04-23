@@ -1,6 +1,6 @@
 # kollagen
 
-Ready-to-use, themed SvelteKit components built on [Ark UI](https://ark-ui.com) / [Zag.js](https://zagjs.com).
+Ready-to-use, themed SvelteKit components built on [bits-ui](https://bits-ui.com) primitives.
 
 ## Quick Start
 
