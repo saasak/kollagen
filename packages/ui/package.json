@@ -1,13 +1,13 @@
 {
 	"name": "@saasak/kollagen",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Ready-to-use, themed SvelteKit components built on bits-ui",
 	"type": "module",
 	"bin": {
 		"kollagen": "dist/cli/index.js"
 	},
 	"scripts": {
-		"build": "tsup && cp -r src/templates/theme dist/themes",
+		"build": "tsup && rm -rf dist/themes && cp -r src/templates/theme dist/themes",
 		"dev": "tsup --watch"
 	},
 	"files": [
