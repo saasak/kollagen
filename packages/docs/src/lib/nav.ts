@@ -4,6 +4,7 @@ export const componentNav = [
 	{ label: 'Breadcrumb', href: '/components/breadcrumb' },
 	{ label: 'Button', href: '/components/button' },
 	{ label: 'ButtonGroup', href: '/components/button-group' },
+	{ label: 'Card', href: '/components/card' },
 	{ label: 'Carousel', href: '/components/carousel' },
 	{ label: 'Checkbox', href: '/components/checkbox' },
 	{ label: 'Clipboard', href: '/components/clipboard' },

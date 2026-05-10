@@ -33,6 +33,11 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/button-group' }]
 			},
 			{
+				name: 'card',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/card' }]
+			},
+			{
 				name: 'carousel',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/carousel' }]
