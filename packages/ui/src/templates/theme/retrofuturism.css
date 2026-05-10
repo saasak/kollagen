@@ -1,0 +1,97 @@
+@layer kollagen.theme {
+	[data-theme='retrofuturism'] {
+		/* Brand */
+		--kl-primary: oklch(0.83 0.27 145);
+		--kl-primary-content: oklch(0.12 0.035 285);
+		--kl-secondary: oklch(0.78 0.22 205);
+		--kl-secondary-content: oklch(0.12 0.035 285);
+		--kl-accent: oklch(0.73 0.29 330);
+		--kl-accent-content: oklch(0.98 0.005 285);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.84 0.02 145);
+		--kl-neutral-content: oklch(0.12 0.035 285);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.14 0.045 285);
+		--kl-base-200: oklch(0.19 0.055 285);
+		--kl-base-300: oklch(0.31 0.07 285);
+		--kl-base-content: oklch(0.94 0.025 145);
+
+		/* Muted */
+		--kl-muted: oklch(0.24 0.055 285);
+		--kl-muted-content: oklch(0.7 0.055 205);
+
+		/* Status */
+		--kl-info: oklch(0.78 0.2 215);
+		--kl-info-content: oklch(0.12 0.035 285);
+		--kl-success: oklch(0.8 0.24 145);
+		--kl-success-content: oklch(0.12 0.035 285);
+		--kl-warning: oklch(0.86 0.2 90);
+		--kl-warning-content: oklch(0.12 0.035 285);
+		--kl-error: oklch(0.68 0.28 20);
+		--kl-error-content: oklch(0.98 0.005 285);
+
+		/* Geometry */
+		--kl-density: 0.92;
+		--kl-density-reading: 1.02;
+		--kl-radius-selector: 999px;
+		--kl-radius-field: 999px;
+		--kl-radius-box: 0.125rem;
+
+		/* Neon surface system */
+		--kl-shadow-sm:
+			0 0 0 var(--kl-border-width) oklch(0.83 0.27 145 / 0.2), 0 0 10px oklch(0.83 0.27 145 / 0.18);
+		--kl-shadow-md:
+			0 0 0 var(--kl-border-width) oklch(0.78 0.22 205 / 0.26), 0 0 18px oklch(0.78 0.22 205 / 0.24);
+		--kl-shadow-lg:
+			0 0 0 var(--kl-border-width) oklch(0.83 0.27 145 / 0.3), 0 0 32px oklch(0.73 0.29 330 / 0.28);
+		--kl-shadow-inset: inset 0 0 18px oklch(0.78 0.22 205 / 0.16);
+		--kl-shadow-pressed: inset 0 0 22px oklch(0.83 0.27 145 / 0.32);
+		--kl-shadow-raised: var(--kl-shadow-md);
+		--kl-glow-sm: 0 0 10px oklch(0.83 0.27 145 / 0.32);
+		--kl-glow-md: 0 0 22px oklch(0.78 0.22 205 / 0.38);
+		--kl-glow-lg: 0 0 42px oklch(0.73 0.29 330 / 0.42);
+
+		/* Crisp chrome */
+		--kl-border-width: 1px;
+		--kl-border-width-strong: 2px;
+		--kl-border-style: solid;
+		--kl-outline-width: 2px;
+		--kl-motion-scale: 0.75;
+		--kl-motion-reduced: 0;
+		--kl-transition-easing: cubic-bezier(0.16, 1, 0.3, 1);
+		--kl-contrast-level: 1.2;
+
+		/* Type and grid */
+		--kl-font-heading: 'Eurostile', 'Bank Gothic', 'Orbitron', 'Rajdhani', var(--kl-font-body);
+		--kl-font-display: var(--kl-font-heading);
+		--kl-page-background: radial-gradient(
+			circle at 50% 0%,
+			oklch(0.28 0.09 285),
+			var(--kl-base-100) 48rem
+		);
+		--kl-surface-background: color-mix(in oklch, var(--kl-base-100) 84%, var(--kl-primary) 16%);
+		--kl-pattern-image:
+			linear-gradient(oklch(0.83 0.27 145 / 0.18) 1px, transparent 1px),
+			linear-gradient(90deg, oklch(0.78 0.22 205 / 0.18) 1px, transparent 1px),
+			linear-gradient(180deg, transparent 0 84%, oklch(0.73 0.29 330 / 0.08) 100%);
+		--kl-pattern-size: 48px 48px, 48px 48px, 100% 6px;
+		--kl-pattern-opacity: 1;
+		--kl-pattern-blend-mode: screen;
+	}
+
+	[data-theme='retrofuturism'][data-mode='dark'] {
+		--kl-base-100: oklch(0.1 0.045 285);
+		--kl-base-200: oklch(0.15 0.055 285);
+		--kl-base-300: oklch(0.28 0.075 285);
+		--kl-base-content: oklch(0.96 0.025 145);
+		--kl-muted: oklch(0.21 0.055 285);
+		--kl-muted-content: oklch(0.72 0.06 205);
+		--kl-page-background: radial-gradient(
+			circle at 50% 0%,
+			oklch(0.24 0.1 285),
+			var(--kl-base-100) 48rem
+		);
+	}
+}

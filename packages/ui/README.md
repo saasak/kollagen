@@ -21,7 +21,7 @@ npx @saasak/kollagen add combobox
 
 ## Customizing the Theme
 
-After running `kollagen init`, you get a full set of `--kl-*` CSS variables (density, OKLCH colors, radii, shadows, transitions). Override any of them in your `app.css` to tweak the theme:
+After running `kollagen init`, you get a full set of `--kl-*` CSS variables (density, typography, OKLCH colors, radii, borders, shadows, glow, transitions, contrast, and page patterns). Override any of them in your `app.css` to tweak the theme:
 
 ```css
 /* app.css — after the kollagen theme import */
@@ -29,6 +29,10 @@ After running `kollagen init`, you get a full set of `--kl-*` CSS variables (den
 :root {
 	/* Density: 1 = Tailwind default, <1 = compact, >1 = spacious */
 	--kl-density: 0.875;
+	--kl-density-reading: 1;
+
+	/* Typography */
+	--kl-font-heading: ui-sans-serif, system-ui, sans-serif;
 
 	/* Swap the primary color to a custom blue */
 	--kl-primary: oklch(0.55 0.25 260);
@@ -40,6 +44,14 @@ After running `kollagen init`, you get a full set of `--kl-*` CSS variables (den
 
 	/* Subtler shadows */
 	--kl-shadow-md: 0 2px 8px oklch(0 0 0 / 0.08);
+
+	/* Border and motion personality */
+	--kl-border-width: 1px;
+	--kl-border-style: solid;
+	--kl-motion-scale: 1;
+
+	/* Optional page pattern */
+	--kl-pattern-image: none;
 }
 
 /* Override only in dark mode */
@@ -57,6 +69,8 @@ After running `kollagen init`, you get a full set of `--kl-*` CSS variables (den
 Density scales Tailwind's numeric spacing utilities (`p-*`, `gap-*`, `h-*`, `size-*`, etc.). Use `--kl-density: 1` for Tailwind's default scale or `--kl-density: 1.125` for a more spacious UI. Arbitrary values like `max-w-[350px]` are unchanged.
 
 All components use these variables through Tailwind utilities (`bg-kl-primary`, `rounded-kl-field`, etc.), so overrides apply everywhere automatically.
+
+The included themes include calm low-motion options like `sustainable` and expressive options like `retrofuturism`, which use the same variables without changing component APIs.
 
 ## License
 

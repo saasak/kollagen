@@ -9,6 +9,8 @@
 		'sunset',
 		'rose',
 		'cyberpunk',
+		'retrofuturism',
+		'sustainable',
 		'nord',
 		'dracula',
 		'emerald',
@@ -47,7 +49,7 @@
 		onchange={select}
 		class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:border-kl-base-content/30 cursor-pointer border px-2 py-1 text-sm transition-colors focus:outline-none"
 	>
-		{#each themes as theme}
+		{#each themes as theme (theme)}
 			<option value={theme} class="capitalize">{theme}</option>
 		{/each}
 	</select>
