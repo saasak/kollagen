@@ -70,9 +70,13 @@
 		class: className
 	}: Props = $props();
 
-	// Initialize value from defaultValue if not provided
-	if (value === undefined && defaultValue !== undefined) {
-		value = defaultValue;
+	function getDefaultValue() {
+		return defaultValue;
+	}
+
+	const initialDefaultValue = getDefaultValue();
+	if (value === undefined && initialDefaultValue !== undefined) {
+		value = initialDefaultValue;
 	}
 
 	let focused = $state(false);

@@ -21,12 +21,15 @@ npx @saasak/kollagen add combobox
 
 ## Customizing the Theme
 
-After running `kollagen init`, you get a full set of `--kl-*` CSS variables (OKLCH colors, radii, shadows, transitions). Override any of them in your `app.css` to tweak the theme:
+After running `kollagen init`, you get a full set of `--kl-*` CSS variables (density, OKLCH colors, radii, shadows, transitions). Override any of them in your `app.css` to tweak the theme:
 
 ```css
 /* app.css — after the kollagen theme import */
 
 :root {
+	/* Density: 1 = Tailwind default, <1 = compact, >1 = spacious */
+	--kl-density: 0.875;
+
 	/* Swap the primary color to a custom blue */
 	--kl-primary: oklch(0.55 0.25 260);
 	--kl-primary-content: oklch(0.98 0.01 260);
@@ -50,6 +53,8 @@ After running `kollagen init`, you get a full set of `--kl-*` CSS variables (OKL
 	--kl-accent: oklch(0.7 0.18 190);
 }
 ```
+
+Density scales Tailwind's numeric spacing utilities (`p-*`, `gap-*`, `h-*`, `size-*`, etc.). Use `--kl-density: 1` for Tailwind's default scale or `--kl-density: 1.125` for a more spacious UI. Arbitrary values like `max-w-[350px]` are unchanged.
 
 All components use these variables through Tailwind utilities (`bg-kl-primary`, `rounded-kl-field`, etc.), so overrides apply everywhere automatically.
 

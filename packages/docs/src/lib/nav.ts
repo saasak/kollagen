@@ -2,6 +2,8 @@ export const componentNav = [
 	{ label: 'Accordion', href: '/components/accordion' },
 	{ label: 'Avatar', href: '/components/avatar' },
 	{ label: 'Breadcrumb', href: '/components/breadcrumb' },
+	{ label: 'Button', href: '/components/button' },
+	{ label: 'ButtonGroup', href: '/components/button-group' },
 	{ label: 'Carousel', href: '/components/carousel' },
 	{ label: 'Checkbox', href: '/components/checkbox' },
 	{ label: 'Clipboard', href: '/components/clipboard' },

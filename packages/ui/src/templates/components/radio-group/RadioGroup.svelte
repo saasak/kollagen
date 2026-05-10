@@ -64,7 +64,7 @@
 					{id}
 					value={item.value}
 					disabled={item.disabled}
-					class="border-kl-base-300 bg-kl-base-100 hover:border-kl-muted-content data-[state=checked]:border-kl-primary data-[state=checked]:border-[5px] h-5 w-5 shrink-0 cursor-default rounded-full border-2 transition-all duration-100 ease-in-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+					class="border-kl-base-300 bg-kl-base-100 hover:border-kl-muted-content data-[state=checked]:border-kl-primary h-5 w-5 shrink-0 cursor-default rounded-full border-2 transition-all duration-100 ease-in-out data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[state=checked]:border-[5px]"
 				/>
 				<Label.Root
 					for={id}

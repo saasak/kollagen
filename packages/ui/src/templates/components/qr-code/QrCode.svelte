@@ -27,9 +27,13 @@
 		class: className
 	}: Props = $props();
 
-	// Initialize value from defaultValue if not provided
-	if (value === undefined && defaultValue !== undefined) {
-		value = defaultValue;
+	function getDefaultValue() {
+		return defaultValue;
+	}
+
+	const initialDefaultValue = getDefaultValue();
+	if (value === undefined && initialDefaultValue !== undefined) {
+		value = initialDefaultValue;
 	}
 
 	const qr = $derived(value ? encode(value, encoding) : null);
@@ -51,8 +55,8 @@
 			role="img"
 			aria-label="QR Code"
 		>
-			{#each qr.data as row, y}
-				{#each row as cell, x}
+			{#each qr.data as row, y (y)}
+				{#each row as cell, x (x)}
 					{#if cell}
 						<rect
 							x={x * cellSize}

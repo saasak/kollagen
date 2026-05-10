@@ -17,16 +17,10 @@
 			description: 'Controlled open state. Supports bind:open'
 		},
 		{
-			name: 'openDelay',
+			name: 'delayDuration',
 			type: 'number',
 			default: '400',
 			description: 'Delay in ms before the tooltip opens'
-		},
-		{
-			name: 'closeDelay',
-			type: 'number',
-			default: '150',
-			description: 'Delay in ms before the tooltip closes'
 		},
 		{
 			name: 'disabled',
@@ -45,18 +39,6 @@
 			type: 'number',
 			default: '6',
 			description: 'Distance in px between the tooltip and the trigger'
-		},
-		{
-			name: 'align',
-			type: '"start" | "center" | "end"',
-			default: '"center"',
-			description: 'Alignment of the tooltip along the trigger edge'
-		},
-		{
-			name: 'alignOffset',
-			type: 'number',
-			default: '0',
-			description: 'Offset in px from the aligned edge'
 		},
 		{
 			name: 'onOpenChange',
@@ -144,12 +126,12 @@
 
 		<DemoCard
 			title="Instant open"
-			description="Set openDelay to 0 for immediate display."
-			code={`<Tooltip content="No delay!" openDelay={0}>
+			description="Set delayDuration to 0 for immediate display."
+			code={`<Tooltip content="No delay!" delayDuration={0}>
   <button>Instant</button>
 </Tooltip>`}
 		>
-			<Tooltip content="No delay!" openDelay={0}>
+			<Tooltip content="No delay!" delayDuration={0}>
 				<button class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm">
 					Instant tooltip
 				</button>

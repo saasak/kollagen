@@ -39,7 +39,7 @@
 </script>
 
 <Pagination.Root {count} bind:page {perPage} {siblingCount} {onPageChange}>
-	{#snippet children({ pages, range, _currentPage })}
+	{#snippet children({ pages, range })}
 		<div
 			class="flex items-center {hasExtras ? 'w-full justify-between' : ''} gap-4 {className ?? ''}"
 		>

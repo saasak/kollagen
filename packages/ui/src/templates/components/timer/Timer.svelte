@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Play, Pause, RotateCcw } from 'lucide-svelte';
 
 	type TimePart = 'days' | 'hours' | 'minutes' | 'seconds';
@@ -42,7 +43,11 @@
 		class: className
 	}: Props = $props();
 
-	let elapsed = $state(countdown ? (startMs ?? 0) : 0);
+	function getInitialElapsed() {
+		return countdown ? startMs : 0;
+	}
+
+	let elapsed = $state(getInitialElapsed());
 	let running = $state(false);
 	let paused = $state(false);
 	let intervalId: ReturnType<typeof setInterval> | null = null;
@@ -106,7 +111,7 @@
 
 	function reset() {
 		stop();
-		elapsed = countdown ? (startMs ?? 0) : 0;
+		elapsed = getInitialElapsed();
 	}
 
 	function stop() {
@@ -116,7 +121,7 @@
 		intervalId = null;
 	}
 
-	$effect(() => {
+	onMount(() => {
 		if (autoStart) start();
 		return () => {
 			if (intervalId) clearInterval(intervalId);

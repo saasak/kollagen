@@ -37,7 +37,11 @@
 		class: className
 	}: Props = $props();
 
-	let internalVisible = $state(defaultVisible);
+	function getInitialVisible() {
+		return defaultVisible;
+	}
+
+	let internalVisible = $state(getInitialVisible());
 	const isVisible = $derived(visible !== undefined ? visible : internalVisible);
 
 	function toggleVisibility() {

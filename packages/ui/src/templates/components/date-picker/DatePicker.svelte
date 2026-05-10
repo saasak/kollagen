@@ -1,11 +1,6 @@
 <script lang="ts">
 	import { DatePicker } from 'bits-ui';
-	import {
-		type DateValue,
-		getLocalTimeZone,
-		today,
-		DateFormatter
-	} from '@internationalized/date';
+	import type { DateValue } from '@internationalized/date';
 	import { Calendar, ChevronLeft, ChevronRight, X } from 'lucide-svelte';
 
 	interface Props {
@@ -70,8 +65,6 @@
 		value = undefined;
 		onValueChange?.(undefined);
 	}
-
-	const df = new DateFormatter(locale, { dateStyle: 'medium' });
 </script>
 
 <DatePicker.Root
@@ -157,7 +150,7 @@
 				</DatePicker.Header>
 				<div class="flex gap-4">
 					{#each months as month (month.value)}
-						<DatePicker.Grid class="w-full border-collapse select-none space-y-1">
+						<DatePicker.Grid class="w-full border-collapse space-y-1 select-none">
 							<DatePicker.GridHead>
 								<DatePicker.GridRow class="flex w-full justify-between">
 									{#each weekdays as day (day)}
@@ -179,7 +172,7 @@
 												class="relative size-10 p-0 text-center text-sm"
 											>
 												<DatePicker.Day
-													class="rounded-kl-selector text-kl-base-content hover:bg-kl-base-200 data-[selected]:bg-kl-primary data-[selected]:text-kl-primary-content data-[outside-month]:text-kl-muted-content data-[unavailable]:text-kl-muted-content data-[disabled]:text-kl-muted-content inline-flex size-10 items-center justify-center border-none bg-transparent text-sm transition-colors duration-150 data-[disabled]:pointer-events-none data-[unavailable]:pointer-events-none data-[today]:font-semibold data-[unavailable]:line-through"
+													class="rounded-kl-selector text-kl-base-content hover:bg-kl-base-200 data-[selected]:bg-kl-primary data-[selected]:text-kl-primary-content data-[outside-month]:text-kl-muted-content data-[unavailable]:text-kl-muted-content data-[disabled]:text-kl-muted-content inline-flex size-10 items-center justify-center border-none bg-transparent text-sm transition-colors duration-150 data-[disabled]:pointer-events-none data-[today]:font-semibold data-[unavailable]:pointer-events-none data-[unavailable]:line-through"
 												>
 													{date.day}
 												</DatePicker.Day>

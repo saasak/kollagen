@@ -8,6 +8,7 @@
 		title?: string;
 		description?: string;
 		preventScroll?: boolean;
+		closeOnInteractOutside?: boolean;
 		disabled?: boolean;
 		onOpenChange?: (open: boolean) => void;
 		trigger?: Snippet;
@@ -21,6 +22,7 @@
 		title,
 		description,
 		preventScroll = true,
+		closeOnInteractOutside = true,
 		disabled = false,
 		onOpenChange,
 		trigger,
@@ -44,6 +46,7 @@
 		<Dialog.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 		<Dialog.Content
 			{preventScroll}
+			interactOutsideBehavior={closeOnInteractOutside ? 'close' : 'ignore'}
 			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6 {className ??
 				''}"
 		>

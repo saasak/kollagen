@@ -97,8 +97,9 @@
 					</button>
 				{/snippet}
 				<div class="grid gap-2">
-					<label class="text-kl-base-content text-sm">Width</label>
+					<label for="popover-width" class="text-kl-base-content text-sm">Width</label>
 					<input
+						id="popover-width"
 						type="text"
 						value="100%"
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-3 py-1.5 text-sm"

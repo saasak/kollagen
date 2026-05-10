@@ -10,6 +10,7 @@
 		sideOffset?: number;
 		align?: 'start' | 'center' | 'end';
 		alignOffset?: number;
+		arrow?: boolean;
 		onOpenChange?: (open: boolean) => void;
 		trigger: Snippet;
 		children: Snippet;
@@ -24,6 +25,7 @@
 		sideOffset = 8,
 		align = 'center',
 		alignOffset = 0,
+		arrow = true,
 		onOpenChange,
 		trigger,
 		children,
@@ -45,5 +47,8 @@
 			''}"
 	>
 		{@render children()}
+		{#if arrow}
+			<LinkPreview.Arrow class="fill-kl-base-100 stroke-kl-base-300" />
+		{/if}
 	</LinkPreview.Content>
 </LinkPreview.Root>

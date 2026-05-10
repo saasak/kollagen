@@ -3,9 +3,17 @@
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	// eslint-disable-next-line no-useless-assignment -- $state() initial value is used by Svelte reactivity
 	let visible = $state(false);
 	let formResult = $state('');
+	const scriptClose = '</' + 'script>';
+	const controlledVisibilityCode = `<script>
+  let visible = $state(false);
+${scriptClose}
+
+<PasswordInput bind:visible placeholder="Enter password..." />
+<p class="text-sm text-kl-muted-content">
+  Password is {visible ? "visible" : "hidden"}
+</p>`;
 
 	const propsData = [
 		{
@@ -105,14 +113,7 @@
 		<DemoCard
 			title="Controlled visibility"
 			description="Control the show/hide state externally with bind:visible."
-			code={`<script>
-  let visible = $state(false);
-</script>
-
-<PasswordInput bind:visible placeholder="Enter password..." />
-<p class="text-sm text-kl-muted-content">
-  Password is {visible ? "visible" : "hidden"}
-</p>`}
+			code={controlledVisibilityCode}
 		>
 			<div class="max-w-sm space-y-2">
 				<PasswordInput bind:visible placeholder="Enter password..." />

@@ -26,7 +26,12 @@
 		class: className
 	}: Props = $props();
 
-	if (value === undefined && defaultValue !== undefined) value = defaultValue;
+	function getDefaultValue() {
+		return defaultValue;
+	}
+
+	const initialDefaultValue = getDefaultValue();
+	if (value === undefined && initialDefaultValue !== undefined) value = initialDefaultValue;
 
 	let copied = $state(false);
 	let timeoutId: ReturnType<typeof setTimeout> | undefined;

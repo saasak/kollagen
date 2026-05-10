@@ -34,16 +34,7 @@
 	}: Props = $props();
 </script>
 
-<Accordion.Root
-	type={multiple ? 'multiple' : 'single'}
-	{disabled}
-	bind:value
-	{orientation}
-	{onValueChange}
-	loop={false}
-	class="divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border {className ??
-		''}"
->
+{#snippet accordionItems()}
 	{#each items as item (item.value)}
 		<Accordion.Item value={item.value} disabled={item.disabled}>
 			<Accordion.Header>
@@ -64,4 +55,35 @@
 			</Accordion.Content>
 		</Accordion.Item>
 	{/each}
-</Accordion.Root>
+{/snippet}
+
+{#if multiple}
+	<Accordion.Root
+		type="multiple"
+		{disabled}
+		bind:value
+		{orientation}
+		{onValueChange}
+		loop={false}
+		class="divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border {className ??
+			''}"
+	>
+		{@render accordionItems()}
+	</Accordion.Root>
+{:else}
+	<Accordion.Root
+		type="single"
+		{disabled}
+		value={value?.[0] ?? ''}
+		{orientation}
+		onValueChange={(nextValue) => {
+			value = nextValue ? [nextValue] : [];
+			onValueChange?.(value);
+		}}
+		loop={false}
+		class="divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border {className ??
+			''}"
+	>
+		{@render accordionItems()}
+	</Accordion.Root>
+{/if}

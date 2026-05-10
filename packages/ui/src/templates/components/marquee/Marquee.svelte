@@ -67,7 +67,11 @@
 	const isVertical = $derived(side === 'top' || side === 'bottom');
 	const shouldReverse = $derived(side === 'end' || side === 'bottom' ? !reverse : reverse);
 
-	let internalPaused = $state(defaultPaused);
+	function getInitialPaused() {
+		return defaultPaused;
+	}
+
+	let internalPaused = $state(getInitialPaused());
 	const isPaused = $derived(paused !== undefined ? paused : internalPaused);
 
 	let loopsCompleted = $state(0);
@@ -126,7 +130,7 @@
 			style:--marquee-duration="{items.length * (100 / speed)}s"
 			onanimationiteration={handleAnimationIteration}
 		>
-			{#each { length: duplicates } as _, dupIndex}
+			{#each { length: duplicates } as _, dupIndex (dupIndex)}
 				{#each items as item, index (dupIndex + '-' + index)}
 					<div class="marquee-item shrink-0">
 						{@render renderItem(item, index)}

@@ -37,13 +37,12 @@
 
 <PaneGroup
 	{direction}
-	{disabled}
-	onLayout={onResize}
+	onLayoutChange={onResize}
 	class="flex h-full w-full {isVertical ? 'flex-col' : ''} {disabled
 		? 'pointer-events-none opacity-50'
 		: ''} {className ?? ''}"
 >
-	{#each panels as panelConfig, i}
+	{#each panels as panelConfig, i (panelConfig.id)}
 		<Pane
 			defaultSize={defaultSize?.[i]}
 			minSize={panelConfig.minSize}
@@ -56,6 +55,7 @@
 		</Pane>
 		{#if i < panels.length - 1}
 			<PaneResizer
+				{disabled}
 				class="bg-kl-base-200 hover:bg-kl-base-300 focus-visible:outline-kl-primary flex shrink-0 items-center justify-center border-none transition-colors duration-150 focus-visible:outline-2 {isVertical
 					? 'h-3 cursor-row-resize'
 					: 'w-3 cursor-col-resize'}"

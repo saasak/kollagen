@@ -50,7 +50,6 @@
 	}: Props = $props();
 
 	const isVertical = $derived(orientation === 'vertical');
-	const isMultiple = $derived(value.length > 1);
 </script>
 
 <div
@@ -73,7 +72,7 @@
 	{/if}
 
 	<Slider.Root
-		type={isMultiple ? 'multiple' : 'single'}
+		type="multiple"
 		bind:value
 		{min}
 		{max}
@@ -84,7 +83,7 @@
 		{onValueCommit}
 		class="relative flex {isVertical ? 'h-full flex-col' : 'w-full'} items-center"
 	>
-		{#snippet children({ thumbItems, _tickItems })}
+		{#snippet children({ thumbItems })}
 			<span
 				class="relative {isVertical
 					? 'h-full w-2'

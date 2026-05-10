@@ -139,7 +139,7 @@
 					</button>
 				{/snippet}
 				<nav class="space-y-1">
-					{#each navItems as item}
+					{#each navItems as item (item.label)}
 						<button
 							class="rounded-kl-field text-kl-base-content hover:bg-kl-muted flex w-full items-center gap-3 px-3 py-2.5 text-sm transition-colors"
 						>
@@ -171,15 +171,15 @@
 				{/snippet}
 				<div class="space-y-4">
 					<div>
-						<label class="text-kl-muted-content text-xs font-medium">Name</label>
+						<span class="text-kl-muted-content text-xs font-medium">Name</span>
 						<p class="text-kl-base-content text-sm">Example Item</p>
 					</div>
 					<div>
-						<label class="text-kl-muted-content text-xs font-medium">Status</label>
+						<span class="text-kl-muted-content text-xs font-medium">Status</span>
 						<p class="text-kl-base-content text-sm">Active</p>
 					</div>
 					<div>
-						<label class="text-kl-muted-content text-xs font-medium">Created</label>
+						<span class="text-kl-muted-content text-xs font-medium">Created</span>
 						<p class="text-kl-base-content text-sm">April 12, 2026</p>
 					</div>
 				</div>
@@ -212,7 +212,7 @@
 					</button>
 				{/snippet}
 				<div class="space-y-2">
-					{#each Array(8) as _, i}
+					{#each Array(8) as _, i (i)}
 						<div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
 							<div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
 							<div class="min-w-0 flex-1">

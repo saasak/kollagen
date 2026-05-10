@@ -5,6 +5,16 @@
 	import { Bold, Italic, Underline } from 'lucide-svelte';
 
 	let controlled = $state(false);
+	const scriptClose = '</' + 'script>';
+	const withIconsCode = `<script>
+  import { Bold, Italic, Underline } from "lucide-svelte";
+${scriptClose}
+
+<div class="flex gap-2">
+  <Toggle><Bold size={16} /> Bold</Toggle>
+  <Toggle><Italic size={16} /> Italic</Toggle>
+  <Toggle><Underline size={16} /> Underline</Toggle>
+</div>`;
 
 	const propsData = [
 		{
@@ -59,15 +69,7 @@
 		<DemoCard
 			title="With icons"
 			description="Toggles with icons for formatting actions."
-			code={`<script>
-  import { Bold, Italic, Underline } from "lucide-svelte";
-</script>
-
-<div class="flex gap-2">
-  <Toggle><Bold size={16} /> Bold</Toggle>
-  <Toggle><Italic size={16} /> Italic</Toggle>
-  <Toggle><Underline size={16} /> Underline</Toggle>
-</div>`}
+			code={withIconsCode}
 		>
 			<div class="flex gap-2">
 				<Toggle><Bold size={16} /> Bold</Toggle>

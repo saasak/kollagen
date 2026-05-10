@@ -23,6 +23,16 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/breadcrumb' }]
 			},
 			{
+				name: 'button',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/button' }]
+			},
+			{
+				name: 'button-group',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/button-group' }]
+			},
+			{
 				name: 'carousel',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/carousel' }]

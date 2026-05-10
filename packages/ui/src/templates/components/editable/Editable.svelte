@@ -48,18 +48,16 @@
 
 	let editing = $state(false);
 	let previousValue = $state('');
-	let inputEl: HTMLInputElement | undefined = $state();
+
+	function focusInput(node: HTMLInputElement) {
+		node.focus();
+		if (selectOnFocus) node.select();
+	}
 
 	function startEditing() {
 		if (disabled || readOnly) return;
 		previousValue = value;
 		editing = true;
-		requestAnimationFrame(() => {
-			if (inputEl) {
-				inputEl.focus();
-				if (selectOnFocus) inputEl.select();
-			}
-		});
 	}
 
 	function submit() {
@@ -76,6 +74,12 @@
 		if (activationMode === 'click' && event.type === 'click') startEditing();
 		if (activationMode === 'dblclick' && event.type === 'dblclick') startEditing();
 		if (activationMode === 'focus' && event.type === 'focus') startEditing();
+	}
+
+	function handlePreviewKeydown(event: KeyboardEvent) {
+		if (event.key !== 'Enter' && event.key !== ' ') return;
+		event.preventDefault();
+		startEditing();
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -103,7 +107,7 @@
 		<div class="relative flex min-w-0 flex-1 items-center">
 			{#if editing}
 				<input
-					bind:this={inputEl}
+					{@attach focusInput}
 					bind:value
 					{name}
 					{placeholder}
@@ -116,18 +120,19 @@
 						: 'border-kl-primary ring-kl-primary/20'}"
 				/>
 			{:else}
-				<span
-					role="button"
-					tabindex={disabled ? -1 : 0}
+				<button
+					type="button"
+					{disabled}
 					onclick={handlePreviewInteraction}
 					ondblclick={handlePreviewInteraction}
 					onfocus={handlePreviewInteraction}
+					onkeydown={handlePreviewKeydown}
 					class="rounded-kl-field text-kl-base-content hover:bg-kl-base-200 w-full cursor-text truncate border border-transparent px-3 py-1.5 text-sm transition-colors duration-150 {disabled
 						? 'cursor-not-allowed opacity-60'
 						: ''} {readOnly ? 'cursor-default' : ''} {!value ? 'text-kl-muted-content' : ''}"
 				>
 					{value || placeholder}
-				</span>
+				</button>
 			{/if}
 		</div>
 

@@ -103,7 +103,6 @@
 
 <div
 	class="relative w-full {disabled ? 'pointer-events-none opacity-50' : ''} {className ?? ''}"
-	aria-disabled={disabled || undefined}
 	role="region"
 	aria-roledescription="carousel"
 >

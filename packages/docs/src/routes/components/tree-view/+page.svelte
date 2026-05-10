@@ -80,8 +80,19 @@
 		{ value: 'main', label: 'main.ts' }
 	];
 
-	// eslint-disable-next-line no-useless-assignment -- $state() initial value is used by Svelte reactivity
 	let selectedValue = $state<string[]>([]);
+	const scriptClose = '</' + 'script>';
+	const controlledSelectionCode = `<script>
+  let selectedValue = $state([]);
+${scriptClose}
+
+<TreeView
+  nodes={fileSystem}
+  bind:selectedValue
+/>
+{#if selectedValue.length}
+  <p>Selected: {selectedValue.join(', ')}</p>
+{/if}`;
 
 	const propsData = [
 		{
@@ -172,17 +183,7 @@
 		<DemoCard
 			title="Controlled selection"
 			description="Track selected nodes via bind:selectedValue."
-			code={`<script>
-  let selectedValue = $state([]);
-</script>
-
-<TreeView
-  nodes={fileSystem}
-  bind:selectedValue
-/>
-{#if selectedValue.length}
-  <p>Selected: {selectedValue.join(', ')}</p>
-{/if}`}
+			code={controlledSelectionCode}
 		>
 			<div class="max-w-xs space-y-3">
 				<TreeView nodes={fileSystem} bind:selectedValue />

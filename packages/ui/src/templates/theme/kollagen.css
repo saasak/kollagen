@@ -7,20 +7,23 @@
 
 @layer kollagen.base {
 	:root {
+		/* Density — 1 = Tailwind default spacing, <1 = compact, >1 = spacious */
+		--kl-density: 0.875;
+
 		/* Radius — semantic (DaisyUI v5) */
-		--kl-radius-selector: 0.375rem; /* checkboxes, toggles, badges */
-		--kl-radius-field: 0.5rem; /* inputs, buttons, tabs */
-		--kl-radius-box: 0.75rem; /* cards, modals, dropdowns */
+		--kl-radius-selector: 0.25rem; /* checkboxes, toggles, badges */
+		--kl-radius-field: 0.375rem; /* inputs, buttons, tabs */
+		--kl-radius-box: 0.375rem; /* cards, modals, dropdowns */
 
 		/* Shadows */
-		--kl-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05);
-		--kl-shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
-		--kl-shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+		--kl-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.04);
+		--kl-shadow-md: 0 2px 4px -1px oklch(0 0 0 / 0.06), 0 1px 2px -1px oklch(0 0 0 / 0.04);
+		--kl-shadow-lg: 0 8px 16px -8px oklch(0 0 0 / 0.16), 0 4px 8px -6px oklch(0 0 0 / 0.08);
 
 		/* Transitions */
-		--kl-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-		--kl-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-		--kl-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+		--kl-transition-fast: 50ms ease-out;
+		--kl-transition-base: 200ms ease-out;
+		--kl-transition-slow: 300ms ease-in-out;
 
 		/* Z-index */
 		--kl-z-dropdown: 50;
@@ -105,6 +108,9 @@
 
 /* Tailwind 4 @theme mapping */
 @theme inline {
+	/* Density-aware spacing scale */
+	--spacing: calc(0.25rem * var(--kl-density));
+
 	/* Brand */
 	--color-kl-primary: var(--kl-primary);
 	--color-kl-primary-content: var(--kl-primary-content);
