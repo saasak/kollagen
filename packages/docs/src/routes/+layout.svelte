@@ -10,7 +10,9 @@
 	let { children }: { children: Snippet } = $props();
 
 	const isComponentPage = $derived(
-		$page.url.pathname.startsWith('/components') || $page.url.pathname.startsWith('/blocks')
+		$page.url.pathname.startsWith('/components') ||
+			$page.url.pathname.startsWith('/blocks') ||
+			$page.url.pathname === '/theme'
 	);
 </script>
 
