@@ -44,10 +44,10 @@
 		{disabled}
 		{required}
 		{onCheckedChange}
-		class="bg-kl-base-300 data-[state=checked]:bg-kl-primary data-[focus]:border-kl-primary data-[focus]:outline-kl-primary inline-flex h-6 w-11 shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-150 data-[focus]:outline-2 data-[focus]:outline-offset-2"
+		class="bg-kl-base-300 data-[state=checked]:bg-kl-primary inline-flex h-[1.5rem] w-[2.75rem] shrink-0 items-center rounded-full p-[2px] transition-colors duration-150 outline-none"
 	>
 		<Switch.Thumb
-			class="bg-kl-base-100 shadow-kl-sm pointer-events-none block h-5 w-5 rounded-full transition-transform duration-150 data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0"
+			class="bg-kl-base-100 shadow-kl-sm pointer-events-none block size-[1.25rem] rounded-full transition-transform duration-150 data-[state=checked]:translate-x-[1.25rem] data-[state=unchecked]:translate-x-0"
 		/>
 	</Switch.Root>
 	{#if label}
