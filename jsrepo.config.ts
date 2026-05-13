@@ -68,6 +68,12 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/date-picker' }]
 			},
 			{
+				name: 'data-table',
+				type: 'component',
+				registryDependencies: ['checkbox', 'menu', 'pagination', 'popover', 'select'],
+				files: [{ path: 'packages/ui/src/templates/components/data-table' }]
+			},
+			{
 				name: 'dialog',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/dialog' }]

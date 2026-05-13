@@ -10,6 +10,7 @@ export const componentNav = [
 	{ label: 'Clipboard', href: '/components/clipboard' },
 	{ label: 'Collapsible', href: '/components/collapsible' },
 	{ label: 'ComboBox', href: '/components/combobox' },
+	{ label: 'DataTable', href: '/components/data-table' },
 	{ label: 'DatePicker', href: '/components/date-picker' },
 	{ label: 'Dialog', href: '/components/dialog' },
 	{ label: 'Drawer', href: '/components/drawer' },

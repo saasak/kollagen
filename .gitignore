@@ -2,3 +2,4 @@ node_modules/
 dist/
 packages/docs/.svelte-kit/
 packages/docs/build/
+.DS_Store
