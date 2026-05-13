@@ -1,4 +1,5 @@
 <script lang="ts" generics="T extends { value: string; label: string; disabled?: boolean }">
+	import { cn } from '$lib/utils/cn';
 	import { Accordion } from 'bits-ui';
 	import { ChevronDown } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -65,8 +66,10 @@
 		{orientation}
 		{onValueChange}
 		loop={false}
-		class="divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border {className ??
-			''}"
+		class={cn(
+			`divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border`,
+			className as string | undefined
+		)}
 	>
 		{@render accordionItems()}
 	</Accordion.Root>
@@ -81,8 +84,10 @@
 			onValueChange?.(value);
 		}}
 		loop={false}
-		class="divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border {className ??
-			''}"
+		class={cn(
+			`divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border`,
+			className as string | undefined
+		)}
 	>
 		{@render accordionItems()}
 	</Accordion.Root>

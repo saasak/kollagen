@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { onMount } from 'svelte';
 	import { Play, Pause, RotateCcw } from 'lucide-svelte';
 
@@ -131,9 +132,10 @@
 
 <div
 	inert={disabled || undefined}
-	class="inline-flex flex-col items-center gap-4 {disabled
-		? 'pointer-events-none opacity-50'
-		: ''} {className ?? ''}"
+	class={cn(
+		`inline-flex flex-col items-center gap-4 ${disabled ? 'pointer-events-none opacity-50' : ''}`,
+		className
+	)}
 	aria-disabled={disabled || undefined}
 >
 	<div class="flex items-center gap-0.5" role="timer" aria-live="polite">

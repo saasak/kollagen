@@ -1,1 +1,17 @@
 export { default as Menu } from './Menu.svelte';
+export { default as Root } from './MenuRoot.svelte';
+export { default as Trigger } from './MenuTrigger.svelte';
+export { default as Portal } from './MenuPortal.svelte';
+export { default as Content } from './MenuContent.svelte';
+export { default as Item } from './MenuItem.svelte';
+export { default as Separator } from './MenuSeparator.svelte';
+export { default as Group } from './MenuGroup.svelte';
+export { default as GroupHeading } from './MenuGroupHeading.svelte';
+export { default as MenuRoot } from './MenuRoot.svelte';
+export { default as MenuTrigger } from './MenuTrigger.svelte';
+export { default as MenuPortal } from './MenuPortal.svelte';
+export { default as MenuContent } from './MenuContent.svelte';
+export { default as MenuItem } from './MenuItem.svelte';
+export { default as MenuSeparator } from './MenuSeparator.svelte';
+export { default as MenuGroup } from './MenuGroup.svelte';
+export { default as MenuGroupHeading } from './MenuGroupHeading.svelte';

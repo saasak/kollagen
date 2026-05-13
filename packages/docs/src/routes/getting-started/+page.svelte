@@ -14,18 +14,23 @@
 	<section class="mt-8">
 		<h2 class="text-xl font-semibold">Initialize</h2>
 		<p class="text-kl-muted-content mt-3 text-sm">
-			Run the init command to install dependencies and set up the base theme with CSS variables.
+			Run the init command to install dependencies, set up theme CSS, and create the shared
+			<code>cn</code> helper.
 		</p>
 		<pre class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">npx kollagen init</pre>
 		<p class="text-kl-muted-content mt-3 text-sm">
 			This installs <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
 				>bits-ui</code
 			>
+			,
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">lucide-svelte</code>
 			and
-			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">lucide-svelte</code>,
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">tailwind-merge</code>,
 			then copies the base theme CSS with all
-			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">--kl-*</code> tokens into your
-			project.
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">--kl-*</code> tokens into
+			your project and creates
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">src/lib/utils/cn.ts</code
+			>.
 		</p>
 	</section>
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Collapsible } from 'bits-ui';
 	import { ChevronDown } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -35,7 +36,10 @@
 	bind:open
 	{disabled}
 	{onOpenChange}
-	class="rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full border {className ?? ''}"
+	class={cn(
+		`rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full border`,
+		className as string | undefined
+	)}
 >
 	<Collapsible.Trigger
 		class="text-kl-base-content hover:bg-kl-base-200 flex w-full cursor-pointer items-center justify-between border-none bg-transparent px-4 py-3 text-sm font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50"

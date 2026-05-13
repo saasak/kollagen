@@ -4,6 +4,7 @@
 </script>
 
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -53,12 +54,12 @@
 	aria-orientation={role === 'toolbar' ? orientation : undefined}
 	data-orientation={orientation}
 	data-attached={attached}
-	class={[
+	class={cn(
 		baseClass,
 		orientationClasses[orientation],
 		attached ? attachedClasses[orientation] : gapClasses[orientation],
 		className
-	]}
+	)}
 >
 	{@render children?.()}
 </div>

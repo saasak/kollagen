@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { DropdownMenu } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -64,8 +65,10 @@
 		<DropdownMenu.Content
 			{loop}
 			sideOffset={4}
-			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-[8rem] border p-1 outline-none {className ??
-				''}"
+			class={cn(
+				`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-[8rem] border p-1 outline-none`,
+				className as string | undefined
+			)}
 		>
 			{#each items as entry, i (i)}
 				{#if isSeparator(entry)}

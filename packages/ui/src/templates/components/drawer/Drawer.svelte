@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
 	import { tick, type Snippet } from 'svelte';
@@ -88,8 +89,10 @@
 	<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 	<Drawer.Portal>
 		<Drawer.Content
-			class="{contentClass} border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-modal)] {className ??
-				''}"
+			class={cn(
+				`${contentClass} border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-modal)]`,
+				className as string | undefined
+			)}
 		>
 			{#if isVertical}
 				<Drawer.Handle class="bg-kl-base-300 mx-auto mt-3 mb-1 h-1.5 w-12 shrink-0 rounded-full" />

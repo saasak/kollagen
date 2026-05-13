@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	interface Props {
 		/** Label text displayed above the dropzone */
 		label?: string;
@@ -123,7 +124,7 @@
 	}
 </script>
 
-<div class="flex flex-col gap-2 {className ?? ''}">
+<div class={cn(`flex flex-col gap-2`, className)}>
 	{#if label}
 		<span
 			class="text-kl-base-content text-sm font-medium {disabled ? 'text-kl-muted-content' : ''}"

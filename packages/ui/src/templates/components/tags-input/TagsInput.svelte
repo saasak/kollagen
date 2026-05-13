@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { X } from 'lucide-svelte';
 
 	interface Props {
@@ -103,7 +104,7 @@
 	}
 </script>
 
-<div class="w-full {className ?? ''}">
+<div class={cn(`w-full`, className)}>
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { ChevronUp, ChevronDown } from 'lucide-svelte';
 
 	interface ValueChangeDetails {
@@ -177,7 +178,7 @@
 	});
 </script>
 
-<div class="flex flex-col gap-1.5 {className ?? ''}">
+<div class={cn(`flex flex-col gap-1.5`, className)}>
 	{#if label}
 		<label
 			for={id}

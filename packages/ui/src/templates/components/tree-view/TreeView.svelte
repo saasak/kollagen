@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { ChevronRight } from 'lucide-svelte';
 
 	interface TreeNode {
@@ -139,7 +140,7 @@
 	{/each}
 {/snippet}
 
-<div class="w-full {className ?? ''}">
+<div class={cn(`w-full`, className)}>
 	{#if label}
 		<span class="text-kl-base-content mb-1 block text-sm font-medium">{label}</span>
 	{/if}

@@ -1,1 +1,11 @@
 export { default as Accordion } from './Accordion.svelte';
+export { default as Root } from './AccordionRoot.svelte';
+export { default as Item } from './AccordionItem.svelte';
+export { default as Header } from './AccordionHeader.svelte';
+export { default as Trigger } from './AccordionTrigger.svelte';
+export { default as Content } from './AccordionContent.svelte';
+export { default as AccordionRoot } from './AccordionRoot.svelte';
+export { default as AccordionItem } from './AccordionItem.svelte';
+export { default as AccordionHeader } from './AccordionHeader.svelte';
+export { default as AccordionTrigger } from './AccordionTrigger.svelte';
+export { default as AccordionContent } from './AccordionContent.svelte';

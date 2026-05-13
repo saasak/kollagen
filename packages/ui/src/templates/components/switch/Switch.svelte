@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Switch } from 'bits-ui';
 
 	interface Props {
@@ -33,9 +34,12 @@
 </script>
 
 <label
-	class="inline-flex cursor-pointer items-center gap-2 select-none {disabled
-		? 'cursor-not-allowed opacity-50'
-		: ''} {className ?? ''}"
+	class={cn(
+		`inline-flex cursor-pointer items-center gap-2 select-none ${
+			disabled ? 'cursor-not-allowed opacity-50' : ''
+		}`,
+		className
+	)}
 >
 	<Switch.Root
 		bind:checked

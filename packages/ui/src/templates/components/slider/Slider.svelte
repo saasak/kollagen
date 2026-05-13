@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Slider } from 'bits-ui';
 
 	interface Props {
@@ -53,8 +54,10 @@
 </script>
 
 <div
-	class="flex {isVertical ? 'h-48 flex-col items-center' : 'w-full flex-col'} gap-2 {className ??
-		''}"
+	class={cn(
+		`flex ${isVertical ? 'h-48 flex-col items-center' : 'w-full flex-col'} gap-2`,
+		className
+	)}
 >
 	{#if label || showValue}
 		<div class="flex items-center justify-between text-sm">

@@ -1,4 +1,5 @@
 <script lang="ts" generics="T">
+	import { cn } from '$lib/utils/cn';
 	import emblaCarouselSvelte from 'embla-carousel-svelte';
 	import Autoplay from 'embla-carousel-autoplay';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
@@ -102,7 +103,7 @@
 </script>
 
 <div
-	class="relative w-full {disabled ? 'pointer-events-none opacity-50' : ''} {className ?? ''}"
+	class={cn(`relative w-full ${disabled ? 'pointer-events-none opacity-50' : ''}`, className)}
 	role="region"
 	aria-roledescription="carousel"
 >

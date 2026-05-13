@@ -27,7 +27,7 @@ Think of it as ShadCN + DaisyUI: copy-paste ownership with batteries included.
 Components are distributed via [jsrepo](https://jsrepo.dev) and copied into your project — you own the source.
 
 ```bash
-# Setup Kollagen in your SvelteKit project (installs deps, base theme, CSS variables)
+# Setup Kollagen in your SvelteKit project (installs deps, theme CSS, cn helper)
 npx @saasak/kollagen init
 
 # Add components (auto-resolves per-component npm deps)
@@ -37,7 +37,7 @@ npx @saasak/kollagen add combobox
 npx @saasak/kollagen update
 ```
 
-Components land in `src/lib/components/` and can be modified freely.
+Components land in `src/lib/components/` and can be modified freely. The init command also creates `src/lib/utils/cn.ts` so component `class` props can override default Tailwind utilities through `tailwind-merge`.
 
 ## Theming
 

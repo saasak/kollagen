@@ -13,6 +13,7 @@
 </script>
 
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { LoaderCircle } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
@@ -116,7 +117,7 @@
 		aria-busy={loading}
 		tabindex={isDisabled ? -1 : undefined}
 		onclick={handleClick}
-		class={[baseClass, variantClasses[variant], sizeClasses[size], className]}
+		class={cn(baseClass, variantClasses[variant], sizeClasses[size], className)}
 	>
 		{#if loading}
 			<LoaderCircle size={16} class="animate-spin" aria-hidden="true" />
@@ -132,7 +133,7 @@
 		aria-label={ariaLabel}
 		aria-busy={loading}
 		onclick={handleClick}
-		class={[baseClass, variantClasses[variant], sizeClasses[size], className]}
+		class={cn(baseClass, variantClasses[variant], sizeClasses[size], className)}
 	>
 		{#if loading}
 			<LoaderCircle size={16} class="animate-spin" aria-hidden="true" />

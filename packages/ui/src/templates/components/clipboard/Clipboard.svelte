@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { ClipboardCopy, Check } from 'lucide-svelte';
 
 	interface Props {
@@ -60,7 +61,7 @@
 	}
 </script>
 
-<div class="w-full {className ?? ''}">
+<div class={cn(`w-full`, className)}>
 	{#if label}
 		<span class="text-kl-base-content mb-1.5 block text-sm font-medium">
 			{label}

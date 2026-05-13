@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Check, CheckCheck } from 'lucide-svelte';
 
 	interface Props {
@@ -29,7 +30,7 @@
 	}: Props = $props();
 </script>
 
-<div class="flex gap-2 {sent ? 'flex-row-reverse justify-end' : 'flex-row'} {className ?? ''}">
+<div class={cn(`flex gap-2 ${sent ? 'flex-row-reverse justify-end' : 'flex-row'}`, className)}>
 	{#if !sent && avatar}
 		<div
 			class="bg-kl-secondary text-kl-secondary-content flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium"

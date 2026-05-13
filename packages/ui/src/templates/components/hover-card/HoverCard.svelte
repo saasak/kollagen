@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { LinkPreview } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -43,8 +44,10 @@
 		{sideOffset}
 		{align}
 		{alignOffset}
-		class="rounded-kl-box border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-md z-[var(--kl-z-popover)] w-72 border p-4 text-sm {className ??
-			''}"
+		class={cn(
+			`rounded-kl-box border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-md z-[var(--kl-z-popover)] w-72 border p-4 text-sm`,
+			className
+		)}
 	>
 		{@render children()}
 		{#if arrow}

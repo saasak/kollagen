@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { DatePicker } from 'bits-ui';
 	import type { DateValue } from '@internationalized/date';
 	import { Calendar, ChevronLeft, ChevronRight, X } from 'lucide-svelte';
@@ -86,7 +87,7 @@
 	weekdayFormat="short"
 	fixedWeeks={true}
 >
-	<div class="relative w-full {className ?? ''}">
+	<div class={cn(`relative w-full`, className)}>
 		<DatePicker.Input
 			{name}
 			class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border px-3 py-2 transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1 {disabled

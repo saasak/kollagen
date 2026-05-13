@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
 	import type { Snippet } from 'svelte';
 	import { GripVertical, GripHorizontal } from 'lucide-svelte';
@@ -38,9 +39,12 @@
 <PaneGroup
 	{direction}
 	onLayoutChange={onResize}
-	class="flex h-full w-full {isVertical ? 'flex-col' : ''} {disabled
-		? 'pointer-events-none opacity-50'
-		: ''} {className ?? ''}"
+	class={cn(
+		`flex h-full w-full ${isVertical ? 'flex-col' : ''} ${
+			disabled ? 'pointer-events-none opacity-50' : ''
+		}`,
+		className
+	)}
 >
 	{#each panels as panelConfig, i (panelConfig.id)}
 		<Pane

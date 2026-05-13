@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Popover } from 'bits-ui';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -45,8 +46,10 @@
 			{sideOffset}
 			{align}
 			{alignOffset}
-			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-popover)] w-72 border p-4 {className ??
-				''}"
+			class={cn(
+				`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg z-[var(--kl-z-popover)] w-72 border p-4`,
+				className as string | undefined
+			)}
 		>
 			<div class="flex items-start justify-between gap-2">
 				<div>

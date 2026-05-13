@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Toaster } from 'svelte-sonner';
 
 	interface Props {
@@ -32,7 +33,7 @@
 	{richColors}
 	{closeButton}
 	{duration}
-	class={className ?? ''}
+	class={cn(className)}
 	toastOptions={{
 		classes: {
 			toast: 'rounded-kl-box border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-lg',

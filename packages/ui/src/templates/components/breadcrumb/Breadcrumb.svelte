@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { ChevronRight, Ellipsis } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
@@ -33,7 +34,7 @@
 	const isTruncated = $derived(maxItems > 0 && items.length > maxItems);
 </script>
 
-<nav aria-label={label} class={className}>
+<nav aria-label={label} class={cn(className)}>
 	<ol class="flex flex-wrap items-center gap-1.5 text-sm">
 		{#each visibleItems as item, i}
 			{#if i === 1 && isTruncated}

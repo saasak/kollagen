@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Eye, EyeOff } from 'lucide-svelte';
 
 	interface Props {
@@ -52,7 +53,7 @@
 	}
 </script>
 
-<div class="relative w-full {className ?? ''}">
+<div class={cn(`relative w-full`, className)}>
 	<div
 		class="rounded-kl-field bg-kl-base-100 flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1 {disabled
 			? 'cursor-not-allowed opacity-50'

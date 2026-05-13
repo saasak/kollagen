@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { ScrollArea } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -11,7 +12,7 @@
 	let { dir, class: className, children }: Props = $props();
 </script>
 
-<ScrollArea.Root {dir} class="relative overflow-hidden {className ?? ''}">
+<ScrollArea.Root {dir} class={cn(`relative overflow-hidden`, className)}>
 	<ScrollArea.Viewport class="size-full">
 		{@render children()}
 	</ScrollArea.Viewport>

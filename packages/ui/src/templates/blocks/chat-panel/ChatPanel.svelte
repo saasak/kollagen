@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { SendHorizontal } from 'lucide-svelte';
 	import ChatBubble from './ChatBubble.svelte';
 	import type { Snippet } from 'svelte';
@@ -98,8 +99,10 @@
 </script>
 
 <div
-	class="rounded-kl-box border-kl-base-300 bg-kl-base-100 flex min-w-[350px] flex-col overflow-hidden border {className ??
-		''}"
+	class={cn(
+		`rounded-kl-box border-kl-base-300 bg-kl-base-100 flex min-w-[350px] flex-col overflow-hidden border`,
+		className
+	)}
 >
 	<!-- Header -->
 	{#if showHeader}

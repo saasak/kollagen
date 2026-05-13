@@ -1,4 +1,5 @@
 <script lang="ts" generics="T extends Record<string, any>">
+	import { cn } from '$lib/utils/cn';
 	import { Combobox } from 'bits-ui';
 	import { untrack } from 'svelte';
 	import { ChevronDown, X, Check, Loader2 } from 'lucide-svelte';
@@ -163,7 +164,7 @@
 		onOpenChange={handleOpenChange}
 		{onValueChange}
 	>
-		<div class="relative w-full {className ?? ''}">
+		<div class={cn(`relative w-full`, className)}>
 			<div
 				class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1"
 			>
@@ -238,7 +239,7 @@
 		onOpenChange={handleOpenChange}
 		{onValueChange}
 	>
-		<div class="relative w-full {className ?? ''}">
+		<div class={cn(`relative w-full`, className)}>
 			<div
 				class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1"
 			>

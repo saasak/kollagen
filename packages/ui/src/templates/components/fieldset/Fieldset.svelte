@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -29,7 +30,7 @@
 	}: Props = $props();
 </script>
 
-<fieldset {disabled} class="flex flex-col gap-3 {className ?? ''}">
+<fieldset {disabled} class={cn(`flex flex-col gap-3`, className)}>
 	{#if legend}
 		<legend
 			class="text-kl-base-content text-sm font-semibold {disabled ? 'text-kl-muted-content' : ''}"

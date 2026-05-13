@@ -1,57 +1,69 @@
 @layer kollagen.theme {
 	[data-theme='ocean'] {
-		--kl-primary: oklch(56.86% 0.255 257.57);
-		--kl-primary-content: oklch(91.372% 0.051 257.57);
-		--kl-secondary: oklch(60.682% 0.108 309.782);
-		--kl-secondary-content: oklch(96% 0.016 293.756);
-		--kl-accent: oklch(85.661% 0.144 198.645);
-		--kl-accent-content: oklch(40.124% 0.068 197.603);
-		--kl-neutral: oklch(19.616% 0.063 257.651);
-		--kl-neutral-content: oklch(83.923% 0.012 257.651);
-		--kl-base-100: oklch(100% 0 0);
-		--kl-base-200: oklch(97.466% 0.011 259.822);
-		--kl-base-300: oklch(93.268% 0.016 262.751);
-		--kl-base-content: oklch(41.886% 0.053 255.824);
-		--kl-muted: oklch(97.466% 0.011 259.822);
-		--kl-muted-content: oklch(56% 0.04 255.824);
-		--kl-info: oklch(88.127% 0.085 214.515);
-		--kl-info-content: oklch(17.625% 0.017 214.515);
-		--kl-success: oklch(80.494% 0.077 197.823);
-		--kl-success-content: oklch(16.098% 0.015 197.823);
-		--kl-warning: oklch(89.172% 0.045 71.47);
-		--kl-warning-content: oklch(17.834% 0.009 71.47);
-		--kl-error: oklch(73.092% 0.11 20.076);
-		--kl-error-content: oklch(14.618% 0.022 20.076);
-		--kl-radius-selector: 1rem;
-		--kl-radius-field: 0.5rem;
-		--kl-radius-box: 1rem;
+		/* Brand */
+		--kl-primary: oklch(0.55 0.22 230);
+		--kl-primary-content: oklch(0.985 0 0);
+		--kl-secondary: oklch(0.58 0.18 195);
+		--kl-secondary-content: oklch(0.985 0 0);
+		--kl-accent: oklch(0.68 0.16 175);
+		--kl-accent-content: oklch(0.985 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.3 0.02 230);
+		--kl-neutral-content: oklch(0.985 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.975 0.008 230);
+		--kl-base-200: oklch(0.935 0.015 225);
+		--kl-base-300: oklch(0.885 0.02 220);
+		--kl-base-content: oklch(0.18 0.02 230);
+
+		/* Muted */
+		--kl-muted: oklch(0.93 0.012 225);
+		--kl-muted-content: oklch(0.52 0.02 230);
+
+		/* Status */
+		--kl-info: oklch(0.62 0.22 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.65 0.2 160);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.78 0.16 85);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.58 0.22 25);
+		--kl-error-content: oklch(0.985 0 0);
 	}
 
 	[data-theme='ocean'][data-mode='dark'] {
-		--kl-primary: oklch(85.661% 0.144 198.645);
-		--kl-primary-content: oklch(40.124% 0.068 197.603);
-		--kl-secondary: oklch(60.682% 0.108 309.782);
-		--kl-secondary-content: oklch(96% 0.016 293.756);
-		--kl-accent: oklch(93.426% 0.102 94.555);
-		--kl-accent-content: oklch(18.685% 0.02 94.555);
-		--kl-neutral: oklch(27% 0.146 265.522);
-		--kl-neutral-content: oklch(80% 0.146 265.522);
-		--kl-base-100: oklch(37% 0.146 265.522);
-		--kl-base-200: oklch(28% 0.091 267.935);
-		--kl-base-300: oklch(22% 0.091 267.935);
-		--kl-base-content: oklch(90% 0.058 230.902);
-		--kl-muted: oklch(32% 0.11 267.935);
-		--kl-muted-content: oklch(72% 0.08 230.902);
-		--kl-info: oklch(54.615% 0.215 262.88);
-		--kl-info-content: oklch(90.923% 0.043 262.88);
-		--kl-success: oklch(62.705% 0.169 149.213);
-		--kl-success-content: oklch(12.541% 0.033 149.213);
-		--kl-warning: oklch(66.584% 0.157 58.318);
-		--kl-warning-content: oklch(27% 0.077 45.635);
-		--kl-error: oklch(73.95% 0.19 27.33);
-		--kl-error-content: oklch(14.79% 0.038 27.33);
-		--kl-radius-selector: 1rem;
-		--kl-radius-field: 0.5rem;
-		--kl-radius-box: 1rem;
+		/* Brand */
+		--kl-primary: oklch(0.65 0.2 230);
+		--kl-primary-content: oklch(0.14 0 0);
+		--kl-secondary: oklch(0.68 0.16 195);
+		--kl-secondary-content: oklch(0.14 0 0);
+		--kl-accent: oklch(0.72 0.14 175);
+		--kl-accent-content: oklch(0.14 0 0);
+
+		/* Neutral */
+		--kl-neutral: oklch(0.8 0.015 230);
+		--kl-neutral-content: oklch(0.14 0 0);
+
+		/* Base surfaces */
+		--kl-base-100: oklch(0.14 0.02 230);
+		--kl-base-200: oklch(0.19 0.025 228);
+		--kl-base-300: oklch(0.25 0.025 225);
+		--kl-base-content: oklch(0.92 0.01 230);
+
+		/* Muted */
+		--kl-muted: oklch(0.25 0.02 228);
+		--kl-muted-content: oklch(0.65 0.015 230);
+
+		/* Status */
+		--kl-info: oklch(0.65 0.2 245);
+		--kl-info-content: oklch(0.985 0 0);
+		--kl-success: oklch(0.68 0.18 160);
+		--kl-success-content: oklch(0.985 0 0);
+		--kl-warning: oklch(0.8 0.15 85);
+		--kl-warning-content: oklch(0.2 0 0);
+		--kl-error: oklch(0.62 0.22 25);
+		--kl-error-content: oklch(0.985 0 0);
 	}
 }

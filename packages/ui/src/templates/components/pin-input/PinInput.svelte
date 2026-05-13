@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { PinInput, REGEXP_ONLY_DIGITS, REGEXP_ONLY_CHARS } from 'bits-ui';
 
 	interface Props {
@@ -51,7 +52,7 @@
 	);
 </script>
 
-<div class="flex flex-col gap-1.5 {className ?? ''}">
+<div class={cn(`flex flex-col gap-1.5`, className)}>
 	{#if label}
 		<span
 			class="text-kl-base-content text-sm font-medium{disabled ? ' text-kl-muted-content' : ''}"

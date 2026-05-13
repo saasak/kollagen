@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Avatar } from 'bits-ui';
 	import { User } from 'lucide-svelte';
 
@@ -40,9 +41,12 @@
 
 <Avatar.Root
 	{onLoadingStatusChange}
-	class="rounded-kl-selector bg-kl-base-200 text-kl-muted-content relative inline-flex shrink-0 items-center justify-center overflow-hidden {sizeClass[
-		size
-	]} {disabled ? 'opacity-50' : ''} {className ?? ''}"
+	class={cn(
+		`rounded-kl-selector bg-kl-base-200 text-kl-muted-content relative inline-flex shrink-0 items-center justify-center overflow-hidden ${
+			sizeClass[size]
+		} ${disabled ? 'opacity-50' : ''}`,
+		className
+	)}
 >
 	<Avatar.Fallback class="flex size-full items-center justify-center font-medium">
 		{#if fallback}

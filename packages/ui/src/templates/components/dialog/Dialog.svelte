@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Dialog } from 'bits-ui';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -47,8 +48,10 @@
 		<Dialog.Content
 			{preventScroll}
 			interactOutsideBehavior={closeOnInteractOutside ? 'close' : 'ignore'}
-			class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6 {className ??
-				''}"
+			class={cn(
+				`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6`,
+				className as string | undefined
+			)}
 		>
 			<Dialog.Close
 				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"

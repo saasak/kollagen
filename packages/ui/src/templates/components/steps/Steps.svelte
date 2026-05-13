@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Check, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
@@ -60,7 +61,7 @@
 	}
 </script>
 
-<div class="flex flex-col gap-4 {className ?? ''}">
+<div class={cn(`flex flex-col gap-4`, className)}>
 	<div
 		class="flex items-center gap-0 {orientation === 'vertical' ? 'flex-col items-stretch' : ''}"
 		role="tablist"

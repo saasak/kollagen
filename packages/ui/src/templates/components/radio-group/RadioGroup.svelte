@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { RadioGroup, Label, useId } from 'bits-ui';
 
 	export interface Item {
@@ -37,8 +38,10 @@
 </script>
 
 <div
-	class="flex {orientation === 'horizontal' ? 'flex-row gap-4' : 'flex-col gap-2'} {className ??
-		''}"
+	class={cn(
+		`flex ${orientation === 'horizontal' ? 'flex-row gap-4' : 'flex-col gap-2'}`,
+		className
+	)}
 >
 	{#if label}
 		<span class="text-kl-base-content text-sm font-medium {disabled ? 'text-kl-muted-content' : ''}"

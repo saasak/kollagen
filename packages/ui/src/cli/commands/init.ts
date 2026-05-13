@@ -9,6 +9,7 @@ import { writeFile } from '../utils/fs.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const THEMES_DIR = path.resolve(__dirname, '../themes');
+const UTILS_DIR = path.resolve(__dirname, '../utils');
 
 function listThemeFiles(): string[] {
 	const files = fs.readdirSync(THEMES_DIR).filter((f) => f.endsWith('.css'));
@@ -17,6 +18,10 @@ function listThemeFiles(): string[] {
 
 function readThemeFile(filename: string): string {
 	return fs.readFileSync(path.join(THEMES_DIR, filename), 'utf-8');
+}
+
+function readUtilsFile(filename: string): string {
+	return fs.readFileSync(path.join(UTILS_DIR, filename), 'utf-8');
 }
 
 export const initCommand = new Command('init')
@@ -41,10 +46,13 @@ export const initCommand = new Command('init')
 		try {
 			await addDependency('bits-ui', { cwd, packageManager: pm });
 			await addDependency('lucide-svelte', { cwd, packageManager: pm });
+			await addDependency('tailwind-merge', { cwd, packageManager: pm });
 			s.stop('Dependencies installed');
 		} catch {
 			s.stop('Failed to install dependencies');
-			logger.error('Could not install dependencies. Install manually: bits-ui lucide-svelte');
+			logger.error(
+				'Could not install dependencies. Install manually: bits-ui lucide-svelte tailwind-merge'
+			);
 			process.exit(1);
 		}
 
@@ -67,7 +75,12 @@ export const initCommand = new Command('init')
 			logger.success(`Copied ${themeFiles.length} themes to src/lib/styles/themes/`);
 		}
 
-		// 5. Create jsrepo.config.ts for component paths
+		// 5. Copy shared utilities
+		const cnPath = path.join(cwd, 'src/lib/utils/cn.ts');
+		writeFile(cnPath, readUtilsFile('cn.ts'));
+		logger.success('Created src/lib/utils/cn.ts');
+
+		// 6. Create jsrepo.config.ts for component paths
 		const jsrepoConfigPath = path.join(cwd, 'jsrepo.config.ts');
 		if (!fs.existsSync(jsrepoConfigPath)) {
 			const jsrepoConfig = `import { defineConfig } from "jsrepo";
@@ -86,7 +99,7 @@ export default defineConfig({
 			logger.log('jsrepo.config.ts already exists');
 		}
 
-		// 6. Auto-configure: inject @import into app.css
+		// 7. Auto-configure: inject @import into app.css
 		const appCss = findAppCss(cwd);
 		if (appCss) {
 			const appCssPath = path.join(cwd, appCss);

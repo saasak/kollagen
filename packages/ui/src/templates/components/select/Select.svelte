@@ -1,4 +1,5 @@
 <script lang="ts" generics="T extends Record<string, any>">
+	import { cn } from '$lib/utils/cn';
 	import { Select } from 'bits-ui';
 	import { untrack } from 'svelte';
 	import { ChevronDown, X, Check } from 'lucide-svelte';
@@ -106,7 +107,7 @@
 			</span>
 		{/if}
 
-		<div class="relative w-full {className ?? ''}">
+		<div class={cn(`relative w-full`, className as string | undefined)}>
 			<div
 				class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1"
 			>
@@ -185,7 +186,7 @@
 			</span>
 		{/if}
 
-		<div class="relative w-full {className ?? ''}">
+		<div class={cn(`relative w-full`, className as string | undefined)}>
 			<div
 				class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1"
 			>

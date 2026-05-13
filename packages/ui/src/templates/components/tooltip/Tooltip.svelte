@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Tooltip } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -38,8 +39,10 @@
 			<Tooltip.Content
 				{side}
 				{sideOffset}
-				class="rounded-kl-box bg-kl-base-content text-kl-base-100 shadow-kl-sm z-[var(--kl-z-tooltip)] px-3 py-1.5 text-xs {className ??
-					''}"
+				class={cn(
+					`rounded-kl-box bg-kl-base-content text-kl-base-100 shadow-kl-sm z-[var(--kl-z-tooltip)] px-3 py-1.5 text-xs`,
+					className as string | undefined
+				)}
 			>
 				{content}
 			</Tooltip.Content>

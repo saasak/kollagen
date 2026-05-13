@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Pagination } from 'bits-ui';
 	import { ChevronLeft, ChevronRight, Ellipsis } from 'lucide-svelte';
 
@@ -41,7 +42,7 @@
 <Pagination.Root {count} bind:page {perPage} {siblingCount} {onPageChange}>
 	{#snippet children({ pages, range })}
 		<div
-			class="flex items-center {hasExtras ? 'w-full justify-between' : ''} gap-4 {className ?? ''}"
+			class={cn(`flex items-center ${hasExtras ? 'w-full justify-between' : ''} gap-4`, className)}
 		>
 			{#if showPageInfo}
 				<span class="text-kl-muted-content text-sm whitespace-nowrap">

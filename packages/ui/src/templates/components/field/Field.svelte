@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	interface Props {
 		/** Label text displayed above the input */
 		label?: string;
@@ -57,7 +58,7 @@
 	);
 </script>
 
-<div class="flex flex-col gap-1.5 {className ?? ''}">
+<div class={cn(`flex flex-col gap-1.5`, className)}>
 	{#if label}
 		<label
 			for={id}

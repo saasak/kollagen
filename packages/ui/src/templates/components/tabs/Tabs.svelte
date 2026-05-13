@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Tabs } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -42,7 +43,7 @@
 	{loop}
 	{disabled}
 	{onValueChange}
-	class="w-full {className ?? ''}"
+	class={cn(`w-full`, className as string | undefined)}
 >
 	<Tabs.List
 		class="border-kl-base-300 flex border-b {orientation === 'vertical'

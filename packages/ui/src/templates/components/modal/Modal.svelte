@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Dialog } from 'bits-ui';
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
@@ -85,8 +86,10 @@
 		<Drawer.Portal>
 			<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 			<Drawer.Content
-				class="border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed inset-x-0 bottom-0 z-[var(--kl-z-modal)] flex h-full max-h-[85dvh] w-full flex-col rounded-t-2xl border-x border-t {className ??
-					''}"
+				class={cn(
+					`border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed inset-x-0 bottom-0 z-[var(--kl-z-modal)] flex h-full max-h-[85dvh] w-full flex-col rounded-t-2xl border-x border-t`,
+					className
+				)}
 			>
 				<Drawer.Handle class="bg-kl-base-300 mx-auto mt-3 mb-1 h-1.5 w-12 shrink-0 rounded-full" />
 
@@ -144,8 +147,10 @@
 			<Dialog.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
 			<Dialog.Content
 				{preventScroll}
-				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6 {className ??
-					''}"
+				class={cn(
+					`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed top-1/2 left-1/2 z-[var(--kl-z-modal)] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 border p-6`,
+					className
+				)}
 			>
 				<Dialog.Close
 					class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"

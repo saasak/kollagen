@@ -1,1 +1,9 @@
 export { default as Tabs } from './Tabs.svelte';
+export { default as Root } from './TabsRoot.svelte';
+export { default as List } from './TabsList.svelte';
+export { default as Trigger } from './TabsTrigger.svelte';
+export { default as Content } from './TabsContent.svelte';
+export { default as TabsRoot } from './TabsRoot.svelte';
+export { default as TabsList } from './TabsList.svelte';
+export { default as TabsTrigger } from './TabsTrigger.svelte';
+export { default as TabsContent } from './TabsContent.svelte';

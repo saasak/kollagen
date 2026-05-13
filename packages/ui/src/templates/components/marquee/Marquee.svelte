@@ -1,4 +1,5 @@
 <script lang="ts" generics="T">
+	import { cn } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -110,7 +111,7 @@
 	aria-disabled={disabled || undefined}
 >
 	<div
-		class="overflow-hidden {className ?? ''}"
+		class={cn(`overflow-hidden`, className)}
 		aria-label={label}
 		role="marquee"
 		onmouseenter={handleMouseEnter}

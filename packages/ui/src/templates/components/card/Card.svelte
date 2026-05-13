@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -18,8 +19,10 @@
 </script>
 
 <article
-	class="rounded-kl-box border-kl-base-300 text-kl-base-content shadow-kl-sm overflow-hidden border bg-[var(--kl-surface-background)] {className ??
-		''}"
+	class={cn(
+		`rounded-kl-box border-kl-base-300 text-kl-base-content shadow-kl-sm overflow-hidden border bg-[var(--kl-surface-background)]`,
+		className as string | undefined
+	)}
 >
 	{#if title || description}
 		<header class="border-kl-base-300 border-b px-4 py-3">

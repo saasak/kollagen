@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { Pencil, Check, X } from 'lucide-svelte';
 
 	interface Props {
@@ -98,7 +99,7 @@
 	}
 </script>
 
-<div class="inline-flex w-full flex-col gap-1.5 {className ?? ''}">
+<div class={cn(`inline-flex w-full flex-col gap-1.5`, className)}>
 	{#if label}
 		<span class="text-kl-base-content text-sm font-medium">{label}</span>
 	{/if}

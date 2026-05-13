@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/cn';
 	import { encode } from 'uqr';
 	import type { Snippet } from 'svelte';
 
@@ -42,8 +43,10 @@
 </script>
 
 <div
-	class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-sm relative inline-flex items-center justify-center border p-3 {className ??
-		''}"
+	class={cn(
+		`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-sm relative inline-flex items-center justify-center border p-3`,
+		className
+	)}
 >
 	{#if qr}
 		<svg
