@@ -1,69 +1,57 @@
 @layer kollagen.theme {
 	[data-theme='emerald'] {
-		/* Brand */
-		--kl-primary: oklch(0.56 0.2 158);
-		--kl-primary-content: oklch(0.985 0 0);
-		--kl-secondary: oklch(0.5 0.18 260);
-		--kl-secondary-content: oklch(0.985 0 0);
-		--kl-accent: oklch(0.65 0.15 195);
-		--kl-accent-content: oklch(0.985 0 0);
-
-		/* Neutral */
-		--kl-neutral: oklch(0.28 0.01 260);
-		--kl-neutral-content: oklch(0.985 0 0);
-
-		/* Base surfaces — clean white */
-		--kl-base-100: oklch(0.99 0.002 0);
-		--kl-base-200: oklch(0.96 0.004 0);
-		--kl-base-300: oklch(0.92 0.006 0);
-		--kl-base-content: oklch(0.16 0.01 260);
-
-		/* Muted */
-		--kl-muted: oklch(0.95 0.004 0);
-		--kl-muted-content: oklch(0.52 0.008 260);
-
-		/* Status */
-		--kl-info: oklch(0.62 0.2 240);
-		--kl-info-content: oklch(0.985 0 0);
-		--kl-success: oklch(0.6 0.22 155);
-		--kl-success-content: oklch(0.985 0 0);
-		--kl-warning: oklch(0.78 0.18 80);
-		--kl-warning-content: oklch(0.2 0 0);
-		--kl-error: oklch(0.58 0.24 22);
-		--kl-error-content: oklch(0.985 0 0);
+		--kl-primary: oklch(76.662% 0.135 153.45);
+		--kl-primary-content: oklch(33.387% 0.04 162.24);
+		--kl-secondary: oklch(61.302% 0.202 261.294);
+		--kl-secondary-content: oklch(100% 0 0);
+		--kl-accent: oklch(72.772% 0.149 33.2);
+		--kl-accent-content: oklch(0% 0 0);
+		--kl-neutral: oklch(35.519% 0.032 262.988);
+		--kl-neutral-content: oklch(98.462% 0.001 247.838);
+		--kl-base-100: oklch(100% 0 0);
+		--kl-base-200: oklch(93% 0 0);
+		--kl-base-300: oklch(86% 0 0);
+		--kl-base-content: oklch(35.519% 0.032 262.988);
+		--kl-muted: oklch(93% 0 0);
+		--kl-muted-content: oklch(50% 0.018 262.988);
+		--kl-info: oklch(72.06% 0.191 231.6);
+		--kl-info-content: oklch(0% 0 0);
+		--kl-success: oklch(64.8% 0.15 160);
+		--kl-success-content: oklch(0% 0 0);
+		--kl-warning: oklch(84.71% 0.199 83.87);
+		--kl-warning-content: oklch(0% 0 0);
+		--kl-error: oklch(71.76% 0.221 22.18);
+		--kl-error-content: oklch(0% 0 0);
+		--kl-radius-selector: 1rem;
+		--kl-radius-field: 0.5rem;
+		--kl-radius-box: 1rem;
 	}
 
 	[data-theme='emerald'][data-mode='dark'] {
-		/* Brand */
-		--kl-primary: oklch(0.65 0.18 158);
-		--kl-primary-content: oklch(0.14 0 0);
-		--kl-secondary: oklch(0.6 0.16 260);
-		--kl-secondary-content: oklch(0.985 0 0);
-		--kl-accent: oklch(0.7 0.13 195);
-		--kl-accent-content: oklch(0.14 0 0);
-
-		/* Neutral */
-		--kl-neutral: oklch(0.8 0.008 260);
-		--kl-neutral-content: oklch(0.14 0 0);
-
-		/* Base surfaces */
-		--kl-base-100: oklch(0.13 0.012 260);
-		--kl-base-200: oklch(0.18 0.015 258);
-		--kl-base-300: oklch(0.24 0.015 255);
-		--kl-base-content: oklch(0.94 0.005 0);
-
-		/* Muted */
-		--kl-muted: oklch(0.24 0.012 258);
-		--kl-muted-content: oklch(0.62 0.008 260);
-
-		/* Status */
-		--kl-info: oklch(0.65 0.18 240);
-		--kl-info-content: oklch(0.985 0 0);
-		--kl-success: oklch(0.65 0.2 155);
-		--kl-success-content: oklch(0.985 0 0);
-		--kl-warning: oklch(0.8 0.16 80);
-		--kl-warning-content: oklch(0.2 0 0);
-		--kl-error: oklch(0.62 0.22 22);
-		--kl-error-content: oklch(0.985 0 0);
+		--kl-primary: oklch(72% 0.13 153.45);
+		--kl-primary-content: oklch(15% 0.035 162.24);
+		--kl-secondary: oklch(68% 0.18 261.294);
+		--kl-secondary-content: oklch(96% 0.01 261.294);
+		--kl-accent: oklch(76% 0.13 33.2);
+		--kl-accent-content: oklch(14% 0.02 33.2);
+		--kl-neutral: oklch(82% 0.012 262.988);
+		--kl-neutral-content: oklch(14% 0.01 262.988);
+		--kl-base-100: oklch(16% 0.018 262.988);
+		--kl-base-200: oklch(21% 0.02 262.988);
+		--kl-base-300: oklch(27% 0.022 262.988);
+		--kl-base-content: oklch(94% 0.004 247.838);
+		--kl-muted: oklch(27% 0.018 262.988);
+		--kl-muted-content: oklch(68% 0.012 262.988);
+		--kl-info: oklch(72.06% 0.191 231.6);
+		--kl-info-content: oklch(0% 0 0);
+		--kl-success: oklch(64.8% 0.15 160);
+		--kl-success-content: oklch(0% 0 0);
+		--kl-warning: oklch(84.71% 0.199 83.87);
+		--kl-warning-content: oklch(0% 0 0);
+		--kl-error: oklch(71.76% 0.221 22.18);
+		--kl-error-content: oklch(0% 0 0);
+		--kl-radius-selector: 1rem;
+		--kl-radius-field: 0.5rem;
+		--kl-radius-box: 1rem;
 	}
 }

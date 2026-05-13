@@ -82,8 +82,7 @@
 	let themeRevision = $state(0);
 
 	const snapshot = $derived.by(() => {
-		themeRevision;
-		return readSnapshot();
+		return readSnapshot(themeRevision);
 	});
 	const brandPreview = $derived(
 		snapshot.colorGroups.find((group) => group.title === 'Brand')?.tokens ?? []
@@ -95,7 +94,7 @@
 		snapshot.parameterGroups.find((group) => group.title === 'Shape')?.tokens.slice(0, 3) ?? []
 	);
 
-	function readSnapshot(): ThemeSnapshot {
+	function readSnapshot(_revision = 0): ThemeSnapshot {
 		if (!browser) {
 			return {
 				themeName: 'default',

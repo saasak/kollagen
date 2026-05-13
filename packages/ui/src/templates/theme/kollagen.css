@@ -76,71 +76,71 @@
 	/* Light theme (default) */
 	:root {
 		/* Brand */
-		--kl-primary: oklch(0.585 0.295 275);
-		--kl-primary-content: oklch(0.985 0 0);
-		--kl-secondary: oklch(0.62 0.26 330);
-		--kl-secondary-content: oklch(0.985 0 0);
-		--kl-accent: oklch(0.72 0.19 185);
-		--kl-accent-content: oklch(0.985 0 0);
+		--kl-primary: oklch(45% 0.24 277.023);
+		--kl-primary-content: oklch(93% 0.034 272.788);
+		--kl-secondary: oklch(65% 0.241 354.308);
+		--kl-secondary-content: oklch(94% 0.028 342.258);
+		--kl-accent: oklch(77% 0.152 181.912);
+		--kl-accent-content: oklch(38% 0.063 188.416);
 
 		/* Neutral */
-		--kl-neutral: oklch(0.32 0.01 275);
-		--kl-neutral-content: oklch(0.985 0 0);
+		--kl-neutral: oklch(14% 0.005 285.823);
+		--kl-neutral-content: oklch(92% 0.004 286.32);
 
 		/* Base surfaces (DaisyUI elevation model) */
-		--kl-base-100: oklch(0.985 0.008 275);
-		--kl-base-200: oklch(0.935 0.012 275);
-		--kl-base-300: oklch(0.88 0.016 275);
-		--kl-base-content: oklch(0.145 0.01 275);
+		--kl-base-100: oklch(100% 0 0);
+		--kl-base-200: oklch(98% 0 0);
+		--kl-base-300: oklch(95% 0 0);
+		--kl-base-content: oklch(21% 0.006 285.885);
 
 		/* Muted (ShadCN — subdued/disabled states) */
-		--kl-muted: oklch(0.935 0.012 275);
-		--kl-muted-content: oklch(0.556 0.01 275);
+		--kl-muted: oklch(98% 0 0);
+		--kl-muted-content: oklch(56% 0.012 285.885);
 
 		/* Status */
-		--kl-info: oklch(0.635 0.235 245);
-		--kl-info-content: oklch(0.985 0 0);
-		--kl-success: oklch(0.66 0.24 150);
-		--kl-success-content: oklch(0.985 0 0);
-		--kl-warning: oklch(0.78 0.2 80);
-		--kl-warning-content: oklch(0.2 0 0);
-		--kl-error: oklch(0.6 0.27 25);
-		--kl-error-content: oklch(0.985 0 0);
+		--kl-info: oklch(74% 0.16 232.661);
+		--kl-info-content: oklch(29% 0.066 243.157);
+		--kl-success: oklch(76% 0.177 163.223);
+		--kl-success-content: oklch(37% 0.077 168.94);
+		--kl-warning: oklch(82% 0.189 84.429);
+		--kl-warning-content: oklch(41% 0.112 45.904);
+		--kl-error: oklch(71% 0.194 13.428);
+		--kl-error-content: oklch(27% 0.105 12.094);
 	}
 
 	/* Dark mode */
 	[data-mode='dark'] {
 		/* Brand */
-		--kl-primary: oklch(0.685 0.27 275);
-		--kl-primary-content: oklch(0.145 0 0);
-		--kl-secondary: oklch(0.7 0.24 330);
-		--kl-secondary-content: oklch(0.145 0 0);
-		--kl-accent: oklch(0.76 0.17 185);
-		--kl-accent-content: oklch(0.145 0 0);
+		--kl-primary: oklch(71% 0.202 349.761);
+		--kl-primary-content: oklch(28% 0.109 3.907);
+		--kl-secondary: oklch(82% 0.111 230.318);
+		--kl-secondary-content: oklch(29% 0.066 243.157);
+		--kl-accent: oklch(77% 0.152 181.912);
+		--kl-accent-content: oklch(27% 0.046 192.524);
 
 		/* Neutral */
-		--kl-neutral: oklch(0.82 0.01 275);
-		--kl-neutral-content: oklch(0.145 0 0);
+		--kl-neutral: oklch(45% 0.12 277.023);
+		--kl-neutral-content: oklch(87% 0.065 274.039);
 
 		/* Base surfaces */
-		--kl-base-100: oklch(0.145 0.012 275);
-		--kl-base-200: oklch(0.205 0.015 275);
-		--kl-base-300: oklch(0.269 0.015 275);
-		--kl-base-content: oklch(0.985 0 0);
+		--kl-base-100: oklch(15% 0.03 281.288);
+		--kl-base-200: oklch(20% 0.035 281.288);
+		--kl-base-300: oklch(26% 0.04 281.288);
+		--kl-base-content: oklch(92% 0.012 286.32);
 
 		/* Muted */
-		--kl-muted: oklch(0.269 0.015 275);
-		--kl-muted-content: oklch(0.708 0.01 275);
+		--kl-muted: oklch(26% 0.035 281.288);
+		--kl-muted-content: oklch(70% 0.04 274.713);
 
 		/* Status */
-		--kl-info: oklch(0.67 0.22 245);
-		--kl-info-content: oklch(0.985 0 0);
-		--kl-success: oklch(0.68 0.22 150);
-		--kl-success-content: oklch(0.985 0 0);
-		--kl-warning: oklch(0.8 0.18 80);
-		--kl-warning-content: oklch(0.2 0 0);
-		--kl-error: oklch(0.62 0.26 25);
-		--kl-error-content: oklch(0.985 0 0);
+		--kl-info: oklch(74% 0.16 232.661);
+		--kl-info-content: oklch(29% 0.066 243.157);
+		--kl-success: oklch(77% 0.152 181.912);
+		--kl-success-content: oklch(27% 0.046 192.524);
+		--kl-warning: oklch(90% 0.182 98.111);
+		--kl-warning-content: oklch(42% 0.095 57.708);
+		--kl-error: oklch(73.7% 0.121 32.639);
+		--kl-error-content: oklch(23.501% 0.096 290.329);
 	}
 }
 

@@ -1,69 +1,57 @@
 @layer kollagen.theme {
 	[data-theme='rose'] {
-		/* Brand */
-		--kl-primary: oklch(0.6 0.22 350);
-		--kl-primary-content: oklch(0.985 0 0);
-		--kl-secondary: oklch(0.56 0.2 310);
-		--kl-secondary-content: oklch(0.985 0 0);
-		--kl-accent: oklch(0.65 0.15 15);
-		--kl-accent-content: oklch(0.985 0 0);
-
-		/* Neutral */
-		--kl-neutral: oklch(0.32 0.015 350);
-		--kl-neutral-content: oklch(0.985 0 0);
-
-		/* Base surfaces */
-		--kl-base-100: oklch(0.98 0.01 350);
-		--kl-base-200: oklch(0.94 0.016 348);
-		--kl-base-300: oklch(0.89 0.02 345);
-		--kl-base-content: oklch(0.18 0.015 350);
-
-		/* Muted */
-		--kl-muted: oklch(0.94 0.012 348);
-		--kl-muted-content: oklch(0.52 0.018 350);
-
-		/* Status */
-		--kl-info: oklch(0.62 0.2 245);
-		--kl-info-content: oklch(0.985 0 0);
-		--kl-success: oklch(0.64 0.2 155);
-		--kl-success-content: oklch(0.985 0 0);
-		--kl-warning: oklch(0.78 0.17 80);
-		--kl-warning-content: oklch(0.2 0 0);
-		--kl-error: oklch(0.58 0.25 20);
-		--kl-error-content: oklch(0.985 0 0);
+		--kl-primary: oklch(65% 0.241 354.308);
+		--kl-primary-content: oklch(100% 0 0);
+		--kl-secondary: oklch(89% 0.058 10.001);
+		--kl-secondary-content: oklch(51% 0.222 16.935);
+		--kl-accent: oklch(90% 0.063 306.703);
+		--kl-accent-content: oklch(49% 0.265 301.924);
+		--kl-neutral: oklch(40% 0.153 2.432);
+		--kl-neutral-content: oklch(92% 0.013 255.508);
+		--kl-base-100: oklch(100% 0 0);
+		--kl-base-200: oklch(98.462% 0.001 247.838);
+		--kl-base-300: oklch(92.462% 0.001 247.838);
+		--kl-base-content: oklch(24% 0.05 3.958);
+		--kl-muted: oklch(96% 0.012 343.198);
+		--kl-muted-content: oklch(55% 0.08 3.958);
+		--kl-info: oklch(86% 0.127 207.078);
+		--kl-info-content: oklch(52% 0.105 223.128);
+		--kl-success: oklch(87% 0.15 154.449);
+		--kl-success-content: oklch(52% 0.154 150.069);
+		--kl-warning: oklch(83% 0.128 66.29);
+		--kl-warning-content: oklch(55% 0.195 38.402);
+		--kl-error: oklch(80% 0.114 19.571);
+		--kl-error-content: oklch(50% 0.213 27.518);
+		--kl-radius-selector: 1rem;
+		--kl-radius-field: 2rem;
+		--kl-radius-box: 1rem;
 	}
 
 	[data-theme='rose'][data-mode='dark'] {
-		/* Brand */
-		--kl-primary: oklch(0.68 0.2 350);
-		--kl-primary-content: oklch(0.14 0 0);
-		--kl-secondary: oklch(0.65 0.18 310);
-		--kl-secondary-content: oklch(0.14 0 0);
-		--kl-accent: oklch(0.72 0.13 15);
-		--kl-accent-content: oklch(0.14 0 0);
-
-		/* Neutral */
-		--kl-neutral: oklch(0.8 0.012 350);
-		--kl-neutral-content: oklch(0.14 0 0);
-
-		/* Base surfaces */
-		--kl-base-100: oklch(0.15 0.015 350);
-		--kl-base-200: oklch(0.2 0.018 348);
-		--kl-base-300: oklch(0.26 0.02 345);
-		--kl-base-content: oklch(0.94 0.01 350);
-
-		/* Muted */
-		--kl-muted: oklch(0.26 0.016 348);
-		--kl-muted-content: oklch(0.64 0.015 350);
-
-		/* Status */
-		--kl-info: oklch(0.65 0.18 245);
-		--kl-info-content: oklch(0.985 0 0);
-		--kl-success: oklch(0.68 0.18 155);
-		--kl-success-content: oklch(0.985 0 0);
-		--kl-warning: oklch(0.8 0.16 80);
-		--kl-warning-content: oklch(0.2 0 0);
-		--kl-error: oklch(0.62 0.24 20);
-		--kl-error-content: oklch(0.985 0 0);
+		--kl-primary: oklch(72% 0.2 354.308);
+		--kl-primary-content: oklch(14% 0.04 354.308);
+		--kl-secondary: oklch(74% 0.12 10.001);
+		--kl-secondary-content: oklch(15% 0.04 16.935);
+		--kl-accent: oklch(78% 0.095 306.703);
+		--kl-accent-content: oklch(18% 0.05 301.924);
+		--kl-neutral: oklch(82% 0.05 2.432);
+		--kl-neutral-content: oklch(16% 0.035 3.958);
+		--kl-base-100: oklch(18% 0.03 343.198);
+		--kl-base-200: oklch(23% 0.04 343.198);
+		--kl-base-300: oklch(30% 0.05 343.198);
+		--kl-base-content: oklch(94% 0.02 343.198);
+		--kl-muted: oklch(30% 0.04 343.198);
+		--kl-muted-content: oklch(70% 0.04 343.198);
+		--kl-info: oklch(86% 0.127 207.078);
+		--kl-info-content: oklch(20% 0.06 223.128);
+		--kl-success: oklch(84% 0.13 154.449);
+		--kl-success-content: oklch(19% 0.06 150.069);
+		--kl-warning: oklch(83% 0.128 66.29);
+		--kl-warning-content: oklch(20% 0.06 38.402);
+		--kl-error: oklch(70% 0.18 25.331);
+		--kl-error-content: oklch(96% 0.018 17.38);
+		--kl-radius-selector: 1rem;
+		--kl-radius-field: 2rem;
+		--kl-radius-box: 1rem;
 	}
 }
