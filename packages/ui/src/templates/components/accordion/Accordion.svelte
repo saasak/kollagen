@@ -67,7 +67,7 @@
 		{onValueChange}
 		loop={false}
 		class={cn(
-			`divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border`,
+			`divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y overflow-hidden border`,
 			className as string | undefined
 		)}
 	>
@@ -85,7 +85,7 @@
 		}}
 		loop={false}
 		class={cn(
-			`divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y border`,
+			`divide-kl-base-300 rounded-kl-box border-kl-base-300 bg-kl-base-100 w-full divide-y overflow-hidden border`,
 			className as string | undefined
 		)}
 	>
