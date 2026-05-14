@@ -3,6 +3,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "pnpm --filter @saasak/kollagen-docs dev",
+		"prepare": "husky",
 		"build": "pnpm -r build && jsrepo build",
 		"build:registry": "jsrepo build",
 		"build:ui": "pnpm --filter @saasak/kollagen build",
@@ -27,6 +28,7 @@
 		"eslint-config-prettier": "latest",
 		"eslint-plugin-svelte": "latest",
 		"globals": "latest",
+		"husky": "^9.1.7",
 		"jsrepo": "^3.7.0",
 		"prettier": "latest",
 		"prettier-plugin-svelte": "latest",
