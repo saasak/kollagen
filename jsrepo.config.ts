@@ -70,7 +70,14 @@ export default defineConfig({
 			{
 				name: 'data-table',
 				type: 'component',
-				registryDependencies: ['checkbox', 'menu', 'pagination', 'popover', 'select'],
+				registryDependencies: [
+					'checkbox',
+					'date-picker',
+					'menu',
+					'pagination',
+					'popover',
+					'select'
+				],
 				files: [{ path: 'packages/ui/src/templates/components/data-table' }]
 			},
 			{
