@@ -33,11 +33,15 @@
 		--kl-error-content: oklch(0.98 0.005 285);
 
 		/* Geometry */
-		--kl-density: 0.92;
-		--kl-density-reading: 1.02;
+		--kl-density: 1;
+		--kl-density-reading: 1;
 		--kl-radius-selector: 999px;
 		--kl-radius-field: 999px;
 		--kl-radius-box: 0.125rem;
+		--kl-size-selector: 0.28125rem;
+		--kl-size-field: 0.28125rem;
+		--kl-depth: 1.2;
+		--kl-noise: 0.08;
 
 		/* Neon surface system */
 		--kl-shadow-sm:
@@ -55,9 +59,11 @@
 
 		/* Crisp chrome */
 		--kl-border-width: 1px;
-		--kl-border-width-strong: 2px;
+		--kl-border-width-strong: calc(var(--kl-border-width) + var(--kl-border-width));
 		--kl-border-style: solid;
-		--kl-outline-width: 2px;
+		--kl-outline-width: var(--kl-border-width-strong);
+		--kl-outline-width-strong: calc(var(--kl-outline-width) + var(--kl-border-width));
+		--kl-outline-offset: 2px;
 		--kl-motion-scale: 0.75;
 		--kl-motion-reduced: 0;
 		--kl-transition-easing: cubic-bezier(0.16, 1, 0.3, 1);

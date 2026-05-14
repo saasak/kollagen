@@ -33,11 +33,15 @@
 		--kl-error-content: oklch(0.985 0.006 120);
 
 		/* Shape and rhythm */
-		--kl-density: 0.82;
-		--kl-density-reading: 1.08;
+		--kl-density: 1;
+		--kl-density-reading: 1;
 		--kl-radius-selector: 0;
 		--kl-radius-field: 0;
 		--kl-radius-box: 0;
+		--kl-size-selector: 0.21875rem;
+		--kl-size-field: 0.21875rem;
+		--kl-depth: 0.45;
+		--kl-noise: 0;
 
 		/* Quiet surfaces */
 		--kl-shadow-sm: 0 1px 2px oklch(0.22 0.04 140 / 0.05);
@@ -52,9 +56,11 @@
 
 		/* Accessible restraint */
 		--kl-border-width: 1px;
-		--kl-border-width-strong: 1px;
+		--kl-border-width-strong: calc(var(--kl-border-width) + var(--kl-border-width));
 		--kl-border-style: solid;
-		--kl-outline-width: 2px;
+		--kl-outline-width: var(--kl-border-width-strong);
+		--kl-outline-width-strong: calc(var(--kl-outline-width) + var(--kl-border-width));
+		--kl-outline-offset: 2px;
 		--kl-motion-scale: 0.6;
 		--kl-motion-reduced: 0;
 		--kl-contrast-level: 0.95;
@@ -62,7 +68,7 @@
 		/* Typography and page texture */
 		--kl-font-heading: var(--kl-font-body);
 		--kl-font-display: var(--kl-font-heading);
-		--kl-page-background: var(--kl-base-100);
+		--kl-page-background: var(--kl-base-200);
 		--kl-surface-background: var(--kl-base-100);
 		--kl-pattern-image:
 			linear-gradient(90deg, oklch(0.62 0.12 100 / 0.055) 1px, transparent 1px),
@@ -100,7 +106,8 @@
 		--kl-error: oklch(0.7 0.19 25);
 		--kl-error-content: oklch(0.985 0.006 120);
 
-		--kl-page-background: var(--kl-base-100);
+		--kl-page-background: var(--kl-base-200);
+		--kl-depth: 0.65;
 		--kl-pattern-image:
 			linear-gradient(90deg, oklch(0.86 0.14 95 / 0.055) 1px, transparent 1px),
 			linear-gradient(oklch(0.78 0.13 200 / 0.05) 1px, transparent 1px);

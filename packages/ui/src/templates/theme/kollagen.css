@@ -7,8 +7,8 @@
 
 @layer kollagen.base {
 	:root {
-		/* Density — 1 = Tailwind default spacing, <1 = compact, >1 = spacious */
-		--kl-density: 0.875;
+		/* Density — retained as a preview token; spacing stays Tailwind-default */
+		--kl-density: 1;
 		--kl-density-reading: 1;
 
 		/* Typography */
@@ -26,6 +26,13 @@
 		--kl-radius-field: 0.375rem; /* inputs, buttons, tabs */
 		--kl-radius-box: 0.375rem; /* cards, modals, dropdowns */
 
+		/* DaisyUI-inspired rendering controls */
+		--kl-size-selector: 0.25rem;
+		--kl-size-field: 0.25rem;
+		--kl-depth: 1;
+		--kl-noise: 0;
+		--kl-fx-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.34' numOctaves='4' stitchTiles='stitch'%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23a)' opacity='0.2'%3E%3C/rect%3E%3C/svg%3E");
+
 		/* Shadows */
 		--kl-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.04);
 		--kl-shadow-md: 0 2px 4px -1px oklch(0 0 0 / 0.06), 0 1px 2px -1px oklch(0 0 0 / 0.04);
@@ -39,9 +46,11 @@
 
 		/* Borders */
 		--kl-border-width: 1px;
-		--kl-border-width-strong: 2px;
+		--kl-border-width-strong: calc(var(--kl-border-width) + var(--kl-border-width));
 		--kl-border-style: solid;
-		--kl-outline-width: 2px;
+		--kl-outline-width: var(--kl-border-width-strong);
+		--kl-outline-width-strong: calc(var(--kl-outline-width) + var(--kl-border-width));
+		--kl-outline-offset: 2px;
 
 		/* Transitions */
 		--kl-motion-scale: 1;
@@ -56,7 +65,7 @@
 
 		/* Contrast and backgrounds */
 		--kl-contrast-level: 1;
-		--kl-page-background: var(--kl-base-100);
+		--kl-page-background: var(--kl-base-200);
 		--kl-surface-background: var(--kl-base-100);
 		--kl-pattern-image: none;
 		--kl-pattern-size: auto;
@@ -146,8 +155,18 @@
 
 /* Tailwind 4 @theme mapping */
 @theme inline {
-	/* Density-aware spacing scale */
-	--spacing: calc(0.25rem * var(--kl-density));
+	/* Tailwind default spacing scale */
+	--spacing: 0.25rem;
+	--spacing-kl-field-xs: calc(var(--kl-size-field) * 6);
+	--spacing-kl-field-sm: calc(var(--kl-size-field) * 8);
+	--spacing-kl-field-md: calc(var(--kl-size-field) * 10);
+	--spacing-kl-field-lg: calc(var(--kl-size-field) * 12);
+	--spacing-kl-field-xl: calc(var(--kl-size-field) * 14);
+	--spacing-kl-selector-xs: calc(var(--kl-size-selector) * 4);
+	--spacing-kl-selector-sm: calc(var(--kl-size-selector) * 5);
+	--spacing-kl-selector-md: calc(var(--kl-size-selector) * 6);
+	--spacing-kl-selector-lg: calc(var(--kl-size-selector) * 7);
+	--spacing-kl-selector-xl: calc(var(--kl-size-selector) * 8);
 
 	/* Typography */
 	--font-kl-body: var(--kl-font-body);
@@ -214,7 +233,7 @@
 	}
 
 	body {
-		background-color: var(--kl-base-100);
+		background-color: var(--kl-base-200);
 		background-image: linear-gradient(var(--kl-page-background), var(--kl-page-background));
 		color: var(--kl-base-content);
 		font-family: var(--kl-font-body);
@@ -286,18 +305,43 @@
 		border-left-width: var(--kl-border-width);
 	}
 
-	.border-2 {
+	.border-strong {
 		border-width: var(--kl-border-width-strong);
 		border-style: var(--kl-border-style);
 	}
 
-	.outline-2,
-	.focus\:outline-2:focus,
-	.focus-within\:outline-2:focus-within,
-	.focus-visible\:outline-2:focus-visible,
-	.data-\[focus\]\:outline-2[data-focus],
-	.data-\[active\]\:outline-2[data-active] {
+	.border-dashed {
+		border-style: dashed;
+	}
+
+	.border-dotted {
+		border-style: dotted;
+	}
+
+	.border-solid {
+		border-style: solid;
+	}
+
+	.outline,
+	.focus\:outline:focus,
+	.focus-within\:outline:focus-within,
+	.focus-visible\:outline:focus-visible,
+	.data-\[focus\]\:outline[data-focus],
+	.data-\[active\]\:outline[data-active] {
+		outline-style: solid;
 		outline-width: var(--kl-outline-width);
+		outline-offset: var(--kl-outline-offset);
+	}
+
+	.outline-strong,
+	.focus\:outline-strong:focus,
+	.focus-within\:outline-strong:focus-within,
+	.focus-visible\:outline-strong:focus-visible,
+	.data-\[focus\]\:outline-strong[data-focus],
+	.data-\[active\]\:outline-strong[data-active] {
+		outline-style: solid;
+		outline-width: var(--kl-outline-width-strong);
+		outline-offset: var(--kl-outline-offset);
 	}
 
 	.duration-100,
