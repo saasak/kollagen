@@ -1164,7 +1164,7 @@
 					<Card title="Share package" description="Copy and QR surfaces.">
 						<div class="space-y-4">
 							<Clipboard label="Install command" value="npx kollagen add button card tabs" />
-							<Alert variant="info" title="Preview channel">
+							<Alert color="info" title="Preview channel">
 								This theme is ready for visual regression checks.
 							</Alert>
 							<div class="flex items-center gap-4">

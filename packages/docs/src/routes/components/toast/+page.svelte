@@ -1,8 +1,27 @@
 <script lang="ts">
-	import { Toast } from '$ui/toast';
+	import { Toast, type ToastVariant } from '$ui/toast';
 	import { toast } from 'svelte-sonner';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
+	import { tick } from 'svelte';
+
+	const toastVariants: Array<{ label: string; value: ToastVariant; description: string }> = [
+		{ label: 'Solid', value: 'solid', description: 'Filled status surface' },
+		{ label: 'Outline', value: 'outline', description: 'Strong border, quiet surface' },
+		{ label: 'Dash', value: 'dash', description: 'Dashed border for lower priority' },
+		{ label: 'Soft', value: 'soft', description: 'Opaque tinted surface' },
+		{ label: 'Ghost', value: 'ghost', description: 'Minimal borderless surface' }
+	];
+
+	let toastVariant: ToastVariant = $state('soft');
+
+	async function showVariantToast(variant: ToastVariant, label: string) {
+		toastVariant = variant;
+		await tick();
+		toast.info(`${label} toast`, {
+			description: 'The toaster variant is applied before this toast is shown.'
+		});
+	}
 
 	const propsData = [
 		{
@@ -21,7 +40,13 @@
 			name: 'richColors',
 			type: 'boolean',
 			default: 'true',
-			description: 'Use colored borders for different toast types'
+			description: 'Use tinted status styling for different toast types'
+		},
+		{
+			name: 'variant',
+			type: '"solid" | "outline" | "dash" | "soft" | "ghost"',
+			default: '"soft"',
+			description: 'Visual toast style'
 		},
 		{
 			name: 'closeButton',
@@ -158,6 +183,31 @@ toast.warning("Watch out!");`}
 		</DemoCard>
 
 		<DemoCard
+			title="Variants"
+			description="Switch the active Toast variant and trigger a themed status toast."
+			code={`<Toast variant="soft" />
+<Toast variant="solid" />
+<Toast variant="outline" />
+<Toast variant="dash" />
+<Toast variant="ghost" />`}
+		>
+			<div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+				{#each toastVariants as item (item.value)}
+					<button
+						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 hover:bg-kl-base-200 flex min-h-20 flex-col items-start border px-3 py-2 text-left text-sm transition-colors"
+						aria-pressed={toastVariant === item.value}
+						onclick={() => showVariantToast(item.value, item.label)}
+					>
+						<span class="font-medium">{item.label}</span>
+						<span class="text-kl-muted-content mt-1 text-xs leading-snug">
+							{item.description}
+						</span>
+					</button>
+				{/each}
+			</div>
+		</DemoCard>
+
+		<DemoCard
 			title="With description"
 			description="Toasts can have both a title and a longer description."
 			code={`toast.success("Saved!", {
@@ -236,4 +286,4 @@ toast.warning("Watch out!");`}
 	</section>
 </div>
 
-<Toast />
+<Toast variant={toastVariant} />
