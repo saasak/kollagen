@@ -128,7 +128,7 @@
 			<button
 				onclick={scrollPrev}
 				disabled={!canScrollPrev}
-				class="rounded-kl-selector border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-sm hover:bg-kl-base-200 flex h-8 w-8 cursor-pointer items-center justify-center border transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50"
+				class="rounded-kl-selector border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-sm hover:bg-kl-base-200 size-kl-selector-lg flex cursor-pointer items-center justify-center border transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50"
 				aria-label="Previous slide"
 			>
 				<ChevronLeft size={18} />
@@ -136,7 +136,7 @@
 			<button
 				onclick={scrollNext}
 				disabled={!canScrollNext}
-				class="rounded-kl-selector border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-sm hover:bg-kl-base-200 flex h-8 w-8 cursor-pointer items-center justify-center border transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50"
+				class="rounded-kl-selector border-kl-base-300 bg-kl-base-100 text-kl-base-content shadow-kl-sm hover:bg-kl-base-200 size-kl-selector-lg flex cursor-pointer items-center justify-center border transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50"
 				aria-label="Next slide"
 			>
 				<ChevronRight size={18} />

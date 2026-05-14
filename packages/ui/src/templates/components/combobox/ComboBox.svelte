@@ -1,8 +1,9 @@
 <script lang="ts" generics="T extends Record<string, any>">
 	import { cn } from '$lib/utils/cn';
 	import { Combobox } from 'bits-ui';
-	import { untrack } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { ChevronDown, X, Check, Loader2 } from 'lucide-svelte';
+	import type { Attachment } from 'svelte/attachments';
 
 	interface Props {
 		items: T[];
@@ -51,18 +52,23 @@
 	// --- Internal state ---
 	let searchValue = $state('');
 	let open = $state(false);
+	let anchor = $state<HTMLDivElement | null>(null);
 
 	// --- Async state ---
 	let asyncItems = $state<T[]>([]);
 	let asyncLoading = $state(false);
 	let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
-	// Cleanup debounce timer on component destroy
-	$effect(() => {
-		return () => {
-			if (debounceTimer) clearTimeout(debounceTimer);
-		};
+	onDestroy(() => {
+		if (debounceTimer) clearTimeout(debounceTimer);
 	});
+
+	const setAnchor: Attachment<HTMLDivElement> = (node) => {
+		anchor = node;
+		return () => {
+			if (anchor === node) anchor = null;
+		};
+	};
 
 	// Initialize value from defaultValue if not set
 	if (untrack(() => value) === undefined && untrack(() => defaultValue) !== undefined) {
@@ -152,6 +158,11 @@
 	const hasValue = $derived(
 		multiple ? Array.isArray(value) && value.length > 0 : typeof value === 'string' && value !== ''
 	);
+
+	const fieldShellClass =
+		'rounded-kl-field bg-kl-base-100 flex items-center border transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] focus-within:[--kl-input-border:var(--kl-primary)] focus-within:outline focus-within:outline-[var(--kl-input-border)]';
+	const floatingContentClass =
+		'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] max-h-60 w-[var(--bits-floating-anchor-width)] overflow-y-auto border p-1 [background-image:none,var(--kl-fx-noise)] [background-size:auto,calc(var(--kl-noise)*100%)]';
 </script>
 
 {#if multiple}
@@ -165,9 +176,7 @@
 		{onValueChange}
 	>
 		<div class={cn(`relative w-full`, className)}>
-			<div
-				class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1"
-			>
+			<div {@attach setAnchor} class={fieldShellClass}>
 				<Combobox.Input
 					{placeholder}
 					oninput={handleInput}
@@ -195,8 +204,10 @@
 		<Combobox.Portal>
 			<Combobox.Content
 				side="bottom"
+				align="start"
 				sideOffset={4}
-				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] max-h-60 overflow-y-auto border p-1"
+				customAnchor={anchor}
+				class={floatingContentClass}
 			>
 				{#if isAsync && asyncLoading}
 					<div class="text-kl-muted-content flex items-center justify-center gap-2 p-3 text-sm">
@@ -240,9 +251,7 @@
 		{onValueChange}
 	>
 		<div class={cn(`relative w-full`, className)}>
-			<div
-				class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1"
-			>
+			<div {@attach setAnchor} class={fieldShellClass}>
 				<Combobox.Input
 					{placeholder}
 					oninput={handleInput}
@@ -270,8 +279,10 @@
 		<Combobox.Portal>
 			<Combobox.Content
 				side="bottom"
+				align="start"
 				sideOffset={4}
-				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] max-h-60 overflow-y-auto border p-1"
+				customAnchor={anchor}
+				class={floatingContentClass}
 			>
 				{#if isAsync && asyncLoading}
 					<div class="text-kl-muted-content flex items-center justify-center gap-2 p-3 text-sm">

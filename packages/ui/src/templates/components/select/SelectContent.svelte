@@ -8,16 +8,16 @@
 	};
 
 	let { class: className, children, side = 'bottom', sideOffset = 4, ...rest }: Props = $props();
+
+	const contentClass =
+		'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] max-h-60 overflow-y-auto border p-1 [background-image:none,var(--kl-fx-noise)] [background-size:auto,calc(var(--kl-noise)*100%)]';
 </script>
 
 <SelectPrimitive.Content
 	{...rest}
 	{side}
 	{sideOffset}
-	class={cn(
-		`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] max-h-60 overflow-y-auto border p-1`,
-		className as string | undefined
-	)}
+	class={cn(contentClass, className as string | undefined)}
 >
 	{@render children?.()}
 </SelectPrimitive.Content>

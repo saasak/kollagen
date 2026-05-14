@@ -76,7 +76,7 @@
 				{#each cells as cell, i (i)}
 					<PinInput.Cell
 						{cell}
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content data-[active]:border-kl-primary data-[active]:outline-kl-primary h-11 w-11 border text-center text-base font-medium transition-colors duration-150 outline-none data-[active]:outline-2 data-[active]:-outline-offset-1{disabled
+						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content data-[active]:border-kl-primary data-[active]:outline-kl-primary h-11 w-11 border text-center text-base font-medium transition-colors duration-150 outline-none data-[active]:outline{disabled
 							? ' cursor-not-allowed opacity-50'
 							: ''}{invalid
 							? ' border-kl-error data-[active]:border-kl-error data-[active]:outline-kl-error'

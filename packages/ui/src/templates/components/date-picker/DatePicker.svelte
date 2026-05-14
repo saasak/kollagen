@@ -33,6 +33,8 @@
 		isDateDisabled?: (date: DateValue) => boolean;
 		/** Locale for date formatting (BCP 47 tag) */
 		locale?: string;
+		/** Accessible label for the date input */
+		ariaLabel?: string;
 		/** Callback when selected value changes */
 		onValueChange?: (value: DateValue | undefined) => void;
 		/** Additional CSS classes on the root element */
@@ -54,6 +56,7 @@
 		isDateUnavailable,
 		isDateDisabled,
 		locale = 'en',
+		ariaLabel,
 		onValueChange,
 		class: className
 	}: Props = $props();
@@ -66,6 +69,11 @@
 		value = undefined;
 		onValueChange?.(undefined);
 	}
+
+	const fieldShellClass =
+		'rounded-kl-field bg-kl-base-100 flex h-kl-field-md items-center border px-3 transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] focus-within:[--kl-input-border:var(--kl-primary)] focus-within:outline focus-within:outline-[var(--kl-input-border)]';
+	const calendarContentClass =
+		'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] border p-3 [background-image:none,var(--kl-fx-noise)] [background-size:auto,calc(var(--kl-noise)*100%)]';
 </script>
 
 <DatePicker.Root
@@ -90,9 +98,8 @@
 	<div class={cn(`relative w-full`, className)}>
 		<DatePicker.Input
 			{name}
-			class="border-kl-base-300 rounded-kl-field bg-kl-base-100 focus-within:border-kl-primary focus-within:outline-kl-primary flex items-center border px-3 py-2 transition-colors duration-150 focus-within:outline-2 focus-within:-outline-offset-1 {disabled
-				? 'cursor-not-allowed opacity-50'
-				: ''}"
+			aria-label={ariaLabel}
+			class={cn(fieldShellClass, disabled && 'cursor-not-allowed opacity-50')}
 		>
 			{#snippet children({ segments })}
 				{#each segments as { part, value: segValue }, i (part + i)}
@@ -115,13 +122,13 @@
 							type="button"
 							onclick={handleClear}
 							{disabled}
-							class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex cursor-pointer items-center justify-center border-none bg-transparent p-1 transition-colors duration-150"
+							class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
 						>
 							<X size={14} />
 						</button>
 					{/if}
 					<DatePicker.Trigger
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex cursor-pointer items-center justify-center border-none bg-transparent p-1 transition-colors duration-150"
+						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
 					>
 						<Calendar size={16} />
 					</DatePicker.Trigger>
@@ -130,21 +137,18 @@
 		</DatePicker.Input>
 	</div>
 
-	<DatePicker.Content
-		sideOffset={6}
-		class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] border p-3"
-	>
+	<DatePicker.Content sideOffset={6} class={calendarContentClass}>
 		<DatePicker.Calendar>
 			{#snippet children({ months, weekdays })}
 				<DatePicker.Header class="mb-2 flex items-center justify-between">
 					<DatePicker.PrevButton
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex cursor-pointer items-center justify-center border-none bg-transparent p-1 transition-colors duration-150"
+						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
 					>
 						<ChevronLeft size={16} />
 					</DatePicker.PrevButton>
 					<DatePicker.Heading class="text-kl-base-content text-sm font-medium" />
 					<DatePicker.NextButton
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex cursor-pointer items-center justify-center border-none bg-transparent p-1 transition-colors duration-150"
+						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
 					>
 						<ChevronRight size={16} />
 					</DatePicker.NextButton>

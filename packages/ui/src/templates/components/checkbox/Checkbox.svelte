@@ -38,6 +38,9 @@
 		onCheckedChange,
 		class: className
 	}: Props = $props();
+
+	const controlClass =
+		'rounded-kl-selector bg-kl-base-100 data-[state=checked]:bg-kl-primary data-[state=indeterminate]:bg-kl-primary data-[state=checked]:[--kl-check-border:color-mix(in_oklab,var(--kl-primary),#000_calc(var(--kl-depth)*5%))] data-[state=indeterminate]:[--kl-check-border:color-mix(in_oklab,var(--kl-primary),#000_calc(var(--kl-depth)*5%))] data-[focus]:[--kl-check-border:var(--kl-primary)] data-[focus]:outline-kl-primary flex size-kl-selector-md items-center justify-center border transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-check-border:var(--kl-base-300)] [border-color:var(--kl-check-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-check-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] data-[focus]:outline';
 </script>
 
 <label
@@ -57,7 +60,7 @@
 		{required}
 		{readonly}
 		{onCheckedChange}
-		class="rounded-kl-selector border-kl-base-300 bg-kl-base-100 data-[state=checked]:border-kl-primary data-[state=checked]:bg-kl-primary data-[state=indeterminate]:border-kl-primary data-[state=indeterminate]:bg-kl-primary data-[focus]:border-kl-primary data-[focus]:outline-kl-primary flex h-5 w-5 items-center justify-center border transition-colors duration-150 data-[focus]:outline-2 data-[focus]:-outline-offset-1"
+		class={controlClass}
 	>
 		{#snippet children({ checked: isChecked, indeterminate: isIndeterminate })}
 			{#if isIndeterminate}

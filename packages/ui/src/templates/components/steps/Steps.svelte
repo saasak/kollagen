@@ -67,7 +67,7 @@
 		role="tablist"
 		aria-label="Steps"
 	>
-		{#each items as item, i}
+		{#each items as item, i (item.label)}
 			<div class="flex items-center gap-2 {i < items.length - 1 ? 'flex-1' : ''}">
 				<button
 					{disabled}
@@ -83,7 +83,7 @@
 						: ''}"
 				>
 					<span
-						class="border-kl-base-300 bg-kl-base-100 text-kl-muted-content flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold transition-colors duration-150 {step ===
+						class="border-kl-base-300 bg-kl-base-100 text-kl-muted-content size-kl-selector-lg border-strong flex shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors duration-150 {step ===
 						i
 							? 'border-kl-primary bg-kl-primary text-kl-primary-content'
 							: ''} {step > i ? 'border-kl-primary bg-kl-primary text-kl-primary-content' : ''}"

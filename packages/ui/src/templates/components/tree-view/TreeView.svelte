@@ -104,7 +104,7 @@
 							e.stopPropagation();
 							toggleExpand(node.value);
 						}}
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex h-5 w-5 shrink-0 items-center justify-center transition-colors duration-150"
+						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-sm flex shrink-0 items-center justify-center transition-colors duration-150"
 						aria-label="Toggle {node.label}"
 					>
 						<span

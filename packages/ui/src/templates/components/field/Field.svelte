@@ -83,7 +83,7 @@
 			readonly={readOnly}
 			aria-invalid={invalid || undefined}
 			aria-describedby={describedBy}
-			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:ring-kl-primary resize-y border px-3 py-2 text-sm transition-colors duration-150 outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 {invalid
+			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:ring-kl-primary min-h-kl-field-lg resize-y border px-3 py-2 text-sm transition-colors duration-150 outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 {invalid
 				? 'border-kl-error focus:ring-kl-error'
 				: ''}"
 		></textarea>
@@ -99,7 +99,7 @@
 			readonly={readOnly}
 			aria-invalid={invalid || undefined}
 			aria-describedby={describedBy}
-			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:ring-kl-primary h-10 border px-3 text-sm transition-colors duration-150 outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 {invalid
+			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:ring-kl-primary h-kl-field-md border px-3 text-sm transition-colors duration-150 outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 {invalid
 				? 'border-kl-error focus:ring-kl-error'
 				: ''}"
 		/>

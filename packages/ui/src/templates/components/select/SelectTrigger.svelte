@@ -9,15 +9,12 @@
 	};
 
 	let { class: className, children, ...rest }: Props = $props();
+
+	const triggerClass =
+		'rounded-kl-field bg-kl-base-100 text-kl-base-content flex h-kl-field-md w-full cursor-pointer items-center justify-between gap-2 border px-3 text-sm transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 outline-none [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] focus:[--kl-input-border:var(--kl-primary)] focus:outline focus:outline-[var(--kl-input-border)] disabled:cursor-not-allowed disabled:opacity-50';
 </script>
 
-<SelectPrimitive.Trigger
-	{...rest}
-	class={cn(
-		`border-kl-base-300 rounded-kl-field bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary flex w-full cursor-pointer items-center justify-between gap-2 border px-3 py-2 text-sm transition-colors duration-150 outline-none focus:outline-2 focus:-outline-offset-1 disabled:cursor-not-allowed disabled:opacity-50`,
-		className as string | undefined
-	)}
->
+<SelectPrimitive.Trigger {...rest} class={cn(triggerClass, className as string | undefined)}>
 	<span class="truncate text-left">
 		{@render children?.()}
 	</span>

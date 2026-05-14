@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
 	import { DropdownMenu } from 'bits-ui';
+	import { ChevronRight } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	type MenuItemDef = {
@@ -14,10 +15,17 @@
 	type MenuGroupDef = {
 		type: 'group';
 		label: string;
-		items: MenuItemDef[];
+		items?: MenuEntry[];
 	};
 
-	type MenuEntry = MenuItemDef | MenuSeparator | MenuGroupDef;
+	type MenuSubmenuDef = {
+		type: 'submenu';
+		label: string;
+		disabled?: boolean;
+		items: MenuEntry[];
+	};
+
+	type MenuEntry = MenuItemDef | MenuSeparator | MenuGroupDef | MenuSubmenuDef;
 
 	interface Props {
 		items: MenuEntry[];
@@ -49,9 +57,51 @@
 		return 'type' in entry && entry.type === 'group';
 	}
 
+	function isSubmenu(entry: MenuEntry): entry is MenuSubmenuDef {
+		return 'type' in entry && entry.type === 'submenu';
+	}
+
 	const itemClass =
-		'flex cursor-pointer items-center rounded-kl-selector px-3 py-2 text-sm text-kl-base-content transition-colors duration-150 data-[highlighted]:bg-kl-base-200 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 outline-none';
+		'flex cursor-pointer items-center rounded-kl-selector px-3 py-2 text-sm text-kl-base-content transition-colors duration-150 outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[highlighted]:bg-kl-base-200';
+
+	const contentClass =
+		'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-[8rem] border p-1 outline-none';
 </script>
+
+{#snippet menuEntries(entries: MenuEntry[])}
+	{#each entries as entry, i (i)}
+		{#if isSeparator(entry)}
+			<DropdownMenu.Separator class="bg-kl-base-300 my-1 h-px" />
+		{:else if isGroup(entry)}
+			<DropdownMenu.Group>
+				<DropdownMenu.GroupHeading class="text-kl-muted-content px-3 py-1.5 text-xs font-semibold">
+					{entry.label}
+				</DropdownMenu.GroupHeading>
+				{#if entry.items?.length}
+					{@render menuEntries(entry.items)}
+				{/if}
+			</DropdownMenu.Group>
+		{:else if isSubmenu(entry)}
+			<DropdownMenu.Sub>
+				<DropdownMenu.SubTrigger disabled={entry.disabled} class={itemClass}>
+					<span class="flex-1">{entry.label}</span>
+					<ChevronRight size={14} class="ml-4" />
+				</DropdownMenu.SubTrigger>
+				<DropdownMenu.SubContent sideOffset={6} class={contentClass}>
+					{@render menuEntries(entry.items)}
+				</DropdownMenu.SubContent>
+			</DropdownMenu.Sub>
+		{:else}
+			<DropdownMenu.Item
+				disabled={entry.disabled}
+				class={itemClass}
+				onSelect={() => onSelect?.(entry.value)}
+			>
+				{entry.label}
+			</DropdownMenu.Item>
+		{/if}
+	{/each}
+{/snippet}
 
 <DropdownMenu.Root bind:open {onOpenChange}>
 	<DropdownMenu.Trigger
@@ -65,41 +115,9 @@
 		<DropdownMenu.Content
 			{loop}
 			sideOffset={4}
-			class={cn(
-				`rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-[8rem] border p-1 outline-none`,
-				className as string | undefined
-			)}
+			class={cn(contentClass, className as string | undefined)}
 		>
-			{#each items as entry, i (i)}
-				{#if isSeparator(entry)}
-					<DropdownMenu.Separator class="bg-kl-base-300 my-1 h-px" />
-				{:else if isGroup(entry)}
-					<DropdownMenu.Group>
-						<DropdownMenu.GroupHeading
-							class="text-kl-muted-content px-3 py-1.5 text-xs font-semibold"
-						>
-							{entry.label}
-						</DropdownMenu.GroupHeading>
-						{#each entry.items as item (item.value)}
-							<DropdownMenu.Item
-								disabled={item.disabled}
-								class={itemClass}
-								onSelect={() => onSelect?.(item.value)}
-							>
-								{item.label}
-							</DropdownMenu.Item>
-						{/each}
-					</DropdownMenu.Group>
-				{:else}
-					<DropdownMenu.Item
-						disabled={entry.disabled}
-						class={itemClass}
-						onSelect={() => onSelect?.(entry.value)}
-					>
-						{entry.label}
-					</DropdownMenu.Item>
-				{/if}
-			{/each}
+			{@render menuEntries(items)}
 		</DropdownMenu.Content>
 	</DropdownMenu.Portal>
 </DropdownMenu.Root>

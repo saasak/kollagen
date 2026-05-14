@@ -176,6 +176,9 @@
 		if (isNaN(num)) return value ?? '';
 		return formatNum(num);
 	});
+
+	const fieldShellClass =
+		'rounded-kl-field bg-kl-base-100 flex h-kl-field-md border transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset]';
 </script>
 
 <div class={cn(`flex flex-col gap-1.5`, className)}>
@@ -189,15 +192,15 @@
 	{/if}
 
 	<div
-		class="rounded-kl-field border-kl-base-300 bg-kl-base-100 flex border transition-colors duration-150 {disabled
-			? 'cursor-not-allowed opacity-50'
-			: ''} {focused
-			? invalid
-				? 'border-kl-error outline-kl-error outline-2 -outline-offset-1'
-				: 'border-kl-primary outline-kl-primary outline-2 -outline-offset-1'
-			: invalid
-				? 'border-kl-error'
-				: ''}"
+		class={cn(
+			fieldShellClass,
+			disabled && 'cursor-not-allowed opacity-50',
+			invalid && '[--kl-input-border:var(--kl-error)]',
+			focused &&
+				(invalid
+					? 'outline outline-[var(--kl-input-border)] [--kl-input-border:var(--kl-error)]'
+					: 'outline outline-[var(--kl-input-border)] [--kl-input-border:var(--kl-primary)]')
+		)}
 	>
 		<input
 			{id}
@@ -219,7 +222,7 @@
 			onblur={handleBlur}
 			onkeydown={handleKeydown}
 			onwheel={handleWheel}
-			class="text-kl-base-content placeholder:text-kl-muted-content min-w-0 flex-1 bg-transparent px-3 py-2 text-sm outline-none"
+			class="text-kl-base-content placeholder:text-kl-muted-content min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"
 		/>
 
 		<div class="border-kl-base-300 flex flex-col border-l">

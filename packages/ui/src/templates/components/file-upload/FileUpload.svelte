@@ -141,7 +141,7 @@
 		onkeydown={(e) => e.key === 'Enter' && !disabled && inputEl?.click()}
 		role="button"
 		tabindex={disabled ? -1 : 0}
-		class="rounded-kl-box border-kl-base-300 bg-kl-base-100 flex min-h-36 flex-col items-center justify-center gap-3 border-2 border-dashed px-6 py-8 text-center transition-colors duration-150 {invalid
+		class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border-strong flex min-h-36 flex-col items-center justify-center gap-3 border-dashed px-6 py-8 text-center transition-colors duration-150 {invalid
 			? 'border-kl-error'
 			: ''} {dragging ? 'border-kl-primary bg-kl-primary/5' : ''} {disabled
 			? 'cursor-not-allowed opacity-50'

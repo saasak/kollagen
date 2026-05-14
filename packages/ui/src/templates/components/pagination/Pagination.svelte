@@ -57,7 +57,7 @@
 					</label>
 					<select
 						id="km-page-size"
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary h-9 cursor-pointer border px-2 text-sm outline-none focus:outline-2 focus:-outline-offset-1"
+						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary h-kl-field-sm cursor-pointer border px-2 text-sm outline-none focus:outline"
 						value={perPage}
 						onchange={(e) => {
 							perPage = Number(e.currentTarget.value);
@@ -72,7 +72,7 @@
 
 			<div class="flex items-center gap-1 {hasExtras ? 'ml-auto' : ''}">
 				<Pagination.PrevButton
-					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-9 w-9 cursor-pointer items-center justify-center border transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 size-kl-field-sm inline-flex cursor-pointer items-center justify-center border transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					<ChevronLeft size={16} />
 				</Pagination.PrevButton>
@@ -81,19 +81,21 @@
 					{#if p.type === 'page'}
 						<Pagination.Page
 							page={p}
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 data-[selected]:border-kl-primary data-[selected]:bg-kl-primary data-[selected]:text-kl-primary-content focus-visible:outline-kl-primary inline-flex h-9 w-9 cursor-pointer items-center justify-center border text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] focus-visible:outline-2 focus-visible:-outline-offset-1"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 data-[selected]:border-kl-primary data-[selected]:bg-kl-primary data-[selected]:text-kl-primary-content focus-visible:outline-kl-primary size-kl-field-sm inline-flex cursor-pointer items-center justify-center border text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] focus-visible:outline"
 						>
 							{p.value}
 						</Pagination.Page>
 					{:else}
-						<span class="text-kl-muted-content inline-flex h-9 w-9 items-center justify-center">
+						<span
+							class="text-kl-muted-content size-kl-field-sm inline-flex items-center justify-center"
+						>
 							<Ellipsis size={16} />
 						</span>
 					{/if}
 				{/each}
 
 				<Pagination.NextButton
-					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-9 w-9 cursor-pointer items-center justify-center border transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 size-kl-field-sm inline-flex cursor-pointer items-center justify-center border transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					<ChevronRight size={16} />
 				</Pagination.NextButton>

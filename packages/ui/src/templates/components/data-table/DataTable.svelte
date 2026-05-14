@@ -1,10 +1,12 @@
 <script lang="ts" generics="T extends Record<string, any>">
 	import { cn } from '$lib/utils/cn';
 	import { Checkbox } from '../checkbox';
+	import { DatePicker } from '../date-picker';
 	import { Menu } from '../menu';
 	import { Pagination } from '../pagination';
 	import { Popover } from '../popover';
 	import { Select } from '../select';
+	import { parseDate, type DateValue } from '@internationalized/date';
 	import {
 		ArrowDown,
 		ArrowUp,
@@ -375,6 +377,35 @@
 		};
 	}
 
+	function getDateFilterValue(id: string, key: keyof DataTableDateRangeValue) {
+		const value = getDateRangeFilterValue(id)[key];
+		if (!value) return undefined;
+
+		try {
+			return parseDate(value);
+		} catch {
+			return undefined;
+		}
+	}
+
+	function formatDateFilterValue(value: DateValue | undefined) {
+		if (!value) return undefined;
+		const month = String(value.month).padStart(2, '0');
+		const day = String(value.day).padStart(2, '0');
+		return `${value.year}-${month}-${day}`;
+	}
+
+	function updateDateRangeFilter(
+		id: string,
+		key: keyof DataTableDateRangeValue,
+		value: DateValue | undefined
+	) {
+		updateFilter(id, {
+			...getDateRangeFilterValue(id),
+			[key]: formatDateFilterValue(value)
+		});
+	}
+
 	function getNumberRangeFilterValue(id: string): DataTableNumberRangeValue {
 		const value = query.filters[id];
 		if (!isRangeObject(value)) return {};
@@ -428,7 +459,7 @@
 					value={searchValue}
 					placeholder={searchPlaceholder}
 					oninput={(event) => updateSearch(event.currentTarget.value)}
-					class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 w-full border pr-10 pl-9 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+					class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border pr-10 pl-9 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 				/>
 				{#if searchValue}
 					<button
@@ -449,13 +480,13 @@
 					{#snippet trigger()}
 						<button
 							type="button"
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 relative inline-flex h-10 cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md relative inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
 						>
 							<SlidersHorizontal size={16} />
 							<span>Filters</span>
 							{#if activeFilterCount > 0}
 								<span
-									class="bg-kl-primary text-kl-primary-content rounded-kl-selector inline-flex h-5 min-w-5 items-center justify-center px-1.5 text-xs font-semibold"
+									class="bg-kl-primary text-kl-primary-content rounded-kl-selector h-kl-selector-sm min-w-kl-selector-sm inline-flex items-center justify-center px-1.5 text-xs font-semibold"
 								>
 									{activeFilterCount}
 								</span>
@@ -504,31 +535,19 @@
 											value={getStringFilterValue(filter.id)}
 											placeholder={filter.placeholder ?? filter.label}
 											oninput={(event) => updateFilter(filter.id, event.currentTarget.value)}
-											class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 w-full border px-3 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+											class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border px-3 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 										/>
 									{:else if filter.type === 'date-range'}
 										<div class="grid grid-cols-2 gap-2">
-											<input
-												type="date"
-												aria-label="{filter.label} from"
-												value={getDateRangeFilterValue(filter.id).from ?? ''}
-												oninput={(event) =>
-													updateFilter(filter.id, {
-														...getDateRangeFilterValue(filter.id),
-														from: event.currentTarget.value || undefined
-													})}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+											<DatePicker
+												ariaLabel="{filter.label} from"
+												value={getDateFilterValue(filter.id, 'from')}
+												onValueChange={(value) => updateDateRangeFilter(filter.id, 'from', value)}
 											/>
-											<input
-												type="date"
-												aria-label="{filter.label} to"
-												value={getDateRangeFilterValue(filter.id).to ?? ''}
-												oninput={(event) =>
-													updateFilter(filter.id, {
-														...getDateRangeFilterValue(filter.id),
-														to: event.currentTarget.value || undefined
-													})}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+											<DatePicker
+												ariaLabel="{filter.label} to"
+												value={getDateFilterValue(filter.id, 'to')}
+												onValueChange={(value) => updateDateRangeFilter(filter.id, 'to', value)}
 											/>
 										</div>
 									{:else if filter.type === 'number-range'}
@@ -546,7 +565,7 @@
 																? undefined
 																: Number(event.currentTarget.value)
 													})}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 											/>
 											<input
 												type="number"
@@ -561,7 +580,7 @@
 																? undefined
 																: Number(event.currentTarget.value)
 													})}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 											/>
 										</div>
 									{/if}
@@ -574,7 +593,7 @@
 								type="button"
 								disabled={activeFilterCount === 0}
 								onclick={() => updateQuery({ filters: {} }, true)}
-								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-9 cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
 							>
 								<X size={16} />
 								Clear filters
@@ -588,7 +607,7 @@
 				type="button"
 				disabled={!hasQuery}
 				onclick={resetQuery}
-				class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-10 cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+				class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
 			>
 				<X size={16} />
 				Reset
@@ -613,7 +632,7 @@
 					<button
 						type="button"
 						onclick={selectAllRows}
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-9 cursor-pointer items-center border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
 					>
 						Select all {totalCount}
 					</button>
@@ -624,7 +643,7 @@
 						{#snippet trigger()}
 							<button
 								type="button"
-								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-9 cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
 							>
 								<MoreHorizontal size={16} />
 								Actions
@@ -636,7 +655,7 @@
 				<button
 					type="button"
 					onclick={clearSelection}
-					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 inline-flex h-9 cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
 				>
 					<X size={16} />
 					Clear
@@ -745,7 +764,7 @@
 										{#snippet trigger()}
 											<button
 												type="button"
-												class="rounded-kl-selector text-kl-muted-content hover:bg-kl-base-200 hover:text-kl-base-content inline-flex h-8 w-8 cursor-pointer items-center justify-center transition-colors duration-[var(--kl-transition-fast)]"
+												class="rounded-kl-selector text-kl-muted-content hover:bg-kl-base-200 hover:text-kl-base-content size-kl-selector-lg inline-flex cursor-pointer items-center justify-center transition-colors duration-[var(--kl-transition-fast)]"
 												aria-label="Row actions"
 											>
 												<MoreHorizontal size={16} />
@@ -792,7 +811,7 @@
 					id="{searchId}-page-size"
 					value={query.perPage}
 					onchange={(event) => updateQuery({ perPage: Number(event.currentTarget.value) }, true)}
-					class="border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-10 cursor-pointer border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline-2 focus:-outline-offset-1"
+					class="border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md cursor-pointer border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 				>
 					{#each pageSizeOptions as size (size)}
 						<option value={size}>{size}</option>

@@ -15,7 +15,7 @@
 	{side}
 	{sideOffset}
 	class={cn(
-		`rounded-kl-box bg-kl-base-content text-kl-base-100 shadow-kl-sm z-[var(--kl-z-tooltip)] px-3 py-1.5 text-xs`,
+		`rounded-kl-box bg-kl-base-content text-kl-base-100 shadow-kl-sm z-[var(--kl-z-tooltip)] max-w-[min(16rem,calc(100vw-2rem))] px-3 py-1.5 text-left text-xs leading-snug break-words whitespace-normal`,
 		className as string | undefined
 	)}
 >

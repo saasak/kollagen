@@ -60,7 +60,7 @@
 		{#if i < panels.length - 1}
 			<PaneResizer
 				{disabled}
-				class="bg-kl-base-200 hover:bg-kl-base-300 focus-visible:outline-kl-primary flex shrink-0 items-center justify-center border-none transition-colors duration-150 focus-visible:outline-2 {isVertical
+				class="bg-kl-base-200 hover:bg-kl-base-300 focus-visible:outline-kl-primary flex shrink-0 items-center justify-center border-none transition-colors duration-150 focus-visible:outline {isVertical
 					? 'h-3 cursor-row-resize'
 					: 'w-3 cursor-col-resize'}"
 			>
