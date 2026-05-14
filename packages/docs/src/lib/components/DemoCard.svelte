@@ -16,7 +16,7 @@
 	let showCode = $state(false);
 </script>
 
-<div class="rounded-kl-box border-kl-base-300 border">
+<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border">
 	<div class="border-kl-base-300 border-b px-4 py-3">
 		<div class="flex items-center justify-between">
 			<div>

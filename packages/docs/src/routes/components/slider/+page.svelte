@@ -35,6 +35,12 @@
 			default: '"horizontal"',
 			description: 'Slider orientation'
 		},
+		{
+			name: 'color',
+			type: '"neutral" | "primary" | "secondary" | "accent" | "info" | "success" | "warning" | "error"',
+			default: '"neutral"',
+			description: 'Semantic fill color'
+		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the slider' },
 		{ name: 'invalid', type: 'boolean', default: 'false', description: 'Mark as invalid' },
 		{
@@ -139,6 +145,14 @@
 			code={`<Slider label="Rating" showValue markers={[0, 25, 50, 75, 100]} />`}
 		>
 			<Slider label="Rating" showValue markers={[0, 25, 50, 75, 100]} />
+		</DemoCard>
+
+		<DemoCard
+			title="Color"
+			description="Use a semantic color for the filled range."
+			code={`<Slider label="Completion" color="primary" showValue value={[65]} />`}
+		>
+			<Slider label="Completion" color="primary" showValue value={[65]} />
 		</DemoCard>
 
 		<DemoCard

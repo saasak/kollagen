@@ -10,7 +10,9 @@
 </script>
 
 <!-- Desktop sidebar -->
-<aside class="border-kl-base-300 bg-kl-base-200 hidden w-64 shrink-0 flex-col border-r p-4 lg:flex">
+<aside
+	class="border-kl-base-300 bg-kl-base-200 hidden w-64 shrink-0 flex-col overflow-y-auto border-r p-4 lg:sticky lg:top-14 lg:flex lg:max-h-[calc(100vh-3.5rem)] lg:self-start"
+>
 	<h2 class="text-kl-muted-content mb-2 px-2 text-xs font-semibold tracking-wider uppercase">
 		Theme
 	</h2>

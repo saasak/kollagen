@@ -16,10 +16,10 @@
 	);
 </script>
 
-<div class="bg-kl-base-100 text-kl-base-content flex min-h-screen flex-col">
+<div class="bg-kl-base-200 text-kl-base-content flex min-h-screen flex-col">
 	<!-- Top bar -->
 	<header
-		class="border-kl-base-300 bg-kl-base-100 flex h-14 items-center justify-between border-b px-4"
+		class="border-kl-base-300 bg-kl-base-100 sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4"
 	>
 		<div class="flex items-center gap-4">
 			{#if isComponentPage}

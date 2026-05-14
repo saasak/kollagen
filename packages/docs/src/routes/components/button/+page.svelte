@@ -9,9 +9,15 @@
 	const propsData = [
 		{
 			name: 'variant',
-			type: "'primary' | 'secondary' | 'accent' | 'neutral' | 'outline' | 'ghost' | 'link' | 'destructive'",
-			default: "'primary'",
+			type: "'solid' | 'outline' | 'dash' | 'soft' | 'ghost' | 'link'",
+			default: "'solid'",
 			description: 'Visual style'
+		},
+		{
+			name: 'color',
+			type: "'base' | 'neutral' | 'primary' | 'secondary' | 'accent' | 'info' | 'success' | 'warning' | 'error'",
+			default: "'base'",
+			description: 'Semantic color'
 		},
 		{
 			name: 'size',
@@ -80,26 +86,50 @@
 		</DemoCard>
 
 		<DemoCard
-			title="Variants"
-			description="Semantic variants mapped to Kollagen theme tokens."
+			title="Colors"
+			description="Semantic colors mapped to Kollagen theme tokens."
 			code={`<div class="flex flex-wrap gap-2">
-  <Button>Primary</Button>
-  <Button variant="secondary">Secondary</Button>
-  <Button variant="accent">Accent</Button>
-  <Button variant="neutral">Neutral</Button>
-  <Button variant="outline">Outline</Button>
-  <Button variant="ghost">Ghost</Button>
-  <Button variant="destructive">Delete</Button>
+  <Button>Default</Button>
+  <Button color="primary">Primary</Button>
+  <Button color="secondary">Secondary</Button>
+  <Button color="accent">Accent</Button>
+  <Button color="neutral">Neutral</Button>
+  <Button color="info">Info</Button>
+  <Button color="success">Success</Button>
+  <Button color="warning">Warning</Button>
+  <Button color="error">Error</Button>
 </div>`}
 		>
 			<div class="flex flex-wrap gap-2">
-				<Button>Primary</Button>
-				<Button variant="secondary">Secondary</Button>
-				<Button variant="accent">Accent</Button>
-				<Button variant="neutral">Neutral</Button>
+				<Button>Default</Button>
+				<Button color="primary">Primary</Button>
+				<Button color="secondary">Secondary</Button>
+				<Button color="accent">Accent</Button>
+				<Button color="neutral">Neutral</Button>
+				<Button color="info">Info</Button>
+				<Button color="success">Success</Button>
+				<Button color="warning">Warning</Button>
+				<Button color="error">Error</Button>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Variants"
+			description="Styles compose with any semantic color."
+			code={`<div class="flex flex-wrap gap-2">
+  <Button variant="outline">Outline</Button>
+  <Button variant="dash" color="primary">Dash</Button>
+  <Button variant="soft" color="success">Soft</Button>
+  <Button variant="ghost" color="error">Ghost error</Button>
+  <Button variant="link" color="primary">Link</Button>
+</div>`}
+		>
+			<div class="flex flex-wrap gap-2">
 				<Button variant="outline">Outline</Button>
-				<Button variant="ghost">Ghost</Button>
-				<Button variant="destructive">Delete</Button>
+				<Button variant="dash" color="primary">Dash</Button>
+				<Button variant="soft" color="success">Soft</Button>
+				<Button variant="ghost" color="error">Ghost error</Button>
+				<Button variant="link" color="primary">Link</Button>
 			</div>
 		</DemoCard>
 
@@ -133,13 +163,13 @@
 			code={`<div class="flex flex-wrap gap-2">
   <Button><Mail /> Invite</Button>
   <Button variant="outline">Open <ArrowRight /></Button>
-  <Button variant="destructive"><Trash2 /> Remove</Button>
+  <Button color="error"><Trash2 /> Remove</Button>
 </div>`}
 		>
 			<div class="flex flex-wrap gap-2">
 				<Button><Mail /> Invite</Button>
 				<Button variant="outline">Open <ArrowRight /></Button>
-				<Button variant="destructive"><Trash2 /> Remove</Button>
+				<Button color="error"><Trash2 /> Remove</Button>
 			</div>
 		</DemoCard>
 

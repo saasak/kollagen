@@ -181,15 +181,15 @@
 			title="Separator"
 			description="Use separators with filled variants to keep actions distinct."
 			code={`<ButtonGroup ariaLabel="Clipboard actions">
-  <Button variant="secondary" size="sm"><Copy /> Copy</Button>
+  <Button color="secondary" size="sm"><Copy /> Copy</Button>
   <ButtonGroupSeparator />
-  <Button variant="secondary" size="sm"><Trash2 /> Delete</Button>
+  <Button color="secondary" size="sm"><Trash2 /> Delete</Button>
 </ButtonGroup>`}
 		>
 			<ButtonGroup ariaLabel="Clipboard actions">
-				<Button variant="secondary" size="sm"><Copy /> Copy</Button>
+				<Button color="secondary" size="sm"><Copy /> Copy</Button>
 				<ButtonGroupSeparator />
-				<Button variant="secondary" size="sm"><Trash2 /> Delete</Button>
+				<Button color="secondary" size="sm"><Trash2 /> Delete</Button>
 			</ButtonGroup>
 		</DemoCard>
 

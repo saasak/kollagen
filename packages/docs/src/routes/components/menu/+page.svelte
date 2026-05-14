@@ -30,6 +30,28 @@
 		}
 	];
 
+	const nestedItems = [
+		{ label: 'New File', value: 'new-file' },
+		{
+			type: 'submenu' as const,
+			label: 'Open Recent',
+			items: [
+				{ label: 'Dashboard.svelte', value: 'recent-dashboard' },
+				{ label: 'Settings.svelte', value: 'recent-settings' },
+				{
+					type: 'submenu' as const,
+					label: 'Projects',
+					items: [
+						{ label: 'Kollagen', value: 'project-kollagen' },
+						{ label: 'SaaS app', value: 'project-saas' }
+					]
+				}
+			]
+		},
+		{ type: 'separator' as const },
+		{ label: 'Settings', value: 'settings' }
+	];
+
 	const mixedItems = [
 		{ label: 'Cut', value: 'cut' },
 		{ label: 'Copy', value: 'copy' },
@@ -54,7 +76,7 @@
 			name: 'items',
 			type: 'MenuEntry[]',
 			default: '—',
-			description: 'Array of menu items, groups, and separators'
+			description: 'Array of menu items, groups, separators, and recursive submenus'
 		},
 		{
 			name: 'open',
@@ -111,8 +133,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">Menu</h1>
 		<p class="text-kl-muted-content mt-2">
-			Dropdown menu for actions and navigation. Supports grouping, separators, and disabled items.
-			Built on bits-ui.
+			Dropdown menu for actions and navigation. Supports grouping, separators, nested submenus, and
+			disabled items. Built on bits-ui.
 		</p>
 	</div>
 
@@ -180,15 +202,23 @@
 			description="Organize items into labeled groups with separators between them."
 			code={`<Menu
   items={[
-    { type: "group", label: "Actions", items: [
-      { label: "Edit", value: "edit" },
-      { label: "Duplicate", value: "duplicate" },
-    ]},
+    {
+      type: "group",
+      label: "Actions",
+      items: [
+        { label: "Edit", value: "edit" },
+        { label: "Duplicate", value: "duplicate" },
+      ],
+    },
     { type: "separator" },
-    { type: "group", label: "Danger", items: [
-      { label: "Archive", value: "archive" },
-      { label: "Delete", value: "delete" },
-    ]},
+    {
+      type: "group",
+      label: "Danger",
+      items: [
+        { label: "Archive", value: "archive" },
+        { label: "Delete", value: "delete" },
+      ],
+    },
   ]}
 >
   {#snippet trigger()}Options{/snippet}
@@ -197,6 +227,42 @@
 			<div class="max-w-sm">
 				<Menu items={groupedItems}>
 					{#snippet trigger()}Options{/snippet}
+				</Menu>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Nested submenus"
+			description="Submenus can contain other submenus for deeper action trees."
+			code={`<Menu
+  items={[
+    { label: "New File", value: "new-file" },
+    {
+      type: "submenu",
+      label: "Open Recent",
+      items: [
+        { label: "Dashboard.svelte", value: "recent-dashboard" },
+        { label: "Settings.svelte", value: "recent-settings" },
+        {
+          type: "submenu",
+          label: "Projects",
+          items: [
+            { label: "Kollagen", value: "project-kollagen" },
+            { label: "SaaS app", value: "project-saas" },
+          ],
+        },
+      ],
+    },
+    { type: "separator" },
+    { label: "Settings", value: "settings" },
+  ]}
+>
+  {#snippet trigger()}File{/snippet}
+</Menu>`}
+		>
+			<div class="max-w-sm">
+				<Menu items={nestedItems}>
+					{#snippet trigger()}File{/snippet}
 				</Menu>
 			</div>
 		</DemoCard>

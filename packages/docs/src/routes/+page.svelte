@@ -30,19 +30,19 @@ npx kollagen add combobox</pre>
 	<!-- Features -->
 	<section class="mx-auto mt-20 max-w-4xl px-6 pb-20">
 		<div class="grid gap-6 lg:grid-cols-3">
-			<div class="rounded-kl-box border-kl-base-300 border p-6">
+			<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border p-6">
 				<h3 class="text-kl-base-content text-lg font-semibold">Themed</h3>
 				<p class="text-kl-muted-content mt-2 text-sm">
 					CSS variables with OKLCH colors. DaisyUI-style theming with dark mode out of the box.
 				</p>
 			</div>
-			<div class="rounded-kl-box border-kl-base-300 border p-6">
+			<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border p-6">
 				<h3 class="text-kl-base-content text-lg font-semibold">Accessible</h3>
 				<p class="text-kl-muted-content mt-2 text-sm">
 					Built on bits-ui. WAI-ARIA compliant with keyboard navigation and screen reader support.
 				</p>
 			</div>
-			<div class="rounded-kl-box border-kl-base-300 border p-6">
+			<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border p-6">
 				<h3 class="text-kl-base-content text-lg font-semibold">You own it</h3>
 				<p class="text-kl-muted-content mt-2 text-sm">
 					Components are copied into your project. No runtime dependency. Edit freely to fit your

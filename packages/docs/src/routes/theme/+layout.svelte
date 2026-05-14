@@ -7,7 +7,7 @@
 
 <div class="flex flex-1">
 	<Sidebar />
-	<main class="flex-1 overflow-y-auto p-6 lg:p-10">
+	<main class="min-w-0 flex-1 p-6 lg:p-10">
 		{@render children()}
 	</main>
 </div>
