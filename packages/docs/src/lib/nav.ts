@@ -78,4 +78,8 @@ export const componentNav = [
 	{ label: 'TreeView', href: '/components/tree-view' }
 ];
 
-export const blockNav = [{ label: 'Chat Panel', href: '/blocks/chat-panel' }];
+export const blockNav = [
+	{ label: 'AppShell', href: '/blocks/app-shell' },
+	{ label: 'Chat Panel', href: '/blocks/chat-panel' },
+	{ label: 'Sidebar', href: '/blocks/sidebar' }
+];

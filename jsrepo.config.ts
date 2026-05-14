@@ -409,9 +409,19 @@ export default defineConfig({
 
 			// Blocks
 			{
+				name: 'app-shell',
+				type: 'block',
+				files: [{ path: 'packages/ui/src/templates/blocks/app-shell' }]
+			},
+			{
 				name: 'chat-panel',
 				type: 'block',
 				files: [{ path: 'packages/ui/src/templates/blocks/chat-panel' }]
+			},
+			{
+				name: 'sidebar',
+				type: 'block',
+				files: [{ path: 'packages/ui/src/templates/blocks/sidebar' }]
 			}
 		],
 		defaultPaths: {
