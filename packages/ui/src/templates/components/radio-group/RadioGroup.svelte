@@ -1,16 +1,12 @@
-<script lang="ts">
+<script lang="ts" generics="T">
 	import { cn } from '$lib/utils/cn';
 	import { radioGroupVariants } from './RadioGroup.variants';
 	import { RadioGroup, Label, useId } from 'bits-ui';
 
-	export interface Item {
-		value: string;
-		label: string;
-		disabled?: boolean;
-	}
-
 	interface Props {
-		items: Item[];
+		items: T[];
+		itemToLabel?: (item: T) => string;
+		itemToValue?: (item: T) => string;
 		value?: string;
 		label?: string;
 		name?: string;
@@ -25,6 +21,8 @@
 
 	let {
 		items,
+		itemToLabel = (item: T) => (item as any).label ?? String(item),
+		itemToValue = (item: T) => (item as any).value ?? String(item),
 		value = $bindable(''),
 		label,
 		name,
@@ -36,6 +34,14 @@
 		onValueChange,
 		class: className
 	}: Props = $props();
+
+	const mappedItems = $derived(
+		items.map((item) => ({
+			value: itemToValue(item),
+			label: itemToLabel(item),
+			disabled: (item as any).disabled ?? false
+		}))
+	);
 
 	let classes = $derived(radioGroupVariants({ orientation }));
 </script>
@@ -58,7 +64,7 @@
 		{onValueChange}
 		class={classes.root()}
 	>
-		{#each items as item (item.value)}
+		{#each mappedItems as item (item.value)}
 			{@const id = useId()}
 			<div class="flex items-center gap-2">
 				<RadioGroup.Item {id} value={item.value} disabled={item.disabled} class={classes.item()} />

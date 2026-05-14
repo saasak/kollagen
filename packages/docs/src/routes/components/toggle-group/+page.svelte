@@ -9,13 +9,26 @@
 		{ label: 'Month', value: 'month' }
 	];
 	let value = $state('week');
+	let multipleValue = $state(['day', 'month']);
 
 	const propsData = [
 		{
 			name: 'items',
-			type: 'ToggleGroupItem[]',
+			type: 'T[]',
 			default: '-',
 			description: 'Toggle item definitions.'
+		},
+		{
+			name: 'itemToLabel',
+			type: '(item: T) => string',
+			default: 'item.label ?? String(item)',
+			description: 'Maps each item to a visible label.'
+		},
+		{
+			name: 'itemToValue',
+			type: '(item: T) => string',
+			default: 'item.value ?? String(item)',
+			description: 'Maps each item to the selected value.'
 		},
 		{
 			name: 'value',
@@ -24,9 +37,9 @@
 			description: 'Selected value(s). Supports bind:value.'
 		},
 		{
-			name: 'type',
-			type: "'single' | 'multiple'",
-			default: "'single'",
+			name: 'multiple',
+			type: 'boolean',
+			default: 'false',
 			description: 'Selection mode.'
 		},
 		{
@@ -63,10 +76,25 @@
 	</div>
 	<DemoCard
 		title="Single"
-		description="Supports single and multiple mode."
+		description="Single selected value."
 		code="<ToggleGroup {items} bind:value={value} />"
 	>
 		<ToggleGroup {items} bind:value />
+	</DemoCard>
+
+	<DemoCard
+		title="Multiple"
+		description="Multiple selected values."
+		code="<ToggleGroup {items} multiple bind:value={multipleValue} />"
+	>
+		<div class="space-y-2">
+			<ToggleGroup {items} multiple bind:value={multipleValue} />
+			<p class="text-kl-muted-content text-sm">
+				Selected: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
+					>{multipleValue.join(', ')}</code
+				>
+			</p>
+		</div>
 	</DemoCard>
 
 	<section class="space-y-4">

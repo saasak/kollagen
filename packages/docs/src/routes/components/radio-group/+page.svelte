@@ -21,9 +21,21 @@
 	const propsData = [
 		{
 			name: 'items',
-			type: 'Item[]',
+			type: 'T[]',
 			default: '—',
-			description: 'Radio options to render. Each item has value, label, and optional disabled'
+			description: 'Radio options to render.'
+		},
+		{
+			name: 'itemToLabel',
+			type: '(item: T) => string',
+			default: 'item.label ?? String(item)',
+			description: 'Maps each item to a visible label.'
+		},
+		{
+			name: 'itemToValue',
+			type: '(item: T) => string',
+			default: 'item.value ?? String(item)',
+			description: 'Maps each item to the submitted value.'
 		},
 		{
 			name: 'value',
@@ -40,7 +52,7 @@
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable all options' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
-		{ name: 'readOnly', type: 'boolean', default: 'false', description: 'Make read-only' },
+		{ name: 'readonly', type: 'boolean', default: 'false', description: 'Make read-only' },
 		{
 			name: 'orientation',
 			type: '"horizontal" | "vertical"',

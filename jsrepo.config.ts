@@ -73,6 +73,11 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/checkbox' }]
 			},
 			{
+				name: 'checkbox-group',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/checkbox-group' }]
+			},
+			{
 				name: 'clipboard',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/clipboard' }]
@@ -195,6 +200,11 @@ export default defineConfig({
 				name: 'label',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/label' }]
+			},
+			{
+				name: 'list-box',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/list-box' }]
 			},
 			{
 				name: 'marquee',
@@ -340,6 +350,21 @@ export default defineConfig({
 				name: 'tags-input',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/tags-input' }]
+			},
+			{
+				name: 'time-field',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/time-field' }]
+			},
+			{
+				name: 'time-range-field',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/time-range-field' }]
+			},
+			{
+				name: 'timeline',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/timeline' }]
 			},
 			{
 				name: 'timer',

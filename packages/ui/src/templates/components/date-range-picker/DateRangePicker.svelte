@@ -116,9 +116,9 @@
 						<ChevronRight size={16} />
 					</DateRangePicker.NextButton>
 				</DateRangePicker.Header>
-				<div class="flex flex-wrap gap-4">
+				<div class="grid gap-4 sm:grid-cols-2">
 					{#each months as month (month.value)}
-						<DateRangePicker.Grid class="w-full border-collapse space-y-1 select-none">
+						<DateRangePicker.Grid class="w-[17.5rem] border-collapse space-y-1 select-none">
 							<DateRangePicker.GridHead>
 								<DateRangePicker.GridRow class="flex w-full justify-between">
 									{#each weekdays as day (day)}

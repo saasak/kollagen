@@ -1,17 +1,15 @@
-<script lang="ts">
+<script lang="ts" generics="T">
 	import { cn } from '$lib/utils/cn';
 	import { toggleGroupVariants } from './ToggleGroup.variants';
 	import { ToggleGroup as ToggleGroupPrimitive } from 'bits-ui';
-
-	type ToggleGroupItem = {
-		label: string;
-		value: string;
-		disabled?: boolean;
-	};
+	import { untrack } from 'svelte';
 
 	interface Props {
-		items: ToggleGroupItem[];
+		items: T[];
+		itemToLabel?: (item: T) => string;
+		itemToValue?: (item: T) => string;
 		value?: string | string[];
+		multiple?: boolean;
 		type?: 'single' | 'multiple';
 		disabled?: boolean;
 		orientation?: 'horizontal' | 'vertical';
@@ -21,7 +19,10 @@
 
 	let {
 		items,
-		value = $bindable(''),
+		itemToLabel = (item: T) => (item as any).label ?? String(item),
+		itemToValue = (item: T) => (item as any).value ?? String(item),
+		value = $bindable(),
+		multiple,
 		type = 'single',
 		disabled = false,
 		orientation = 'horizontal',
@@ -29,10 +30,23 @@
 		class: className
 	}: Props = $props();
 
+	const isMultiple = $derived(multiple ?? type === 'multiple');
+	const mappedItems = $derived(
+		items.map((item) => ({
+			value: itemToValue(item),
+			label: itemToLabel(item),
+			disabled: (item as any).disabled ?? false
+		}))
+	);
+
+	if (untrack(() => value) === undefined) {
+		value = untrack(() => isMultiple) ? [] : '';
+	}
+
 	let classes = $derived(toggleGroupVariants({ orientation }));
 </script>
 
-{#if type === 'multiple'}
+{#if isMultiple}
 	<ToggleGroupPrimitive.Root
 		type="multiple"
 		bind:value={value as string[]}
@@ -41,7 +55,7 @@
 		onValueChange={onValueChange as (value: string[]) => void}
 		class={cn(classes.root(), className)}
 	>
-		{#each items as item (item.value)}
+		{#each mappedItems as item (item.value)}
 			<ToggleGroupPrimitive.Item value={item.value} disabled={item.disabled} class={classes.item()}>
 				{item.label}
 			</ToggleGroupPrimitive.Item>
@@ -56,7 +70,7 @@
 		onValueChange={onValueChange as (value: string) => void}
 		class={cn(classes.root(), className)}
 	>
-		{#each items as item (item.value)}
+		{#each mappedItems as item (item.value)}
 			<ToggleGroupPrimitive.Item value={item.value} disabled={item.disabled} class={classes.item()}>
 				{item.label}
 			</ToggleGroupPrimitive.Item>
