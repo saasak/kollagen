@@ -43,19 +43,23 @@ Components land in `src/lib/components/` and can be modified freely. The init co
 
 DaisyUI-inspired theming system built on CSS variables:
 
-- **Base tokens**: density, radius, colors, shadows — all configurable via CSS variables
+- **Base tokens**: field size, selector size, density, radius, colors, shadows — all configurable via CSS variables
 - **Multiple themes**: applied via `data-theme` attribute on the HTML element
 - **Styled by default**: every component ships with a polished default look
 - **Full control**: tweak global CSS variables for broad changes, or edit the component source directly for deeper customization
 
 ```css
 :root {
-	/* 1 = Tailwind default spacing, <1 = compact, >1 = spacious */
-	--kl-density: 0.875;
+	--kl-density: 1;
+	--kl-density-reading: 1;
+
+	/* DaisyUI-style component sizing */
+	--kl-size-field: 0.25rem;
+	--kl-size-selector: 0.25rem;
 }
 ```
 
-Density scales Tailwind's numeric spacing utilities (`p-*`, `gap-*`, `h-*`, `size-*`, etc.). Arbitrary values like `max-w-[350px]` are unchanged.
+`--kl-size-field` controls inputs, buttons, and field-like heights. `--kl-size-selector` controls checkboxes, radios, switches, toggles, slider thumbs/tracks, and similar selectors. Density tokens are retained for theme metadata and future use; they do not scale global Tailwind spacing.
 
 ```html
 <!-- Switch theme -->

@@ -21,15 +21,16 @@ npx @saasak/kollagen add combobox
 
 ## Customizing the Theme
 
-After running `kollagen init`, you get a full set of `--kl-*` CSS variables (density, typography, OKLCH colors, radii, borders, shadows, glow, transitions, contrast, and page patterns). Override any of them in your `app.css` to tweak the theme:
+After running `kollagen init`, you get a full set of `--kl-*` CSS variables (field size, selector size, density, typography, OKLCH colors, radii, borders, shadows, glow, transitions, contrast, and page patterns). Override any of them in your `app.css` to tweak the theme:
 
 ```css
 /* app.css — after the kollagen theme import */
 
 :root {
-	/* Density: 1 = Tailwind default, <1 = compact, >1 = spacious */
-	--kl-density: 0.875;
+	--kl-density: 1;
 	--kl-density-reading: 1;
+	--kl-size-field: 0.25rem;
+	--kl-size-selector: 0.25rem;
 
 	/* Typography */
 	--kl-font-heading: ui-sans-serif, system-ui, sans-serif;
