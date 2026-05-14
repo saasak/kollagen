@@ -13,7 +13,7 @@
 	const faqContent: Record<string, string> = {
 		what: 'Kollagen is a CLI tool that copies ready-to-use, themed SvelteKit components into your project. Built on bits-ui primitives.',
 		install:
-			'Run npx kollagen init to scaffold your project, then npx kollagen add <component> to add individual components.',
+			'Run npx @saasak/kollagen init to scaffold your project, then npx @saasak/kollagen add <component> to add individual components.',
 		theme:
 			'Yes! Kollagen uses semantic CSS variables (OKLCH) that you can override. Switch themes via the data-theme attribute on your HTML element.',
 		components:

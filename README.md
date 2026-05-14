@@ -71,7 +71,7 @@ DaisyUI-inspired theming system built on CSS variables:
 
 ## Component design
 
-- **40 components + 1 block** — priority on user-input components (ComboBox, Select, DatePicker, etc.)
+- **73 components + 1 block** — priority on ready-to-use UI patterns and user-input components (ComboBox, Select, DatePicker, DataTable, etc.)
 - **Heterogeneous primitives** — bits-ui for most components, vaul-svelte (Drawer), svelte-sonner (Toast), embla-carousel-svelte (Carousel), paneforge (Splitter), plus custom implementations for niche components
 - **Async-ready** — components like ComboBox support async data fetching out of the box
 - **Form-ready** — `name` prop forwarded to the native input for proper form submission
@@ -87,6 +87,8 @@ pnpm monorepo:
 - **`packages/docs`** — SvelteKit docs site importing components directly from ui source
 - **`jsrepo.config.ts`** — registry configuration (at monorepo root)
 - **`registry.json`** — generated component manifest (committed, auto-rebuilt by CI)
+
+The docs app imports raw source from `packages/ui` via `$ui`, `$blocks`, and `$theme` aliases, so component changes are visible in the docs without publishing a package.
 
 ## Development
 

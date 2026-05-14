@@ -1163,7 +1163,10 @@
 				<div class="grid gap-4 xl:grid-cols-3">
 					<Card title="Share package" description="Copy and QR surfaces.">
 						<div class="space-y-4">
-							<Clipboard label="Install command" value="npx kollagen add button card tabs" />
+							<Clipboard
+								label="Install command"
+								value="npx @saasak/kollagen add button card tabs"
+							/>
 							<Alert color="info" title="Preview channel">
 								This theme is ready for visual regression checks.
 							</Alert>

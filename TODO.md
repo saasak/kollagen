@@ -10,7 +10,6 @@
 
 ## Components
 
-- [ ] Data table (pagination, filter and search bar, row actions, bulk actions, etc)
 - [ ] Charts with echarts
 - [ ] Map with Svelte-Maplibre
 - [ ] Terminal with Xterm ?

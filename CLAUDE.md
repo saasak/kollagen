@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md / CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides agent guidance for Claude Code, Codex, and other LLM coding tools working in this repository. `AGENTS.md` is expected to be a symlink to this file so all agents read the same source of truth.
 
 ## Project Overview
 
@@ -12,7 +12,7 @@ Kollagen distributes ready-to-use, themed SvelteKit components via jsrepo. Built
 
 pnpm workspace with two packages:
 
-- **`packages/ui`** (`kollagen`) — jsrepo registry + thin init CLI + component templates. Published to npm.
+- **`packages/ui`** (`@saasak/kollagen`) — jsrepo registry + thin init CLI + component templates. Published to npm.
 - **`packages/docs`** (`@saasak/kollagen-docs`) — SvelteKit app that imports components directly from ui source via `$ui`, `$blocks`, and `$theme` aliases.
 
 Root scripts:
@@ -33,9 +33,9 @@ Root scripts:
 
 Components are distributed via [jsrepo](https://jsrepo.dev). The registry config is `jsrepo.config.ts` at the monorepo root. `registry.json` (generated, committed) is also at the root.
 
-- `npx kollagen init` — scaffolds deps, base theme, CSS variables in a SvelteKit project
-- `npx kollagen add <component>` — copies component to user project with auto-resolved deps (wraps jsrepo)
-- `npx kollagen update` — update previously added components with interactive diffs (wraps jsrepo)
+- `npx @saasak/kollagen init` — scaffolds deps, base theme, CSS variables in a SvelteKit project
+- `npx @saasak/kollagen add <component>` — copies component to user project with auto-resolved deps (wraps jsrepo)
+- `npx @saasak/kollagen update` — updates previously added components with interactive diffs (wraps jsrepo)
 - `pnpm build` — builds all packages then runs `jsrepo build` (registry manifest) from root
 - `pnpm build:registry` — rebuild `registry.json` only
 
@@ -51,7 +51,7 @@ Components are distributed via [jsrepo](https://jsrepo.dev). The registry config
 
 - Wrap bits-ui primitives into single ready-to-use components with clean props interfaces
 - Some components use alternative libraries: vaul-svelte (Drawer), svelte-sonner (Toast), embla-carousel-svelte (Carousel), paneforge (Splitter)
-- Some components are custom Svelte 5 implementations with no headless library (Timer, Editable, Steps, TagsInput, FileUpload, TreeView, Clipboard, QrCode, NumberInput, Marquee, PasswordInput, Field, Fieldset)
+- Some components are custom Svelte 5 implementations with no headless library (DataTable, Timer, Editable, Steps, TagsInput, FileUpload, TreeView, Clipboard, QrCode, NumberInput, Marquee, PasswordInput, Field, Fieldset)
 - Both controlled (`bind:value`) and uncontrolled (`onValueChange`) APIs
 - Form submission handled natively by bits-ui (name prop forwarded to the visible input)
 - Async-ready where applicable (e.g., ComboBox)
@@ -62,6 +62,7 @@ Components are distributed via [jsrepo](https://jsrepo.dev). The registry config
 ## Theming
 
 - Semantic `--kl-*` CSS variables (OKLCH), mapped to Tailwind 4 via `@theme inline`
+- `--kl-density` and `--kl-density-reading` are retained as preview/future tokens; they do not scale Tailwind's global spacing scale
 - Theme switching via `data-theme` attribute, dark mode via `data-mode="dark"` on `<html>`
 - Default border color set to `--kl-base-300` via `--default-border-color` (bare `border` utility is theme-aware)
 - Components use Tailwind utility classes exclusively (no `:global()` CSS blocks)

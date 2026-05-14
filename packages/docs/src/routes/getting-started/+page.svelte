@@ -17,7 +17,8 @@
 			Run the init command to install dependencies, set up theme CSS, and create the shared
 			<code>cn</code> helper.
 		</p>
-		<pre class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">npx kollagen init</pre>
+		<pre
+			class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">npx @saasak/kollagen init</pre>
 		<p class="text-kl-muted-content mt-3 text-sm">
 			This installs <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
 				>bits-ui</code
@@ -28,11 +29,12 @@
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">tailwind-merge</code>,
 			plus
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">tailwind-variants</code>,
-			then copies the base theme CSS with all
+			then copies the base theme CSS, bundled theme files, and all
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">--kl-*</code> tokens into
-			your project and creates
+			your project, creates
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">src/lib/utils/cn.ts</code
-			>.
+			>, and adds a local
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">jsrepo.config.ts</code>.
 		</p>
 	</section>
 
@@ -45,7 +47,7 @@
 			>.
 		</p>
 		<pre
-			class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">npx kollagen add combobox</pre>
+			class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">npx @saasak/kollagen add combobox</pre>
 		<p class="text-kl-muted-content mt-3 text-sm">
 			You own the source — edit the component directly for any customization.
 		</p>
@@ -62,13 +64,15 @@
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">@theme inline</code>.
 		</p>
 		<p class="text-kl-muted-content mt-3 text-sm">
-			Switch between light and dark mode by setting the
+			Switch themes with
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">data-theme</code>
-			attribute on
+			and dark mode with
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">data-mode</code>
+			on
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">&lt;html&gt;</code>:
 		</p>
 		<pre
-			class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">&lt;html data-theme="dark"&gt;</pre>
+			class="rounded-kl-field bg-kl-base-200 mt-3 p-4 font-mono text-sm">&lt;html data-theme="nord" data-mode="dark"&gt;</pre>
 	</section>
 
 	<!-- Next steps -->

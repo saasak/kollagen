@@ -6,17 +6,17 @@
 
 	const basicItems = [
 		{ label: 'Home', href: '/' },
-		{ label: 'Products', href: '/products' },
-		{ label: 'Headphones' }
+		{ label: 'Components', href: '/components/button' },
+		{ label: 'Breadcrumb' }
 	];
 
 	const longTrail = [
 		{ label: 'Home', href: '/' },
-		{ label: 'Electronics', href: '/electronics' },
-		{ label: 'Audio', href: '/audio' },
-		{ label: 'Headphones', href: '/headphones' },
-		{ label: 'Wireless', href: '/wireless' },
-		{ label: 'Sony WH-1000XM5' }
+		{ label: 'Components', href: '/components/button' },
+		{ label: 'Navigation', href: '/components/navigation-menu' },
+		{ label: 'Menu', href: '/components/menu' },
+		{ label: 'Breadcrumb', href: '/components/breadcrumb' },
+		{ label: 'Current page' }
 	];
 
 	const disabledItems = [
@@ -77,8 +77,8 @@
 			code={`<Breadcrumb
   items={[
     { label: "Home", href: "/" },
-    { label: "Products", href: "/products" },
-    { label: "Headphones" },
+    { label: "Components", href: "/components/button" },
+    { label: "Breadcrumb" },
   ]}
 />`}
 		>
@@ -91,16 +91,16 @@
 			code={`<Breadcrumb
   items={[
     { label: "Home", href: "/", icon: homeIcon },
-    { label: "Products", href: "/products", icon: productsIcon },
-    { label: "Headphones" },
+    { label: "Components", href: "/components/button", icon: productsIcon },
+    { label: "Breadcrumb" },
   ]}
 />`}
 		>
 			<Breadcrumb
 				items={[
 					{ label: 'Home', href: '/', icon: homeIcon },
-					{ label: 'Products', href: '/products', icon: productsIcon },
-					{ label: 'Files', icon: filesIcon }
+					{ label: 'Components', href: '/components/button', icon: productsIcon },
+					{ label: 'Breadcrumb', icon: filesIcon }
 				]}
 			/>
 		</DemoCard>

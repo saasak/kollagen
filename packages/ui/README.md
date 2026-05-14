@@ -10,18 +10,22 @@ npx @saasak/kollagen init
 
 # Add a component
 npx @saasak/kollagen add combobox
+
+# Update installed components
+npx @saasak/kollagen update
 ```
 
 ## Commands
 
-| Command               | Description                                                       |
-| --------------------- | ----------------------------------------------------------------- |
-| `kollagen init`       | Install dependencies and set up theming in your SvelteKit project |
-| `kollagen add <name>` | Copy a component into `src/lib/components/<name>`                 |
+| Command                  | Description                                                             |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `kollagen init`          | Install dependencies, copy themes, create `cn.ts`, and configure jsrepo |
+| `kollagen add <name...>` | Copy one or more components into `src/lib/components/`                  |
+| `kollagen update`        | Update previously added components with interactive jsrepo diffs        |
 
 ## Customizing the Theme
 
-After running `kollagen init`, you get a full set of `--kl-*` CSS variables (field size, selector size, density, typography, OKLCH colors, radii, borders, shadows, glow, transitions, contrast, and page patterns). Override any of them in your `app.css` to tweak the theme:
+After running `kollagen init`, you get `src/lib/styles/kollagen.css`, additional themes in `src/lib/styles/themes/`, a `src/lib/utils/cn.ts` helper, and a local `jsrepo.config.ts`. Override any `--kl-*` token in your app CSS to tweak the theme:
 
 ```css
 /* app.css — after the kollagen theme import */
@@ -67,7 +71,7 @@ After running `kollagen init`, you get a full set of `--kl-*` CSS variables (fie
 }
 ```
 
-Density scales Tailwind's numeric spacing utilities (`p-*`, `gap-*`, `h-*`, `size-*`, etc.). Use `--kl-density: 1` for Tailwind's default scale or `--kl-density: 1.125` for a more spacious UI. Arbitrary values like `max-w-[350px]` are unchanged.
+`--kl-size-field` controls inputs, buttons, and field-like heights. `--kl-size-selector` controls checkboxes, radios, switches, toggles, slider thumbs/tracks, and similar selectors. Density tokens are retained for theme metadata and future use; they do not scale Tailwind spacing.
 
 All components use these variables through Tailwind utilities (`bg-kl-primary`, `rounded-kl-field`, etc.), so overrides apply everywhere automatically.
 

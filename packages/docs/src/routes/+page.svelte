@@ -23,8 +23,8 @@
 
 	<!-- Install snippet -->
 	<section class="mx-auto mt-16 max-w-md">
-		<pre class="rounded-kl-box bg-kl-base-200 p-4 font-mono text-sm">npx kollagen init
-npx kollagen add combobox</pre>
+		<pre class="rounded-kl-box bg-kl-base-200 p-4 font-mono text-sm">npx @saasak/kollagen init
+npx @saasak/kollagen add combobox</pre>
 	</section>
 
 	<!-- Features -->
@@ -45,8 +45,7 @@ npx kollagen add combobox</pre>
 			<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border p-6">
 				<h3 class="text-kl-base-content text-lg font-semibold">You own it</h3>
 				<p class="text-kl-muted-content mt-2 text-sm">
-					Components are copied into your project. No runtime dependency. Edit freely to fit your
-					needs.
+					Components are copied into your project. You own the source and can edit it freely.
 				</p>
 			</div>
 		</div>
