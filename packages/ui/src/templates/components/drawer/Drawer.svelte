@@ -2,7 +2,7 @@
 	import { cn } from '$lib/utils/cn';
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
-	import { tick, type Snippet } from 'svelte';
+	import type { Snippet } from 'svelte';
 
 	type Direction = 'left' | 'right' | 'top' | 'bottom';
 
@@ -40,14 +40,6 @@
 
 	let activeSnapPoint = $state<string | number | null>(null);
 
-	$effect(() => {
-		if (open && snapPoints && snapPoints.length > 0 && activeSnapPoint === null) {
-			tick().then(() => {
-				activeSnapPoint = snapPoints[0];
-			});
-		}
-	});
-
 	let isVertical = $derived(direction === 'bottom' || direction === 'top');
 	let isLastSnapPoint = $derived(
 		snapPoints && snapPoints.length > 0 && activeSnapPoint === snapPoints[snapPoints.length - 1]
@@ -56,12 +48,19 @@
 	let contentClass = $derived(
 		{
 			bottom:
-				'fixed inset-x-0 bottom-0 flex h-full w-full max-h-[85dvh] flex-col rounded-t-2xl border-t border-x',
-			top: 'fixed inset-x-0 top-0 flex h-full w-full max-h-[85dvh] flex-col rounded-b-2xl border-b border-x',
-			left: 'fixed inset-y-0 left-0 h-full w-full max-w-sm rounded-r-2xl border-r border-y',
-			right: 'fixed inset-y-0 right-0 h-full w-full max-w-sm rounded-l-2xl border-l border-y'
+				'fixed inset-x-0 bottom-0 flex h-full w-full max-h-[85dvh] flex-col rounded-t-kl-box border-t border-x',
+			top: 'fixed inset-x-0 top-0 flex h-full w-full max-h-[85dvh] flex-col rounded-b-kl-box border-b border-x',
+			left: 'fixed inset-y-0 left-0 h-full w-full max-w-sm rounded-r-kl-box border-r border-y',
+			right: 'fixed inset-y-0 right-0 h-full w-full max-w-sm rounded-l-kl-box border-l border-y'
 		}[direction]
 	);
+
+	function handleOpenChange(nextOpen: boolean) {
+		if (nextOpen && snapPoints && snapPoints.length > 0 && activeSnapPoint === null) {
+			activeSnapPoint = snapPoints[0];
+		}
+		onOpenChange?.(nextOpen);
+	}
 </script>
 
 <Drawer.Root
@@ -71,7 +70,7 @@
 	bind:activeSnapPoint
 	{modal}
 	{dismissible}
-	{onOpenChange}
+	onOpenChange={handleOpenChange}
 >
 	{#if trigger}
 		<Drawer.Trigger {disabled}>
@@ -86,7 +85,7 @@
 		</Drawer.Trigger>
 	{/if}
 
-	<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
+	<Drawer.Overlay class="bg-kl-neutral/50 fixed inset-0 z-[var(--kl-z-overlay)] backdrop-blur-sm" />
 	<Drawer.Portal>
 		<Drawer.Content
 			class={cn(

@@ -3,7 +3,7 @@
 	import { Dialog } from 'bits-ui';
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
-	import { tick, type Snippet } from 'svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		open?: boolean;
@@ -37,39 +37,29 @@
 		class: className
 	}: Props = $props();
 
-	let isMobile = $state(false);
+	let viewportWidth = $state(0);
 	let activeSnapPoint = $state<string | number | null>(null);
-
-	$effect(() => {
-		if (open && snapPoints && snapPoints.length > 0 && activeSnapPoint === null) {
-			tick().then(() => {
-				activeSnapPoint = snapPoints[0];
-			});
-		}
-	});
 
 	let isLastSnapPoint = $derived(
 		snapPoints && snapPoints.length > 0 && activeSnapPoint === snapPoints[snapPoints.length - 1]
 	);
-	let showDrawer = $derived(variant === 'drawer' || (variant === 'responsive' && isMobile));
+	let showDrawer = $derived(
+		variant === 'drawer' ||
+			(variant === 'responsive' && viewportWidth > 0 && viewportWidth < breakpoint)
+	);
 
-	$effect(() => {
-		if (variant !== 'responsive') return;
-		const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
-		isMobile = mql.matches;
-		const handler = (e: MediaQueryListEvent) => {
-			if (open && isMobile !== e.matches) {
-				open = false;
-			}
-			isMobile = e.matches;
-		};
-		mql.addEventListener('change', handler);
-		return () => mql.removeEventListener('change', handler);
-	});
+	function handleDrawerOpenChange(nextOpen: boolean) {
+		if (nextOpen && snapPoints && snapPoints.length > 0 && activeSnapPoint === null) {
+			activeSnapPoint = snapPoints[0];
+		}
+		onOpenChange?.(nextOpen);
+	}
 </script>
 
+<svelte:window bind:innerWidth={viewportWidth} />
+
 {#if showDrawer}
-	<Drawer.Root bind:open {snapPoints} bind:activeSnapPoint {onOpenChange}>
+	<Drawer.Root bind:open {snapPoints} bind:activeSnapPoint onOpenChange={handleDrawerOpenChange}>
 		{#if trigger}
 			<Drawer.Trigger {disabled}>
 				{#snippet child({ props })}
@@ -84,10 +74,12 @@
 		{/if}
 
 		<Drawer.Portal>
-			<Drawer.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
+			<Drawer.Overlay
+				class="bg-kl-neutral/50 fixed inset-0 z-[var(--kl-z-overlay)] backdrop-blur-sm"
+			/>
 			<Drawer.Content
 				class={cn(
-					`border-kl-base-300 bg-kl-base-100 shadow-kl-lg fixed inset-x-0 bottom-0 z-[var(--kl-z-modal)] flex h-full max-h-[85dvh] w-full flex-col rounded-t-2xl border-x border-t`,
+					`border-kl-base-300 bg-kl-base-100 shadow-kl-lg rounded-t-kl-box fixed inset-x-0 bottom-0 z-[var(--kl-z-modal)] flex h-full max-h-[85dvh] w-full flex-col border-x border-t`,
 					className
 				)}
 			>
@@ -144,7 +136,9 @@
 		{/if}
 
 		<Dialog.Portal>
-			<Dialog.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
+			<Dialog.Overlay
+				class="bg-kl-neutral/50 fixed inset-0 z-[var(--kl-z-overlay)] backdrop-blur-sm"
+			/>
 			<Dialog.Content
 				{preventScroll}
 				class={cn(

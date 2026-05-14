@@ -15,10 +15,10 @@
 	const placementClass = $derived(
 		{
 			bottom:
-				'fixed inset-x-0 bottom-0 flex h-full w-full max-h-[85dvh] flex-col rounded-t-2xl border-t border-x',
-			top: 'fixed inset-x-0 top-0 flex h-full w-full max-h-[85dvh] flex-col rounded-b-2xl border-b border-x',
-			left: 'fixed inset-y-0 left-0 h-full w-full max-w-sm rounded-r-2xl border-r border-y',
-			right: 'fixed inset-y-0 right-0 h-full w-full max-w-sm rounded-l-2xl border-l border-y'
+				'fixed inset-x-0 bottom-0 flex h-full w-full max-h-[85dvh] flex-col rounded-t-kl-box border-t border-x',
+			top: 'fixed inset-x-0 top-0 flex h-full w-full max-h-[85dvh] flex-col rounded-b-kl-box border-b border-x',
+			left: 'fixed inset-y-0 left-0 h-full w-full max-w-sm rounded-r-kl-box border-r border-y',
+			right: 'fixed inset-y-0 right-0 h-full w-full max-w-sm rounded-l-kl-box border-l border-y'
 		}[direction]
 	);
 </script>

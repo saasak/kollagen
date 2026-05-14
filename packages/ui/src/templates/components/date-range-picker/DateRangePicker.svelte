@@ -63,7 +63,7 @@
 		{:else}
 			<DateRangePicker.Segment
 				{part}
-				class="text-kl-base-content hover:bg-kl-base-200 focus:bg-kl-primary focus:text-kl-primary-content rounded-sm px-0.5 text-sm outline-none"
+				class="text-kl-base-content hover:bg-kl-base-200 focus:bg-kl-primary focus:text-kl-primary-content rounded-kl-selector px-0.5 text-sm outline-none"
 			>
 				{segmentValue}
 			</DateRangePicker.Segment>

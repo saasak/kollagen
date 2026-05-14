@@ -44,7 +44,9 @@
 	{/if}
 
 	<Dialog.Portal>
-		<Dialog.Overlay class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm" />
+		<Dialog.Overlay
+			class="bg-kl-neutral/50 fixed inset-0 z-[var(--kl-z-overlay)] backdrop-blur-sm"
+		/>
 		<Dialog.Content
 			{preventScroll}
 			interactOutsideBehavior={closeOnInteractOutside ? 'close' : 'ignore'}

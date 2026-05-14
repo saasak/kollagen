@@ -49,7 +49,7 @@
 
 	<AlertDialog.Portal>
 		<AlertDialog.Overlay
-			class="fixed inset-0 z-[var(--kl-z-overlay)] bg-black/50 backdrop-blur-sm"
+			class="bg-kl-neutral/50 fixed inset-0 z-[var(--kl-z-overlay)] backdrop-blur-sm"
 		/>
 		<AlertDialog.Content
 			class={cn(

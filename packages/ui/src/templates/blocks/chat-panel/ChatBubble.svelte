@@ -46,8 +46,8 @@
 
 		<div
 			class="rounded-kl-box px-3 py-2 text-sm {sent
-				? 'bg-kl-primary text-kl-primary-content rounded-br-sm'
-				: 'bg-kl-base-200 text-kl-base-content rounded-bl-sm'}"
+				? 'bg-kl-primary text-kl-primary-content rounded-br-kl-selector'
+				: 'bg-kl-base-200 text-kl-base-content rounded-bl-kl-selector'}"
 		>
 			{content}
 		</div>
