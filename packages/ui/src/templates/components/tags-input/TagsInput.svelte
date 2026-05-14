@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { tagsInputVariants } from './TagsInput.variants';
 	import { X } from 'lucide-svelte';
 
 	interface Props {
@@ -103,29 +104,20 @@
 		highlightedIndex = -1;
 	}
 
-	const fieldShellClass =
-		'rounded-kl-field bg-kl-base-100 flex min-h-kl-field-md flex-wrap items-center gap-1.5 border px-3 py-1.5 transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] focus-within:[--kl-input-border:var(--kl-primary)] focus-within:outline focus-within:outline-[var(--kl-input-border)]';
+	let classes = $derived(tagsInputVariants({ disabled }));
 </script>
 
 <div class={cn(`w-full`, className)}>
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		onclick={() => inputEl?.focus()}
-		class={cn(fieldShellClass, disabled && 'cursor-not-allowed opacity-50')}
-	>
+	<div onclick={() => inputEl?.focus()} class={classes.fieldShell()}>
 		{#each value as tag, index (tag + index)}
-			<span
-				class="rounded-kl-selector bg-kl-base-200 text-kl-base-content inline-flex items-center gap-1 px-2 py-0.5 text-sm {highlightedIndex ===
-				index
-					? 'ring-kl-primary ring-2'
-					: ''}"
-			>
+			<span class={tagsInputVariants({ highlighted: highlightedIndex === index }).tag()}>
 				<span>{tag}</span>
 				<button
 					onclick={() => removeTag(index)}
 					{disabled}
-					class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content inline-flex cursor-pointer items-center justify-center p-0.5 transition-colors duration-150"
+					class={classes.tagButton()}
 					aria-label="Remove {tag}"
 				>
 					<X size={12} />
@@ -142,16 +134,11 @@
 			onkeydown={handleKeydown}
 			onpaste={handlePaste}
 			onblur={handleBlur}
-			class="text-kl-base-content placeholder:text-kl-muted-content min-w-[4rem] flex-1 border-none bg-transparent text-sm outline-none"
+			class={classes.input()}
 		/>
 
 		{#if value.length > 0}
-			<button
-				onclick={clearAll}
-				{disabled}
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"
-				aria-label="Clear all tags"
-			>
+			<button onclick={clearAll} {disabled} class={classes.clear()} aria-label="Clear all tags">
 				<X size={14} />
 			</button>
 		{/if}

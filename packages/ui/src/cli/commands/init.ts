@@ -47,11 +47,12 @@ export const initCommand = new Command('init')
 			await addDependency('bits-ui', { cwd, packageManager: pm });
 			await addDependency('lucide-svelte', { cwd, packageManager: pm });
 			await addDependency('tailwind-merge', { cwd, packageManager: pm });
+			await addDependency('tailwind-variants', { cwd, packageManager: pm });
 			s.stop('Dependencies installed');
 		} catch {
 			s.stop('Failed to install dependencies');
 			logger.error(
-				'Could not install dependencies. Install manually: bits-ui lucide-svelte tailwind-merge'
+				'Could not install dependencies. Install manually: bits-ui lucide-svelte tailwind-merge tailwind-variants'
 			);
 			process.exit(1);
 		}

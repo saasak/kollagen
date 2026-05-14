@@ -1,10 +1,11 @@
 <script module lang="ts">
-	export type ButtonGroupOrientation = 'horizontal' | 'vertical';
+	export type ButtonGroupOrientation = import('./ButtonGroup.variants').ButtonGroupOrientation;
 	export type ButtonGroupRole = 'group' | 'toolbar';
 </script>
 
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { buttonGroupVariants } from './ButtonGroup.variants';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -31,21 +32,7 @@
 		children
 	}: Props = $props();
 
-	const baseClass = 'inline-flex w-fit items-stretch';
-	const orientationClasses: Record<ButtonGroupOrientation, string> = {
-		horizontal: 'flex-row',
-		vertical: 'flex-col'
-	};
-	const gapClasses: Record<ButtonGroupOrientation, string> = {
-		horizontal: 'gap-2',
-		vertical: 'gap-2'
-	};
-	const attachedClasses: Record<ButtonGroupOrientation, string> = {
-		horizontal:
-			'[&>*:not(:first-child)]:-ml-px [&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none',
-		vertical:
-			'[&>*:not(:first-child)]:-mt-px [&>*:not(:first-child)]:rounded-t-none [&>*:not(:last-child)]:rounded-b-none'
-	};
+	let rootClass = $derived(buttonGroupVariants({ orientation, attached }));
 </script>
 
 <div
@@ -54,12 +41,7 @@
 	aria-orientation={role === 'toolbar' ? orientation : undefined}
 	data-orientation={orientation}
 	data-attached={attached}
-	class={cn(
-		baseClass,
-		orientationClasses[orientation],
-		attached ? attachedClasses[orientation] : gapClasses[orientation],
-		className
-	)}
+	class={cn(rootClass, className)}
 >
 	{@render children?.()}
 </div>

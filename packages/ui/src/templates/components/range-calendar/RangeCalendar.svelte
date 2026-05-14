@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { rangeCalendarVariants } from './RangeCalendar.variants';
 	import { RangeCalendar as RangeCalendarPrimitive } from 'bits-ui';
 	import type { DateRange } from 'bits-ui';
 	import type { DateValue } from '@internationalized/date';
@@ -37,8 +38,7 @@
 		class: className
 	}: Props = $props();
 
-	const dayClass =
-		'rounded-kl-selector text-kl-base-content hover:bg-kl-base-200 data-[selection-start]:bg-kl-primary data-[selection-start]:text-kl-primary-content data-[selection-end]:bg-kl-primary data-[selection-end]:text-kl-primary-content data-[highlighted]:bg-kl-primary/15 data-[outside-month]:text-kl-muted-content data-[unavailable]:text-kl-muted-content data-[disabled]:text-kl-muted-content inline-flex size-10 items-center justify-center border-none bg-transparent text-sm transition-colors duration-150 data-[disabled]:pointer-events-none data-[today]:font-semibold data-[unavailable]:line-through';
+	const classes = rangeCalendarVariants();
 </script>
 
 <RangeCalendarPrimitive.Root
@@ -56,22 +56,15 @@
 	{onValueChange}
 	weekdayFormat="short"
 	fixedWeeks={true}
-	class={cn(
-		'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-sm inline-block border p-3',
-		className
-	)}
+	class={cn(classes.root(), className)}
 >
 	{#snippet children({ months, weekdays })}
 		<RangeCalendarPrimitive.Header class="mb-2 flex items-center justify-between">
-			<RangeCalendarPrimitive.PrevButton
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-			>
+			<RangeCalendarPrimitive.PrevButton class={classes.navButton()}>
 				<ChevronLeft size={16} />
 			</RangeCalendarPrimitive.PrevButton>
 			<RangeCalendarPrimitive.Heading class="text-kl-base-content text-sm font-medium" />
-			<RangeCalendarPrimitive.NextButton
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-			>
+			<RangeCalendarPrimitive.NextButton class={classes.navButton()}>
 				<ChevronRight size={16} />
 			</RangeCalendarPrimitive.NextButton>
 		</RangeCalendarPrimitive.Header>
@@ -98,7 +91,7 @@
 										month={month.value}
 										class="relative size-10 p-0 text-center text-sm"
 									>
-										<RangeCalendarPrimitive.Day class={dayClass}
+										<RangeCalendarPrimitive.Day class={classes.day()}
 											>{date.day}</RangeCalendarPrimitive.Day
 										>
 									</RangeCalendarPrimitive.Cell>

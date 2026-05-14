@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { menubarVariants } from './Menubar.variants';
 	import { Menubar as MenubarPrimitive } from 'bits-ui';
 
 	type MenubarItem = {
@@ -20,32 +21,21 @@
 
 	let { menus, onSelect, class: className }: Props = $props();
 
-	const itemClass =
-		'flex cursor-pointer items-center rounded-kl-selector px-3 py-2 text-sm text-kl-base-content transition-colors duration-150 outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[highlighted]:bg-kl-base-200';
+	const classes = menubarVariants();
 </script>
 
-<MenubarPrimitive.Root
-	class={cn(
-		'rounded-kl-field border-kl-base-300 bg-kl-base-100 h-kl-field-md inline-flex items-center gap-1 border p-1',
-		className
-	)}
->
+<MenubarPrimitive.Root class={cn(classes.root(), className)}>
 	{#each menus as menu (menu.label)}
 		<MenubarPrimitive.Menu>
-			<MenubarPrimitive.Trigger
-				class="rounded-kl-selector text-kl-base-content data-[highlighted]:bg-kl-base-200 data-[state=open]:bg-kl-base-200 h-full cursor-pointer px-3 text-sm font-medium transition-colors outline-none"
-			>
+			<MenubarPrimitive.Trigger class={classes.trigger()}>
 				{menu.label}
 			</MenubarPrimitive.Trigger>
 			<MenubarPrimitive.Portal>
-				<MenubarPrimitive.Content
-					sideOffset={6}
-					class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] min-w-40 border p-1 outline-none"
-				>
+				<MenubarPrimitive.Content sideOffset={6} class={classes.content()}>
 					{#each menu.items as item (item.value)}
 						<MenubarPrimitive.Item
 							disabled={item.disabled}
-							class={itemClass}
+							class={classes.item()}
 							onSelect={() => onSelect?.(item.value)}
 						>
 							{item.label}

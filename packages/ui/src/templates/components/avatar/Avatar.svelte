@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { avatarVariants, type AvatarSize } from './Avatar.variants';
 	import { Avatar } from 'bits-ui';
 	import { User } from 'lucide-svelte';
 
@@ -11,7 +12,7 @@
 		/** Fallback text (e.g. initials) shown when image is unavailable */
 		fallback?: string;
 		/** Avatar size */
-		size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+		size?: AvatarSize;
 		/** Whether the avatar is disabled (reduces opacity) */
 		disabled?: boolean;
 		/** Callback when the image load status changes */
@@ -30,24 +31,10 @@
 		class: className
 	}: Props = $props();
 
-	const sizeClass: Record<string, string> = {
-		xs: 'size-6 text-xs',
-		sm: 'size-8 text-sm',
-		md: 'size-10 text-sm',
-		lg: 'size-14 text-base',
-		xl: 'size-20 text-lg'
-	};
+	let rootClass = $derived(avatarVariants({ size, disabled }));
 </script>
 
-<Avatar.Root
-	{onLoadingStatusChange}
-	class={cn(
-		`rounded-kl-selector bg-kl-base-200 text-kl-muted-content relative inline-flex shrink-0 items-center justify-center overflow-hidden ${
-			sizeClass[size]
-		} ${disabled ? 'opacity-50' : ''}`,
-		className
-	)}
->
+<Avatar.Root {onLoadingStatusChange} class={cn(rootClass, className)}>
 	<Avatar.Fallback class="flex size-full items-center justify-center font-medium">
 		{#if fallback}
 			{fallback}

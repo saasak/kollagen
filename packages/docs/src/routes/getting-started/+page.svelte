@@ -26,6 +26,8 @@
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">lucide-svelte</code>
 			and
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">tailwind-merge</code>,
+			plus
+			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">tailwind-variants</code>,
 			then copies the base theme CSS with all
 			<code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs">--kl-*</code> tokens into
 			your project and creates

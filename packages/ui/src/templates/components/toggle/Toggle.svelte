@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { toggleVariants } from './Toggle.variants';
 	import { Toggle } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -25,14 +26,6 @@
 	}: Props = $props();
 </script>
 
-<Toggle.Root
-	bind:pressed
-	{disabled}
-	{onPressedChange}
-	class={cn(
-		`rounded-kl-selector border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 data-[state=on]:border-kl-primary data-[state=on]:bg-kl-primary data-[state=on]:text-kl-primary-content data-[focus]:outline-kl-primary h-kl-selector-md inline-flex cursor-pointer items-center gap-1.5 border px-3 text-sm font-medium transition-colors duration-150 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[focus]:outline`,
-		className
-	)}
->
+<Toggle.Root bind:pressed {disabled} {onPressedChange} class={cn(toggleVariants(), className)}>
 	{@render children?.()}
 </Toggle.Root>

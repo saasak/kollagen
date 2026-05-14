@@ -19,7 +19,8 @@
 		"@clack/prompts": "^0.10.0",
 		"commander": "^13.1.0",
 		"nypm": "^0.6.0",
-		"tailwind-merge": "^3.6.0"
+		"tailwind-merge": "^3.6.0",
+		"tailwind-variants": "^3.2.2"
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.8.2",

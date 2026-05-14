@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { separatorVariants } from './Separator.variants';
 	import { Separator as SeparatorPrimitive } from 'bits-ui';
 
 	interface Props {
@@ -14,9 +15,5 @@
 <SeparatorPrimitive.Root
 	{orientation}
 	{decorative}
-	class={cn(
-		'bg-kl-base-300 shrink-0',
-		orientation === 'vertical' ? 'h-full w-px' : 'h-px w-full',
-		className
-	)}
+	class={cn(separatorVariants({ orientation }), className)}
 />

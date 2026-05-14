@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { toggleGroupVariants } from './ToggleGroup.variants';
 	import { ToggleGroup as ToggleGroupPrimitive } from 'bits-ui';
 
 	type ToggleGroupItem = {
@@ -28,8 +29,7 @@
 		class: className
 	}: Props = $props();
 
-	const itemClass =
-		'rounded-kl-selector text-kl-base-content data-[state=on]:bg-kl-primary data-[state=on]:text-kl-primary-content hover:bg-kl-base-200 h-kl-field-sm cursor-pointer px-3 text-sm font-medium outline-none transition-colors data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50';
+	let classes = $derived(toggleGroupVariants({ orientation }));
 </script>
 
 {#if type === 'multiple'}
@@ -39,14 +39,10 @@
 		{disabled}
 		{orientation}
 		onValueChange={onValueChange as (value: string[]) => void}
-		class={cn(
-			'rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border p-1',
-			orientation === 'vertical' && 'flex-col',
-			className
-		)}
+		class={cn(classes.root(), className)}
 	>
 		{#each items as item (item.value)}
-			<ToggleGroupPrimitive.Item value={item.value} disabled={item.disabled} class={itemClass}>
+			<ToggleGroupPrimitive.Item value={item.value} disabled={item.disabled} class={classes.item()}>
 				{item.label}
 			</ToggleGroupPrimitive.Item>
 		{/each}
@@ -58,14 +54,10 @@
 		{disabled}
 		{orientation}
 		onValueChange={onValueChange as (value: string) => void}
-		class={cn(
-			'rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border p-1',
-			orientation === 'vertical' && 'flex-col',
-			className
-		)}
+		class={cn(classes.root(), className)}
 	>
 		{#each items as item (item.value)}
-			<ToggleGroupPrimitive.Item value={item.value} disabled={item.disabled} class={itemClass}>
+			<ToggleGroupPrimitive.Item value={item.value} disabled={item.disabled} class={classes.item()}>
 				{item.label}
 			</ToggleGroupPrimitive.Item>
 		{/each}

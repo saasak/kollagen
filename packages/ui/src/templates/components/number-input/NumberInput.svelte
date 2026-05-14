@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { numberInputVariants } from './NumberInput.variants';
 	import { ChevronUp, ChevronDown } from 'lucide-svelte';
 
 	interface ValueChangeDetails {
@@ -177,8 +178,8 @@
 		return formatNum(num);
 	});
 
-	const fieldShellClass =
-		'rounded-kl-field bg-kl-base-100 flex h-kl-field-md border transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset]';
+	const focusState = $derived(focused ? (invalid ? 'invalid' : 'valid') : undefined);
+	let classes = $derived(numberInputVariants({ disabled, invalid, focused: focusState }));
 </script>
 
 <div class={cn(`flex flex-col gap-1.5`, className)}>
@@ -191,17 +192,7 @@
 		</label>
 	{/if}
 
-	<div
-		class={cn(
-			fieldShellClass,
-			disabled && 'cursor-not-allowed opacity-50',
-			invalid && '[--kl-input-border:var(--kl-error)]',
-			focused &&
-				(invalid
-					? 'outline outline-[var(--kl-input-border)] [--kl-input-border:var(--kl-error)]'
-					: 'outline outline-[var(--kl-input-border)] [--kl-input-border:var(--kl-primary)]')
-		)}
-	>
+	<div class={classes.fieldShell()}>
 		<input
 			{id}
 			type="text"
@@ -222,7 +213,7 @@
 			onblur={handleBlur}
 			onkeydown={handleKeydown}
 			onwheel={handleWheel}
-			class="text-kl-base-content placeholder:text-kl-muted-content min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"
+			class={classes.input()}
 		/>
 
 		<div class="border-kl-base-300 flex flex-col border-l">
@@ -232,7 +223,7 @@
 				{disabled}
 				onclick={increment}
 				aria-label="Increment"
-				class="text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex h-1/2 items-center justify-center px-2 transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50"
+				class={classes.stepperButton()}
 			>
 				<ChevronUp size={14} />
 			</button>
@@ -245,7 +236,7 @@
 				{disabled}
 				onclick={decrement}
 				aria-label="Decrement"
-				class="text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex h-1/2 items-center justify-center px-2 transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50"
+				class={classes.stepperButton()}
 			>
 				<ChevronDown size={14} />
 			</button>

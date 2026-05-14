@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { calendarVariants } from './Calendar.variants';
 	import { Calendar as CalendarPrimitive } from 'bits-ui';
 	import type { DateValue } from '@internationalized/date';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
@@ -38,8 +39,7 @@
 		class: className
 	}: Props = $props();
 
-	const dayClass =
-		'rounded-kl-selector text-kl-base-content hover:bg-kl-base-200 data-[selected]:bg-kl-primary data-[selected]:text-kl-primary-content data-[outside-month]:text-kl-muted-content data-[unavailable]:text-kl-muted-content data-[disabled]:text-kl-muted-content inline-flex size-10 items-center justify-center border-none bg-transparent text-sm transition-colors duration-150 data-[disabled]:pointer-events-none data-[today]:font-semibold data-[unavailable]:line-through';
+	const classes = calendarVariants();
 </script>
 
 <CalendarPrimitive.Root
@@ -59,22 +59,15 @@
 	{onValueChange}
 	weekdayFormat="short"
 	fixedWeeks={true}
-	class={cn(
-		'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-sm inline-block border p-3',
-		className
-	)}
+	class={cn(classes.root(), className)}
 >
 	{#snippet children({ months, weekdays })}
 		<CalendarPrimitive.Header class="mb-2 flex items-center justify-between">
-			<CalendarPrimitive.PrevButton
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-			>
+			<CalendarPrimitive.PrevButton class={classes.navButton()}>
 				<ChevronLeft size={16} />
 			</CalendarPrimitive.PrevButton>
 			<CalendarPrimitive.Heading class="text-kl-base-content text-sm font-medium" />
-			<CalendarPrimitive.NextButton
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-			>
+			<CalendarPrimitive.NextButton class={classes.navButton()}>
 				<ChevronRight size={16} />
 			</CalendarPrimitive.NextButton>
 		</CalendarPrimitive.Header>
@@ -101,7 +94,7 @@
 										month={month.value}
 										class="relative size-10 p-0 text-center text-sm"
 									>
-										<CalendarPrimitive.Day class={dayClass}>{date.day}</CalendarPrimitive.Day>
+										<CalendarPrimitive.Day class={classes.day()}>{date.day}</CalendarPrimitive.Day>
 									</CalendarPrimitive.Cell>
 								{/each}
 							</CalendarPrimitive.GridRow>

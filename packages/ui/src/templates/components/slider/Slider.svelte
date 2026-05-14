@@ -1,17 +1,10 @@
 <script module lang="ts">
-	export type SliderColor =
-		| 'neutral'
-		| 'primary'
-		| 'secondary'
-		| 'accent'
-		| 'info'
-		| 'success'
-		| 'warning'
-		| 'error';
+	export type SliderColor = import('./Slider.variants').SliderColor;
 </script>
 
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { sliderVariants } from './Slider.variants';
 	import { Slider } from 'bits-ui';
 
 	interface Props {
@@ -66,26 +59,7 @@
 	}: Props = $props();
 
 	const isVertical = $derived(orientation === 'vertical');
-	const colorClasses: Record<SliderColor, string> = {
-		neutral: '[--kl-slider-fill:var(--kl-neutral)]',
-		primary: '[--kl-slider-fill:var(--kl-primary)]',
-		secondary: '[--kl-slider-fill:var(--kl-secondary)]',
-		accent: '[--kl-slider-fill:var(--kl-accent)]',
-		info: '[--kl-slider-fill:var(--kl-info)]',
-		success: '[--kl-slider-fill:var(--kl-success)]',
-		warning: '[--kl-slider-fill:var(--kl-warning)]',
-		error: '[--kl-slider-fill:var(--kl-error)]'
-	};
-	const radiusClass =
-		'[--kl-slider-radius:min(9999px,calc(var(--kl-radius-selector)+var(--kl-radius-selector)+var(--kl-radius-selector)+var(--kl-radius-selector)+var(--kl-radius-selector)+var(--kl-radius-selector)))]';
-	const trackClass =
-		'relative overflow-hidden rounded-[var(--kl-slider-radius)] bg-kl-base-300 [box-shadow:inset_0_1px_2px_color-mix(in_oklab,#000_calc(var(--kl-depth)*14%),#0000),0_1px_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))]';
-	const rangeClass =
-		'absolute bg-[var(--kl-slider-fill)] [background-image:none,var(--kl-fx-noise)] [background-size:auto,calc(var(--kl-noise)*100%)] [border-color:color-mix(in_oklab,var(--kl-slider-fill),#000_calc(var(--kl-depth)*5%))] [box-shadow:0_1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset]';
-	const thumbClass =
-		'box-border size-kl-selector-md rounded-[var(--kl-slider-radius)] border-[calc(var(--kl-size-selector)*1.25)] bg-kl-base-100 transition-[border-color,box-shadow,transform] outline-none [border-color:color-mix(in_oklab,var(--kl-slider-fill),#000_calc(var(--kl-depth)*5%))] [box-shadow:0_1px_2px_0_color-mix(in_oklab,#000_calc(var(--kl-depth)*20%),#0000),0_0_0_1px_oklch(100%_0_0/calc(var(--kl-depth)*35%))_inset] hover:[box-shadow:0_4px_8px_-4px_color-mix(in_oklab,#000_calc(var(--kl-depth)*32%),#0000),0_0_0_1px_oklch(100%_0_0/calc(var(--kl-depth)*35%))_inset] active:scale-95 focus-visible:outline focus-visible:outline-[var(--kl-slider-fill)]';
-	const markerTickClass = 'rounded-[var(--kl-slider-radius)] bg-kl-base-300';
-	const activeMarkerTickClass = 'bg-[var(--kl-slider-fill)]';
+	let classes = $derived(sliderVariants({ color, orientation, invalid, disabled }));
 
 	function getMarkerPercent(markerValue: number): number {
 		if (max === min) return 0;
@@ -112,9 +86,7 @@
 	}
 </script>
 
-<div
-	class={cn(`flex ${isVertical ? 'flex-col items-center' : 'w-full flex-col'} gap-2`, className)}
->
+<div class={cn(classes.outer(), className)}>
 	{#if label || showValue}
 		<div class="flex items-center justify-between text-sm">
 			{#if label}
@@ -142,45 +114,32 @@
 				{disabled}
 				{onValueChange}
 				{onValueCommit}
-				class={cn(
-					'w-kl-selector-md relative flex h-full items-center justify-center',
-					radiusClass,
-					colorClasses[color],
-					invalid && '[--kl-slider-fill:var(--kl-error)]',
-					disabled && '[--kl-slider-fill:var(--kl-muted-content)]'
-				)}
+				class={classes.root()}
 			>
 				{#snippet children({ thumbItems })}
-					<span class="{trackClass} h-full w-kl-selector-md{disabled ? ' opacity-50' : ''}">
-						<Slider.Range class="{rangeClass} w-full" />
+					<span class={cn(classes.track(), 'w-kl-selector-md h-full')}>
+						<Slider.Range class={cn(classes.range(), 'w-full')} />
 					</span>
 
 					{#each thumbItems as { index } (index)}
-						<Slider.Thumb
-							{index}
-							class="{thumbClass}{disabled ? ' cursor-not-allowed opacity-80' : ''}"
-						/>
+						<Slider.Thumb {index} class={classes.thumb()} />
 					{/each}
 				{/snippet}
 			</Slider.Root>
 
 			{#if markers?.length}
-				<div
-					class={cn(
-						'relative h-full w-12',
-						colorClasses[color],
-						invalid && '[--kl-slider-fill:var(--kl-error)]'
-					)}
-				>
+				<div class={cn(classes.markerContainer(), 'relative h-full w-12')}>
 					{#each markers as markerValue (markerValue)}
 						<span
 							class="absolute left-0 flex items-center gap-2 text-xs"
 							style={getVerticalMarkerStyle(markerValue)}
 						>
 							<span
-								class="{markerTickClass} h-px w-2 {isMarkerActive(markerValue)
-									? activeMarkerTickClass
-									: ''}"
+								class={cn(
+									classes.markerTick(),
+									'h-px w-2',
+									isMarkerActive(markerValue) && classes.activeMarkerTick()
+								)}
 							></span>
 							<span class="text-kl-muted-content">{markerValue}</span>
 						</span>
@@ -199,45 +158,32 @@
 			{disabled}
 			{onValueChange}
 			{onValueCommit}
-			class={cn(
-				'relative flex w-full items-center py-1',
-				radiusClass,
-				colorClasses[color],
-				invalid && '[--kl-slider-fill:var(--kl-error)]',
-				disabled && '[--kl-slider-fill:var(--kl-muted-content)]'
-			)}
+			class={classes.root()}
 		>
 			{#snippet children({ thumbItems })}
-				<span class="{trackClass} h-kl-selector-md w-full{disabled ? ' opacity-50' : ''}">
-					<Slider.Range class="{rangeClass} h-full" />
+				<span class={cn(classes.track(), 'h-kl-selector-md w-full')}>
+					<Slider.Range class={cn(classes.range(), 'h-full')} />
 				</span>
 
 				{#each thumbItems as { index } (index)}
-					<Slider.Thumb
-						{index}
-						class="{thumbClass}{disabled ? ' cursor-not-allowed opacity-80' : ''}"
-					/>
+					<Slider.Thumb {index} class={classes.thumb()} />
 				{/each}
 			{/snippet}
 		</Slider.Root>
 
 		{#if markers?.length}
-			<div
-				class={cn(
-					'relative h-6 w-full',
-					colorClasses[color],
-					invalid && '[--kl-slider-fill:var(--kl-error)]'
-				)}
-			>
+			<div class={cn(classes.markerContainer(), 'relative h-6 w-full')}>
 				{#each markers as markerValue (markerValue)}
 					<span
 						class="absolute top-0 flex min-w-max flex-col items-center gap-1 text-xs"
 						style={getHorizontalMarkerStyle(markerValue)}
 					>
 						<span
-							class="{markerTickClass} h-1.5 w-px {isMarkerActive(markerValue)
-								? activeMarkerTickClass
-								: ''}"
+							class={cn(
+								classes.markerTick(),
+								'h-1.5 w-px',
+								isMarkerActive(markerValue) && classes.activeMarkerTick()
+							)}
 						></span>
 						<span class="text-kl-muted-content">{markerValue}</span>
 					</span>

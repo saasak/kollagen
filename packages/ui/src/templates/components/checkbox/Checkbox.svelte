@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { checkboxVariants } from './Checkbox.variants';
 	import { Checkbox } from 'bits-ui';
 	import { Check, Minus } from 'lucide-svelte';
 
@@ -39,18 +40,10 @@
 		class: className
 	}: Props = $props();
 
-	const controlClass =
-		'rounded-kl-selector bg-kl-base-100 data-[state=checked]:bg-kl-primary data-[state=indeterminate]:bg-kl-primary data-[state=checked]:[--kl-check-border:color-mix(in_oklab,var(--kl-primary),#000_calc(var(--kl-depth)*5%))] data-[state=indeterminate]:[--kl-check-border:color-mix(in_oklab,var(--kl-primary),#000_calc(var(--kl-depth)*5%))] data-[focus]:[--kl-check-border:var(--kl-primary)] data-[focus]:outline-kl-primary flex size-kl-selector-md shrink-0 items-center justify-center border p-0 text-[0] leading-none transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-check-border:var(--kl-base-300)] [border-color:var(--kl-check-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-check-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] data-[focus]:outline [&_svg]:block';
+	let classes = $derived(checkboxVariants({ disabled }));
 </script>
 
-<label
-	class={cn(
-		`relative inline-flex cursor-pointer items-center gap-2 select-none ${
-			disabled ? 'cursor-not-allowed opacity-50' : ''
-		}`,
-		className
-	)}
->
+<label class={cn(classes.root(), className)}>
 	<Checkbox.Root
 		bind:checked
 		bind:indeterminate
@@ -60,7 +53,7 @@
 		{required}
 		{readonly}
 		{onCheckedChange}
-		class={controlClass}
+		class={classes.control()}
 	>
 		{#snippet children({ checked: isChecked, indeterminate: isIndeterminate })}
 			<span class="relative block size-3.5 shrink-0">
@@ -68,26 +61,18 @@
 					size={14}
 					strokeWidth={3}
 					aria-hidden="true"
-					class={cn(
-						'text-kl-primary-content absolute inset-0 transition-opacity duration-100',
-						isIndeterminate ? 'opacity-100' : 'opacity-0'
-					)}
+					class={checkboxVariants({ visible: isIndeterminate }).icon()}
 				/>
 				<Check
 					size={14}
 					strokeWidth={3}
 					aria-hidden="true"
-					class={cn(
-						'text-kl-primary-content absolute inset-0 transition-opacity duration-100',
-						isChecked && !isIndeterminate ? 'opacity-100' : 'opacity-0'
-					)}
+					class={checkboxVariants({ visible: isChecked && !isIndeterminate }).icon()}
 				/>
 			</span>
 		{/snippet}
 	</Checkbox.Root>
 	{#if label}
-		<span class="text-kl-base-content text-sm {disabled ? 'text-kl-muted-content' : ''}"
-			>{label}</span
-		>
+		<span class={classes.label()}>{label}</span>
 	{/if}
 </label>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { dateRangePickerVariants } from './DateRangePicker.variants';
 	import { DateRangePicker } from 'bits-ui';
 	import type { DateRange, SegmentPart } from 'bits-ui';
 	import type { DateValue } from '@internationalized/date';
@@ -48,10 +49,7 @@
 	}: Props = $props();
 
 	let open = $state(false);
-	const fieldShellClass =
-		'rounded-kl-field bg-kl-base-100 flex h-kl-field-md items-center border px-3 transition-[color,background-color,border-color,box-shadow,outline-color] duration-150 [--kl-input-border:var(--kl-base-300)] [border-color:var(--kl-input-border)] [box-shadow:0_1px_0_0_color-mix(in_oklab,var(--kl-input-border)_calc(var(--kl-depth)*35%),#0000)_inset,0_-1px_0_0_oklch(100%_0_0/calc(var(--kl-depth)*8%))_inset] focus-within:[--kl-input-border:var(--kl-primary)] focus-within:outline focus-within:outline-[var(--kl-input-border)]';
-	const dayClass =
-		'rounded-kl-selector text-kl-base-content hover:bg-kl-base-200 data-[selection-start]:bg-kl-primary data-[selection-start]:text-kl-primary-content data-[selection-end]:bg-kl-primary data-[selection-end]:text-kl-primary-content data-[highlighted]:bg-kl-primary/15 data-[outside-month]:text-kl-muted-content data-[unavailable]:text-kl-muted-content data-[disabled]:text-kl-muted-content inline-flex size-10 items-center justify-center border-none bg-transparent text-sm transition-colors duration-150 data-[disabled]:pointer-events-none data-[today]:font-semibold data-[unavailable]:line-through';
+	let classes = $derived(dateRangePickerVariants({ disabled }));
 </script>
 
 {#snippet inputSegments(segments: Array<{ part: SegmentPart; value: string }>)}
@@ -61,10 +59,7 @@
 				{segmentValue}
 			</DateRangePicker.Segment>
 		{:else}
-			<DateRangePicker.Segment
-				{part}
-				class="text-kl-base-content hover:bg-kl-base-200 focus:bg-kl-primary focus:text-kl-primary-content rounded-kl-selector px-0.5 text-sm outline-none"
-			>
+			<DateRangePicker.Segment {part} class={classes.segment()}>
 				{segmentValue}
 			</DateRangePicker.Segment>
 		{/if}
@@ -91,7 +86,7 @@
 	fixedWeeks={true}
 >
 	<div class={cn('relative w-full', className)}>
-		<div class={cn(fieldShellClass, disabled && 'cursor-not-allowed opacity-50')}>
+		<div class={classes.fieldShell()}>
 			<DateRangePicker.Input name={startName} type="start" aria-label={ariaLabel}>
 				{#snippet children({ segments })}
 					{@render inputSegments(segments)}
@@ -103,30 +98,21 @@
 					{@render inputSegments(segments)}
 				{/snippet}
 			</DateRangePicker.Input>
-			<DateRangePicker.Trigger
-				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md ml-auto flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-			>
+			<DateRangePicker.Trigger class={classes.trigger()}>
 				<Calendar size={16} />
 			</DateRangePicker.Trigger>
 		</div>
 	</div>
 
-	<DateRangePicker.Content
-		sideOffset={6}
-		class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md z-[var(--kl-z-dropdown)] border p-3"
-	>
+	<DateRangePicker.Content sideOffset={6} class={classes.content()}>
 		<DateRangePicker.Calendar>
 			{#snippet children({ months, weekdays })}
 				<DateRangePicker.Header class="mb-2 flex items-center justify-between">
-					<DateRangePicker.PrevButton
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-					>
+					<DateRangePicker.PrevButton class={classes.iconButton()}>
 						<ChevronLeft size={16} />
 					</DateRangePicker.PrevButton>
 					<DateRangePicker.Heading class="text-kl-base-content text-sm font-medium" />
-					<DateRangePicker.NextButton
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content size-kl-selector-md flex cursor-pointer items-center justify-center border-none bg-transparent p-0 transition-colors duration-150"
-					>
+					<DateRangePicker.NextButton class={classes.iconButton()}>
 						<ChevronRight size={16} />
 					</DateRangePicker.NextButton>
 				</DateRangePicker.Header>
@@ -153,7 +139,7 @@
 												month={month.value}
 												class="relative size-10 p-0 text-center text-sm"
 											>
-												<DateRangePicker.Day class={dayClass}>{date.day}</DateRangePicker.Day>
+												<DateRangePicker.Day class={classes.day()}>{date.day}</DateRangePicker.Day>
 											</DateRangePicker.Cell>
 										{/each}
 									</DateRangePicker.GridRow>
