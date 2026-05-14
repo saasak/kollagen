@@ -18,9 +18,29 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/accordion' }]
 			},
 			{
+				name: 'alert',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/alert' }]
+			},
+			{
+				name: 'alert-dialog',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/alert-dialog' }]
+			},
+			{
+				name: 'aspect-ratio',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/aspect-ratio' }]
+			},
+			{
 				name: 'breadcrumb',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/breadcrumb' }]
+			},
+			{
+				name: 'badge',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/badge' }]
 			},
 			{
 				name: 'button',
@@ -31,6 +51,11 @@ export default defineConfig({
 				name: 'button-group',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/button-group' }]
+			},
+			{
+				name: 'calendar',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/calendar' }]
 			},
 			{
 				name: 'card',
@@ -63,9 +88,34 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/combobox' }]
 			},
 			{
+				name: 'command',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/command' }]
+			},
+			{
+				name: 'context-menu',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/context-menu' }]
+			},
+			{
 				name: 'date-picker',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/date-picker' }]
+			},
+			{
+				name: 'date-field',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/date-field' }]
+			},
+			{
+				name: 'date-range-field',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/date-range-field' }]
+			},
+			{
+				name: 'date-range-picker',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/date-range-picker' }]
 			},
 			{
 				name: 'data-table',
@@ -89,6 +139,11 @@ export default defineConfig({
 				name: 'drawer',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/drawer' }]
+			},
+			{
+				name: 'empty',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/empty' }]
 			},
 			{
 				name: 'editable',
@@ -116,14 +171,50 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/hover-card' }]
 			},
 			{
+				name: 'input',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/input' }]
+			},
+			{
+				name: 'input-group',
+				type: 'component',
+				registryDependencies: ['input', 'textarea'],
+				files: [{ path: 'packages/ui/src/templates/components/input-group' }]
+			},
+			{
+				name: 'item',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/item' }]
+			},
+			{
+				name: 'kbd',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/kbd' }]
+			},
+			{
+				name: 'label',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/label' }]
+			},
+			{
 				name: 'marquee',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/marquee' }]
 			},
 			{
+				name: 'menubar',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/menubar' }]
+			},
+			{
 				name: 'menu',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/menu' }]
+			},
+			{
+				name: 'meter',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/meter' }]
 			},
 			{
 				name: 'modal',
@@ -136,9 +227,24 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/number-input' }]
 			},
 			{
+				name: 'native-select',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/native-select' }]
+			},
+			{
+				name: 'navigation-menu',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/navigation-menu' }]
+			},
+			{
 				name: 'pagination',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/pagination' }]
+			},
+			{
+				name: 'progress',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/progress' }]
 			},
 			{
 				name: 'password-input',
@@ -166,6 +272,11 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/radio-group' }]
 			},
 			{
+				name: 'range-calendar',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/range-calendar' }]
+			},
+			{
 				name: 'rating-group',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/rating-group' }]
@@ -181,9 +292,24 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/select' }]
 			},
 			{
+				name: 'separator',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/separator' }]
+			},
+			{
 				name: 'slider',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/slider' }]
+			},
+			{
+				name: 'skeleton',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/skeleton' }]
+			},
+			{
+				name: 'spinner',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/spinner' }]
 			},
 			{
 				name: 'splitter',
@@ -199,6 +325,11 @@ export default defineConfig({
 				name: 'switch',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/switch' }]
+			},
+			{
+				name: 'table',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/table' }]
 			},
 			{
 				name: 'tabs',
@@ -226,9 +357,24 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/toggle' }]
 			},
 			{
+				name: 'toggle-group',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/toggle-group' }]
+			},
+			{
+				name: 'toolbar',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/toolbar' }]
+			},
+			{
 				name: 'tooltip',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/tooltip' }]
+			},
+			{
+				name: 'textarea',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/textarea' }]
 			},
 			{
 				name: 'tree-view',

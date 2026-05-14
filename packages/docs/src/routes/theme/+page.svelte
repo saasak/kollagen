@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { Accordion } from '$ui/accordion';
+	import { Alert } from '$ui/alert';
+	import { Badge } from '$ui/badge';
 	import { Button } from '$ui/button';
 	import { ButtonGroup } from '$ui/button-group';
 	import { Card } from '$ui/card';
@@ -18,11 +20,14 @@
 	import { NumberInput } from '$ui/number-input';
 	import { Pagination } from '$ui/pagination';
 	import { PasswordInput } from '$ui/password-input';
+	import { Progress } from '$ui/progress';
 	import { QrCode } from '$ui/qr-code';
 	import { RadioGroup } from '$ui/radio-group';
 	import { RatingGroup } from '$ui/rating-group';
+	import { Separator } from '$ui/separator';
 	import { Select } from '$ui/select';
 	import { Slider } from '$ui/slider';
+	import { Skeleton } from '$ui/skeleton';
 	import { Steps } from '$ui/steps';
 	import { Switch } from '$ui/switch';
 	import { Tabs } from '$ui/tabs';
@@ -577,15 +582,13 @@
 {/snippet}
 
 {#snippet statusCell(_row: Order, value: unknown)}
-	<span
-		class="rounded-kl-selector inline-flex px-2 py-1 text-xs font-medium {value === 'Paid'
-			? 'bg-kl-success text-kl-success-content'
-			: value === 'Pending'
-				? 'bg-kl-warning text-kl-warning-content'
-				: 'bg-kl-error text-kl-error-content'}"
-	>
-		{value}
-	</span>
+	{#if value === 'Paid'}
+		<Badge color="success">{value}</Badge>
+	{:else if value === 'Pending'}
+		<Badge color="warning">{value}</Badge>
+	{:else}
+		<Badge color="error">{value}</Badge>
+	{/if}
 {/snippet}
 
 {#snippet totalCell(_row: Order, value: unknown)}
@@ -606,11 +609,7 @@
 							</p>
 							<h1 class="mt-1 text-2xl font-bold capitalize">{snapshot.themeName}</h1>
 						</div>
-						<span
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-muted-content border px-2.5 py-1 text-xs font-medium capitalize"
-						>
-							{snapshot.modeName}
-						</span>
+						<Badge variant="outline" class="capitalize">{snapshot.modeName}</Badge>
 					</div>
 					<div
 						class="rounded-kl-box border-kl-base-300 mt-4 grid grid-cols-3 overflow-hidden border"
@@ -926,6 +925,21 @@
 								</div>
 							{/each}
 						</div>
+						<Separator class="my-4" />
+						<div class="grid gap-3 sm:grid-cols-[1fr_1fr]">
+							<div class="space-y-2">
+								<div class="flex items-center justify-between gap-3">
+									<span class="text-sm font-medium">Registry sync</span>
+									<Badge color="success" variant="soft">Healthy</Badge>
+								</div>
+								<Progress value={68} color="primary" />
+							</div>
+							<div class="space-y-2">
+								<Skeleton class="h-4 w-28" />
+								<Skeleton class="h-4 w-44" />
+								<Skeleton class="h-8 w-full" />
+							</div>
+						</div>
 					</Card>
 				</div>
 			</section>
@@ -1023,11 +1037,7 @@
 									<p class="text-kl-muted-content text-sm">Scale plan</p>
 									<p class="mt-1 text-3xl font-bold">$249</p>
 								</div>
-								<span
-									class="rounded-kl-selector bg-kl-accent text-kl-accent-content px-2 py-1 text-xs font-medium"
-								>
-									Popular
-								</span>
+								<Badge color="accent">Popular</Badge>
 							</div>
 							<div class="space-y-2 text-sm">
 								<Checkbox checked label="Unlimited previews" />
@@ -1154,6 +1164,9 @@
 					<Card title="Share package" description="Copy and QR surfaces.">
 						<div class="space-y-4">
 							<Clipboard label="Install command" value="npx kollagen add button card tabs" />
+							<Alert variant="info" title="Preview channel">
+								This theme is ready for visual regression checks.
+							</Alert>
 							<div class="flex items-center gap-4">
 								<QrCode value="https://kollagen.saasak.dev/theme" pixelSize={112} />
 								<div>
