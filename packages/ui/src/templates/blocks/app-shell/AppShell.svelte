@@ -3,7 +3,7 @@
 	import { ChevronLeft, ChevronRight, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { SidebarNavigation } from '../sidebar';
+	import { NavigationList } from '../../components/navigation-list';
 	import { getAppShellContext } from './context.svelte';
 	import type { NavAction, NavBarPosition, NavBrand, NavItem, RegisteredNavBar } from './types';
 
@@ -129,7 +129,7 @@
 	{/if}
 {/snippet}
 
-{#snippet horizontalItem(item: NavItem)}
+{#snippet horizontalItem(item: NavItem, position: 'top' | 'bottom' = 'top')}
 	{@const Icon = item.icon}
 	{@const active = isActive(item)}
 	<div class="group/nav relative">
@@ -153,7 +153,10 @@
 		</a>
 		{#if item.children?.length}
 			<div
-				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md invisible absolute top-full left-0 z-[var(--kl-z-dropdown)] mt-2 w-64 border p-2 opacity-0 transition group-focus-within/nav:visible group-focus-within/nav:opacity-100 group-hover/nav:visible group-hover/nav:opacity-100"
+				class={cn(
+					'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md invisible absolute left-0 z-[var(--kl-z-dropdown)] w-64 border p-2 opacity-0 transition group-focus-within/nav:visible group-focus-within/nav:opacity-100 group-hover/nav:visible group-hover/nav:opacity-100',
+					position === 'top' ? 'top-full mt-2' : 'bottom-full mb-2'
+				)}
 			>
 				{#each item.children as child (child.href)}
 					<a
@@ -179,7 +182,10 @@
 	</div>
 {/snippet}
 
-{#snippet horizontalNavigation(navbar: RegisteredNavBar | undefined)}
+{#snippet horizontalNavigation(
+	navbar: RegisteredNavBar | undefined,
+	position: 'top' | 'bottom' = 'top'
+)}
 	{#if navbar?.groups.length}
 		<nav
 			class="flex min-w-0 items-center justify-center gap-1"
@@ -187,7 +193,7 @@
 		>
 			{#each navbar.groups as group, groupIndex (group.label ?? groupIndex)}
 				{#each group.items as item (item.href)}
-					{@render horizontalItem(item)}
+					{@render horizontalItem(item, position)}
 				{/each}
 			{/each}
 		</nav>
@@ -256,9 +262,9 @@
 				<div
 					role="menu"
 					class={cn(
-						'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md absolute z-[var(--kl-z-dropdown)] mt-2 min-w-48 border p-1',
+						'rounded-kl-box border-kl-base-300 bg-kl-base-100 shadow-kl-md absolute z-[var(--kl-z-dropdown)] min-w-48 border p-1',
 						navbar.position === 'right' ? 'right-0' : 'left-0',
-						navbar.position === 'left' || navbar.position === 'right' ? 'bottom-full mt-0 mb-2' : ''
+						navbar.position === 'top' ? 'top-full mt-2' : 'bottom-full mb-2'
 					)}
 				>
 					{#each menu.items ?? [] as item (item.label)}
@@ -409,7 +415,7 @@
 				{@render brandContent(navbar.brand)}
 			</div>
 			<div class="min-w-0">
-				{@render horizontalNavigation(navbar)}
+				{@render horizontalNavigation(navbar, position)}
 			</div>
 			<div class="flex min-w-0 justify-end">
 				{#if navbar.userMenu}
@@ -470,7 +476,7 @@
 					{#if navbar.collapsible}
 						<button
 							type="button"
-							aria-label="Expand sidebar"
+							aria-label="Expand navigation"
 							onclick={() => shell.toggleCollapsed(side)}
 							class="rounded-kl-field text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex size-10 shrink-0 items-center justify-center transition-colors"
 						>
@@ -488,7 +494,7 @@
 					{#if navbar.collapsible}
 						<button
 							type="button"
-							aria-label="Collapse sidebar"
+							aria-label="Collapse navigation"
 							onclick={() => shell.toggleCollapsed(side)}
 							class="rounded-kl-field text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex size-8 shrink-0 items-center justify-center transition-colors"
 						>
@@ -503,7 +509,7 @@
 			</div>
 		{/if}
 
-		<SidebarNavigation
+		<NavigationList
 			groups={navbar.groups}
 			currentPath={shell.currentPath}
 			{collapsed}
@@ -526,7 +532,7 @@
 					{navbar.label}
 				</h2>
 			{/if}
-			<SidebarNavigation
+			<NavigationList
 				groups={navbar.groups}
 				currentPath={shell.currentPath}
 				onNavigate={closeMobileNavigation}

@@ -247,6 +247,11 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/navigation-menu' }]
 			},
 			{
+				name: 'navigation-list',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/navigation-list' }]
+			},
+			{
 				name: 'pagination',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/pagination' }]
@@ -412,17 +417,12 @@ export default defineConfig({
 				name: 'app-shell',
 				type: 'block',
 				files: [{ path: 'packages/ui/src/templates/blocks/app-shell' }],
-				registryDependencies: ['sidebar']
+				registryDependencies: ['navigation-list']
 			},
 			{
 				name: 'chat-panel',
 				type: 'block',
 				files: [{ path: 'packages/ui/src/templates/blocks/chat-panel' }]
-			},
-			{
-				name: 'sidebar',
-				type: 'block',
-				files: [{ path: 'packages/ui/src/templates/blocks/sidebar' }]
 			}
 		],
 		defaultPaths: {

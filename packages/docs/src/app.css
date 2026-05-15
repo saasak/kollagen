@@ -16,3 +16,4 @@
 @import '$theme/coffee.css';
 
 @source '../../ui/src/templates/components';
+@source '../../ui/src/templates/blocks';

@@ -1,4 +1,4 @@
-import { createContext } from 'svelte';
+import { getContext, hasContext, setContext } from 'svelte';
 import type { MobileBarPosition, NavBarPosition, RegisteredNavBar } from './types';
 
 export class AppShellState {
@@ -71,4 +71,22 @@ export class AppShellState {
 	}
 }
 
-export const [getAppShellContext, setAppShellContext] = createContext<AppShellState>();
+const APP_SHELL_CONTEXT = Symbol('app-shell');
+
+export function getAppShellContext() {
+	const context = tryGetAppShellContext();
+
+	if (!context) {
+		throw new Error('AppShell must be rendered inside AppShellProvider.');
+	}
+
+	return context;
+}
+
+export function tryGetAppShellContext() {
+	return hasContext(APP_SHELL_CONTEXT) ? getContext<AppShellState>(APP_SHELL_CONTEXT) : undefined;
+}
+
+export function setAppShellContext(context: AppShellState) {
+	return setContext(APP_SHELL_CONTEXT, context);
+}

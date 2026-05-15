@@ -43,6 +43,7 @@ export const componentNav = [
 	{ label: 'Meter', href: '/components/meter' },
 	{ label: 'Modal', href: '/components/modal' },
 	{ label: 'NativeSelect', href: '/components/native-select' },
+	{ label: 'NavigationList', href: '/components/navigation-list' },
 	{ label: 'NavigationMenu', href: '/components/navigation-menu' },
 	{ label: 'NumberInput', href: '/components/number-input' },
 	{ label: 'Pagination', href: '/components/pagination' },
@@ -81,5 +82,5 @@ export const componentNav = [
 export const blockNav = [
 	{ label: 'AppShell', href: '/blocks/app-shell' },
 	{ label: 'Chat Panel', href: '/blocks/chat-panel' },
-	{ label: 'Sidebar', href: '/blocks/sidebar' }
+	{ label: 'NavBars', href: '/blocks/navbars' }
 ];

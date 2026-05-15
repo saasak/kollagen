@@ -103,7 +103,7 @@
 						</a>
 
 						{#if item.children?.length && !collapsed}
-							<div class="border-kl-base-300 ml-4 space-y-0.5 border-l pl-2">
+							<div class="ml-4 space-y-0.5 pl-2">
 								{#each item.children as child (child.href)}
 									{@const ChildIcon = child.icon}
 									{@const childActive = isSelfActive(child)}

@@ -25,9 +25,3 @@ export interface NavGroup {
 	label?: string;
 	items: NavItem[];
 }
-
-export type SidebarMatch = NavMatch;
-export type SidebarIconProps = NavIconProps;
-export type SidebarIcon = NavIcon;
-export type SidebarItem = NavItem;
-export type SidebarGroup = NavGroup;

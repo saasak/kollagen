@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Sidebar, SidebarNavigation, type NavGroup } from '$blocks/sidebar';
+	import { NavigationList, type NavGroup } from '$ui/navigation-list';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import {
@@ -71,15 +71,21 @@
 			type: '() => void',
 			default: '—',
 			description: 'Called after a link click'
+		},
+		{
+			name: 'label',
+			type: 'string',
+			default: '"Navigation"',
+			description: 'Accessible nav label'
 		}
 	];
 </script>
 
 <div class="space-y-8">
 	<div>
-		<h1 class="text-3xl font-bold">Sidebar</h1>
+		<h1 class="text-3xl font-bold">NavigationList</h1>
 		<p class="text-kl-muted-content mt-2">
-			Vertical navigation primitives used by sidebars and the mobile AppShell navigation.
+			Vertical navigation renderer used by SideNavBar and AppShell mobile drawers.
 		</p>
 	</div>
 
@@ -87,65 +93,26 @@
 		<h2 class="text-xl font-semibold">Examples</h2>
 
 		<DemoCard
-			title="Dashboard sidebar"
-			description="The wrapper keeps header/footer slots while delegating navigation to SidebarNavigation."
-			code={`<Sidebar {groups} currentPath="/dashboard/crm/deals">
-  {#snippet header()}...{/snippet}
-  {#snippet footer()}...{/snippet}
-</Sidebar>`}
+			title="Expanded"
+			description="Grouped vertical navigation with nested links and badges."
+			code={`<NavigationList {groups} currentPath="/dashboard/crm/deals" />`}
 		>
 			<div
-				class="rounded-kl-box border-kl-base-300 bg-kl-base-200 h-[680px] overflow-hidden border"
+				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] overflow-hidden border"
 			>
-				<Sidebar {groups} currentPath="/dashboard/crm/deals">
-					{#snippet header()}
-						<div class="flex items-center gap-2">
-							<div
-								class="rounded-kl-selector bg-kl-primary text-kl-primary-content flex size-9 items-center justify-center font-bold"
-							>
-								N
-							</div>
-							<div class="min-w-0">
-								<div class="truncate text-sm font-semibold">Nexus</div>
-								<div class="text-kl-muted-content truncate text-xs">Operations</div>
-							</div>
-						</div>
-					{/snippet}
-
-					{#snippet footer()}
-						<div class="flex items-center gap-2">
-							<div
-								class="bg-kl-secondary text-kl-secondary-content flex size-8 items-center justify-center rounded-full text-xs font-semibold"
-							>
-								DN
-							</div>
-							<div class="min-w-0">
-								<div class="truncate text-sm font-medium">Denish N</div>
-								<div class="text-kl-muted-content truncate text-xs">@withden</div>
-							</div>
-						</div>
-					{/snippet}
-				</Sidebar>
+				<NavigationList {groups} currentPath="/dashboard/crm/deals" />
 			</div>
 		</DemoCard>
 
 		<DemoCard
-			title="Navigation renderer"
-			description="Use SidebarNavigation directly when a shell owns the surrounding chrome."
-			code={`<SidebarNavigation {groups} currentPath="/dashboard/crm" />
-<SidebarNavigation {groups} currentPath="/dashboard/crm" collapsed />`}
+			title="Collapsed"
+			description="Icon-only rendering for condensed side navigation."
+			code={`<NavigationList {groups} currentPath="/dashboard/crm" collapsed />`}
 		>
-			<div class="grid gap-4 lg:grid-cols-[16rem_4rem]">
-				<div
-					class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] overflow-hidden border"
-				>
-					<SidebarNavigation {groups} currentPath="/dashboard/crm" />
-				</div>
-				<div
-					class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] overflow-hidden border"
-				>
-					<SidebarNavigation {groups} currentPath="/dashboard/crm" collapsed />
-				</div>
+			<div
+				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] w-16 overflow-hidden border"
+			>
+				<NavigationList {groups} currentPath="/dashboard/crm" collapsed />
 			</div>
 		</DemoCard>
 	</section>

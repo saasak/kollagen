@@ -1,5 +1,5 @@
 import type { Component, ComponentType, SvelteComponent } from 'svelte';
-import type { NavGroup, NavIcon, NavItem, NavMatch } from '../sidebar';
+import type { NavGroup, NavIcon, NavItem, NavMatch } from '../../components/navigation-list';
 
 export type NavBarPosition = 'top' | 'bottom' | 'left' | 'right';
 export type MobileBarPosition = 'top' | 'bottom';

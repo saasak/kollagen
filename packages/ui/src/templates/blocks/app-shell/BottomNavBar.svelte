@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { getAppShellContext } from './context.svelte';
+	import { tryGetAppShellContext } from './context.svelte';
+	import HorizontalNavBar from './HorizontalNavBar.svelte';
 	import type { NavAction, NavBrand, NavGroup, NavUserMenu } from './types';
 
 	interface Props {
@@ -14,12 +15,27 @@
 		action?: NavAction;
 		/** Optional right-side user menu */
 		userMenu?: NavUserMenu;
+		/** Current URL pathname used in standalone mode */
+		currentPath?: string;
+		/** Accessible label for the standalone mobile menu button */
+		menuLabel?: string;
+		/** Additional CSS classes in standalone mode */
+		class?: string;
 	}
 
-	let { label = 'Bottom navigation', brand, groups = [], action, userMenu }: Props = $props();
+	let {
+		label = 'Bottom navigation',
+		brand,
+		groups = [],
+		action,
+		userMenu,
+		currentPath = '',
+		menuLabel = 'Open navigation',
+		class: className
+	}: Props = $props();
 
-	const shell = getAppShellContext();
-	const unregister = shell.register({
+	const shell = tryGetAppShellContext();
+	const unregister = shell?.register({
 		position: 'bottom',
 		get label() {
 			return label;
@@ -38,5 +54,19 @@
 		}
 	});
 
-	onDestroy(unregister);
+	onDestroy(() => unregister?.());
 </script>
+
+{#if !shell}
+	<HorizontalNavBar
+		position="bottom"
+		{label}
+		{brand}
+		{groups}
+		{action}
+		{userMenu}
+		{currentPath}
+		{menuLabel}
+		class={className}
+	/>
+{/if}

@@ -16,8 +16,10 @@
 		LayoutDashboard,
 		LogOut,
 		MessageSquare,
+		Settings,
 		ShoppingBag
 	} from 'lucide-svelte';
+	import type { NavAction, NavBrand, NavUserMenu } from '$blocks/app-shell';
 
 	const sidebarGroups: NavGroup[] = [
 		{
@@ -65,6 +67,20 @@
 		}
 	];
 
+	const demoBrand: NavBrand = { label: 'Nexus', logoSrc: '/favicon.png', href: '/dashboard' };
+
+	const userMenu: NavUserMenu = {
+		name: 'Denish N',
+		email: 'owner@nexus.test',
+		initials: 'DN',
+		items: [
+			{ label: 'Settings', icon: Settings },
+			{ label: 'Log out', icon: LogOut, tone: 'error' }
+		]
+	};
+
+	const upgradeAction: NavAction = { label: 'Upgrade', href: '/billing', color: 'primary' };
+
 	const providerProps = [
 		{
 			name: 'currentPath',
@@ -98,6 +114,8 @@
 	];
 
 	const navProps = [
+		{ name: 'side', type: '"left" | "right"', default: '"left"', description: 'SideNavBar side' },
+		{ name: 'label', type: 'string', default: '—', description: 'Accessible navigation label' },
 		{ name: 'brand', type: 'NavBrand', default: '—', description: 'Logo and brand area' },
 		{ name: 'groups', type: 'NavGroup[]', default: '[]', description: 'Navigation data' },
 		{
@@ -106,12 +124,29 @@
 			default: '—',
 			description: 'Right-side button for top/bottom bars'
 		},
-		{ name: 'userMenu', type: 'NavUserMenu', default: '—', description: 'Avatar dropdown menu' },
+		{
+			name: 'userMenu',
+			type: 'NavUserMenu',
+			default: '—',
+			description: 'Avatar dropdown menu declared by the bar'
+		},
 		{
 			name: 'collapsible',
 			type: 'boolean',
 			default: 'true',
 			description: 'Desktop collapse control for SideNavBar'
+		},
+		{
+			name: 'currentPath',
+			type: 'string',
+			default: '""',
+			description: 'Standalone active state path'
+		},
+		{
+			name: 'menuLabel',
+			type: 'string',
+			default: '"Open navigation"',
+			description: 'Standalone mobile menu label'
 		}
 	];
 </script>
@@ -120,7 +155,8 @@
 	<div>
 		<h1 class="text-3xl font-bold">AppShell</h1>
 		<p class="text-kl-muted-content mt-2">
-			Provider-driven application shell with registered top, bottom, left, and right NavBars.
+			NavBars auto-register when rendered inside AppShellProvider; outside a provider they render as
+			standalone responsive bars.
 		</p>
 	</div>
 
@@ -128,11 +164,11 @@
 		<h2 class="text-xl font-semibold">Examples</h2>
 
 		<DemoCard
-			title="Sidebar and top navigation"
+			title="Side and top navigation"
 			description="NavBars register with AppShellProvider; AppShell renders the layout."
 			code={`<AppShellProvider currentPath="/dashboard/crm/deals">
   <SideNavBar side="left" brand={brand} groups={sidebarGroups} userMenu={userMenu} />
-  <TopNavBar brand={brand} groups={topGroups} action={action} />
+  <TopNavBar groups={topGroups} action={action} />
 
   <AppShell>
     ...
@@ -141,22 +177,8 @@
 		>
 			<div class="rounded-kl-box border-kl-base-300 h-[760px] overflow-hidden border">
 				<AppShellProvider currentPath="/dashboard/crm/deals">
-					<SideNavBar
-						side="left"
-						brand={{ label: 'Nexus', logoSrc: '/favicon.png', href: '/dashboard' }}
-						groups={sidebarGroups}
-						userMenu={{
-							name: 'Denish N',
-							email: 'owner@nexus.test',
-							initials: 'DN',
-							items: [{ label: 'Log out', icon: LogOut, tone: 'error' }]
-						}}
-					/>
-					<TopNavBar
-						brand={{ label: 'Nexus', logoSrc: '/favicon.png', href: '/dashboard' }}
-						groups={topGroups}
-						action={{ label: 'Upgrade', href: '/billing', color: 'primary' }}
-					/>
+					<SideNavBar side="left" brand={demoBrand} groups={sidebarGroups} {userMenu} />
+					<TopNavBar groups={topGroups} action={upgradeAction} />
 
 					<AppShell class="h-full min-h-0">
 						<div class="space-y-5">
@@ -238,6 +260,29 @@
 						</div>
 					</AppShell>
 				</AppShellProvider>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Standalone top bar"
+			description="Without AppShellProvider, a NavBar owns its responsive mobile menu."
+			code={`<TopNavBar
+  brand={brand}
+  groups={groups}
+  userMenu={userMenu}
+  currentPath="/solutions/crm"
+/>`}
+		>
+			<div class="rounded-kl-box border-kl-base-300 overflow-hidden border">
+				<TopNavBar brand={demoBrand} groups={topGroups} {userMenu} currentPath="/solutions/crm" />
+				<div class="bg-kl-base-200 p-6">
+					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 border p-5">
+						<h3 class="font-semibold">Standalone content</h3>
+						<p class="text-kl-muted-content mt-1 text-sm">
+							The bar can be used without AppShell while keeping the same data model.
+						</p>
+					</div>
+				</div>
 			</div>
 		</DemoCard>
 	</section>
