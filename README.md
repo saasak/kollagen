@@ -71,7 +71,7 @@ DaisyUI-inspired theming system built on CSS variables:
 
 ## Component design
 
-- **73 components + 1 block** — priority on ready-to-use UI patterns and user-input components (ComboBox, Select, DatePicker, DataTable, etc.)
+- **79 components + 2 blocks** — priority on ready-to-use UI patterns and user-input components (ActionSheet, ComboBox, Select, DatePicker, DataTable, etc.)
 - **Heterogeneous primitives** — bits-ui for most components, vaul-svelte (Drawer), svelte-sonner (Toast), embla-carousel-svelte (Carousel), paneforge (Splitter), plus custom implementations for niche components
 - **Async-ready** — components like ComboBox support async data fetching out of the box
 - **Form-ready** — `name` prop forwarded to the native input for proper form submission

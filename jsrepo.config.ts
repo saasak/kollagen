@@ -227,9 +227,9 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/meter' }]
 			},
 			{
-				name: 'modal',
+				name: 'action-sheet',
 				type: 'component',
-				files: [{ path: 'packages/ui/src/templates/components/modal' }]
+				files: [{ path: 'packages/ui/src/templates/components/action-sheet' }]
 			},
 			{
 				name: 'number-input',

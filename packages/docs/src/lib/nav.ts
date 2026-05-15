@@ -41,7 +41,7 @@ export const componentNav = [
 	{ label: 'Menubar', href: '/components/menubar' },
 	{ label: 'Menu', href: '/components/menu' },
 	{ label: 'Meter', href: '/components/meter' },
-	{ label: 'Modal', href: '/components/modal' },
+	{ label: 'ActionSheet', href: '/components/action-sheet' },
 	{ label: 'NativeSelect', href: '/components/native-select' },
 	{ label: 'NavigationList', href: '/components/navigation-list' },
 	{ label: 'NavigationMenu', href: '/components/navigation-menu' },
