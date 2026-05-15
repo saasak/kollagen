@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Sidebar } from '$blocks/sidebar';
-	import type { SidebarGroup } from '$blocks/sidebar';
+	import { Sidebar, SidebarNavigation, type NavGroup } from '$blocks/sidebar';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import {
@@ -15,7 +14,7 @@
 		Users
 	} from 'lucide-svelte';
 
-	const groups: SidebarGroup[] = [
+	const groups: NavGroup[] = [
 		{
 			label: 'Overview',
 			items: [
@@ -53,7 +52,7 @@
 	];
 
 	const props = [
-		{ name: 'groups', type: 'SidebarGroup[]', default: '[]', description: 'Navigation groups' },
+		{ name: 'groups', type: 'NavGroup[]', default: '[]', description: 'Navigation groups' },
 		{
 			name: 'currentPath',
 			type: 'string',
@@ -66,15 +65,13 @@
 			default: '"exact"',
 			description: 'Default active matching strategy'
 		},
-		{ name: 'header', type: 'Snippet', default: '—', description: 'Custom header content' },
-		{ name: 'footer', type: 'Snippet', default: '—', description: 'Custom footer content' },
+		{ name: 'collapsed', type: 'boolean', default: 'false', description: 'Icon-only rendering' },
 		{
 			name: 'onNavigate',
 			type: '() => void',
 			default: '—',
-			description: 'Called after a sidebar link click'
-		},
-		{ name: 'class', type: 'string', default: '—', description: 'Additional CSS classes' }
+			description: 'Called after a link click'
+		}
 	];
 </script>
 
@@ -82,8 +79,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">Sidebar</h1>
 		<p class="text-kl-muted-content mt-2">
-			A dashboard sidebar with grouped navigation, two-level menu items, active URL matching, and
-			custom header and footer snippets.
+			Vertical navigation primitives used by sidebars and the mobile AppShell navigation.
 		</p>
 	</div>
 
@@ -91,29 +87,21 @@
 		<h2 class="text-xl font-semibold">Examples</h2>
 
 		<DemoCard
-			title="Dashboard navigation"
-			description="Groups, parent entries, child entries, badges, and startsWith matching."
-			code={`<Sidebar
-  {groups}
-  currentPath="/dashboard/crm/deals"
->
-  {#snippet header()}
-    ...
-  {/snippet}
-
-  {#snippet footer()}
-    ...
-  {/snippet}
+			title="Dashboard sidebar"
+			description="The wrapper keeps header/footer slots while delegating navigation to SidebarNavigation."
+			code={`<Sidebar {groups} currentPath="/dashboard/crm/deals">
+  {#snippet header()}...{/snippet}
+  {#snippet footer()}...{/snippet}
 </Sidebar>`}
 		>
 			<div
-				class="border-kl-base-300 bg-kl-base-200 rounded-kl-box h-[680px] overflow-hidden border"
+				class="rounded-kl-box border-kl-base-300 bg-kl-base-200 h-[680px] overflow-hidden border"
 			>
 				<Sidebar {groups} currentPath="/dashboard/crm/deals">
 					{#snippet header()}
 						<div class="flex items-center gap-2">
 							<div
-								class="bg-kl-primary text-kl-primary-content rounded-kl-selector flex size-9 items-center justify-center font-bold"
+								class="rounded-kl-selector bg-kl-primary text-kl-primary-content flex size-9 items-center justify-center font-bold"
 							>
 								N
 							</div>
@@ -142,24 +130,21 @@
 		</DemoCard>
 
 		<DemoCard
-			title="URL matching"
-			description="Use exact matching by default and opt into startsWith per parent section."
-			code={`const groups = [{
-  label: "Overview",
-  items: [{
-    label: "CRM",
-    href: "/dashboard/crm",
-    match: "startsWith",
-    children: [...]
-  }]
-}];`}
+			title="Navigation renderer"
+			description="Use SidebarNavigation directly when a shell owns the surrounding chrome."
+			code={`<SidebarNavigation {groups} currentPath="/dashboard/crm" />
+<SidebarNavigation {groups} currentPath="/dashboard/crm" collapsed />`}
 		>
-			<div class="grid gap-4 lg:grid-cols-2">
-				<div class="border-kl-base-300 rounded-kl-box overflow-hidden border">
-					<Sidebar {groups} currentPath="/dashboard/crm" class="h-[420px] w-full" />
+			<div class="grid gap-4 lg:grid-cols-[16rem_4rem]">
+				<div
+					class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] overflow-hidden border"
+				>
+					<SidebarNavigation {groups} currentPath="/dashboard/crm" />
 				</div>
-				<div class="border-kl-base-300 rounded-kl-box overflow-hidden border">
-					<Sidebar {groups} currentPath="/dashboard/crm/reports" class="h-[420px] w-full" />
+				<div
+					class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] overflow-hidden border"
+				>
+					<SidebarNavigation {groups} currentPath="/dashboard/crm" collapsed />
 				</div>
 			</div>
 		</DemoCard>

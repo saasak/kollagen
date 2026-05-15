@@ -1,25 +1,33 @@
 import type { Component, ComponentType, SvelteComponent } from 'svelte';
 
-export type SidebarMatch = 'exact' | 'startsWith';
-export type SidebarIconProps = {
+export type NavMatch = 'exact' | 'startsWith';
+
+export type NavIconProps = {
 	size?: number | string;
 	class?: string;
 	'aria-hidden'?: boolean | 'true' | 'false' | null;
 };
-export type SidebarIcon =
-	| Component<SidebarIconProps>
-	| ComponentType<SvelteComponent<SidebarIconProps>>;
 
-export interface SidebarItem {
+export type NavIcon = Component<NavIconProps> | ComponentType<SvelteComponent<NavIconProps>>;
+
+export interface NavItem {
 	label: string;
 	href: string;
-	icon?: SidebarIcon;
+	icon?: NavIcon;
 	badge?: string;
-	match?: SidebarMatch;
-	children?: SidebarItem[];
+	match?: NavMatch;
+	children?: NavItem[];
+	description?: string;
+	disabled?: boolean;
 }
 
-export interface SidebarGroup {
+export interface NavGroup {
 	label?: string;
-	items: SidebarItem[];
+	items: NavItem[];
 }
+
+export type SidebarMatch = NavMatch;
+export type SidebarIconProps = NavIconProps;
+export type SidebarIcon = NavIcon;
+export type SidebarItem = NavItem;
+export type SidebarGroup = NavGroup;

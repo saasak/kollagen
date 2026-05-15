@@ -411,7 +411,8 @@ export default defineConfig({
 			{
 				name: 'app-shell',
 				type: 'block',
-				files: [{ path: 'packages/ui/src/templates/blocks/app-shell' }]
+				files: [{ path: 'packages/ui/src/templates/blocks/app-shell' }],
+				registryDependencies: ['sidebar']
 			},
 			{
 				name: 'chat-panel',
