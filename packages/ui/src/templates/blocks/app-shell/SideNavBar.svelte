@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
-	import { ChevronLeft, ChevronRight, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-svelte';
+	import { ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-svelte';
 	import { onDestroy } from 'svelte';
 	import { NavigationList } from '../../components/navigation-list';
 	import { tryGetAppShellContext } from './context.svelte';
@@ -89,6 +89,10 @@
 
 	function closeMobileNavigation() {
 		mobileOpen = false;
+	}
+
+	function openMobileNavigation() {
+		mobileOpen = true;
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -247,18 +251,18 @@
 	</div>
 {/snippet}
 
-{#snippet sidebarContent(isCollapsed = false, overlay = false)}
+{#snippet sidebarContent(isCollapsed = false, overlay = false, mobileRail = false)}
 	<aside
 		class={cn(
 			'border-kl-base-300 bg-kl-base-100 text-kl-base-content flex h-full min-h-0 shrink-0 flex-col overflow-hidden transition-[width]',
 			side === 'left' ? 'border-r' : 'border-l',
 			isCollapsed ? 'w-16' : 'w-64',
-			overlay && 'w-full border-none'
+			overlay && 'shadow-kl-lg'
 		)}
 		style:--kl-nav-px={navPaddingX}
 		style:--kl-nav-py={navPaddingY}
 	>
-		{#if (brand || collapsible) && !overlay}
+		{#if brand || collapsible}
 			<div
 				class={cn(
 					'flex shrink-0 items-center px-[var(--kl-nav-px)] py-[var(--kl-nav-py)]',
@@ -269,8 +273,8 @@
 					{#if collapsible}
 						<button
 							type="button"
-							aria-label="Expand navigation"
-							onclick={toggleCollapsed}
+							aria-label={mobileRail ? menuLabel : 'Expand navigation'}
+							onclick={mobileRail ? openMobileNavigation : toggleCollapsed}
 							class="rounded-kl-field text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex size-10 shrink-0 items-center justify-center transition-colors"
 						>
 							{#if side === 'left'}
@@ -284,11 +288,11 @@
 					{/if}
 				{:else}
 					{@render brandContent(brand)}
-					{#if collapsible && !overlay}
+					{#if collapsible}
 						<button
 							type="button"
-							aria-label="Collapse navigation"
-							onclick={toggleCollapsed}
+							aria-label={overlay ? 'Close navigation' : 'Collapse navigation'}
+							onclick={overlay ? closeMobileNavigation : toggleCollapsed}
 							class="rounded-kl-field text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content flex size-8 shrink-0 items-center justify-center transition-colors"
 						>
 							{#if side === 'left'}
@@ -319,23 +323,9 @@
 {/snippet}
 
 {#if !shell}
-	<div class={cn('text-kl-base-content h-full min-h-0', className)}>
-		<div
-			class="border-kl-base-300 bg-kl-base-100 flex min-h-14 items-center gap-3 border-b px-[var(--kl-nav-px)] py-[var(--kl-nav-py)] md:hidden"
-			style:--kl-nav-px={navPaddingX}
-			style:--kl-nav-py={navPaddingY}
-		>
-			<button
-				type="button"
-				aria-label={menuLabel}
-				onclick={() => (mobileOpen = true)}
-				class="rounded-kl-field text-kl-base-content hover:bg-kl-muted focus-visible:outline-kl-primary flex size-10 items-center justify-center transition-colors focus-visible:outline focus-visible:outline-2"
-			>
-				<Menu size={20} aria-hidden="true" />
-			</button>
-			<div class="min-w-0 flex-1">
-				{@render brandContent(brand)}
-			</div>
+	<div class={cn('text-kl-base-content relative h-dvh min-h-0 md:h-full', className)}>
+		<div class="h-full md:hidden">
+			{@render sidebarContent(true, false, true)}
 		</div>
 
 		<div class="hidden h-full md:block">
@@ -344,23 +334,14 @@
 	</div>
 
 	{#if mobileOpen}
-		<div class="bg-kl-base-100 text-kl-base-content fixed inset-0 z-[var(--kl-z-modal)] md:hidden">
-			<div
-				class="border-kl-base-300 bg-kl-base-100 sticky top-0 z-10 flex min-h-14 items-center justify-between border-b px-[var(--kl-nav-px)] py-[var(--kl-nav-py)]"
-				style:--kl-nav-px={navPaddingX}
-				style:--kl-nav-py={navPaddingY}
-			>
-				{@render brandContent(brand)}
-				<button
-					type="button"
-					aria-label="Close navigation"
-					onclick={() => (mobileOpen = false)}
-					class="rounded-kl-field text-kl-base-content hover:bg-kl-muted focus-visible:outline-kl-primary flex size-10 items-center justify-center transition-colors focus-visible:outline focus-visible:outline-2"
-				>
-					<X size={20} aria-hidden="true" />
-				</button>
-			</div>
-			<div class="h-[calc(100dvh-3.5rem)]">
+		<div class="fixed inset-0 z-[var(--kl-z-modal)] md:hidden">
+			<button
+				type="button"
+				aria-label="Close navigation"
+				class="absolute inset-0 bg-black/15"
+				onclick={closeMobileNavigation}
+			></button>
+			<div class={cn('absolute inset-y-0', side === 'right' ? 'right-0' : 'left-0')}>
 				{@render sidebarContent(false, true)}
 			</div>
 		</div>
