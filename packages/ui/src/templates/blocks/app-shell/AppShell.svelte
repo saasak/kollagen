@@ -21,7 +21,6 @@
 	const shell = getAppShellContext();
 	let openUserMenu = $state<NavBarPosition | null>(null);
 
-	let desktop = $derived(shell.isDesktop);
 	let topNav = $derived(shell.navbars.top);
 	let bottomNav = $derived(shell.navbars.bottom);
 	let leftNav = $derived(shell.navbars.left);
@@ -403,12 +402,17 @@
 	{/if}
 {/snippet}
 
-{#snippet horizontalBar(navbar: RegisteredNavBar | undefined, position: 'top' | 'bottom')}
+{#snippet horizontalBar(
+	navbar: RegisteredNavBar | undefined,
+	position: 'top' | 'bottom',
+	className = ''
+)}
 	{#if navbar}
 		<header
 			class={cn(
 				'border-kl-base-300 bg-kl-base-100 grid min-h-14 shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-[var(--kl-nav-px)] py-[var(--kl-nav-py)]',
-				position === 'top' ? 'border-b' : 'border-t'
+				position === 'top' ? 'border-b' : 'border-t',
+				className
 			)}
 		>
 			<div class="min-w-0 justify-self-start">
@@ -428,11 +432,16 @@
 	{/if}
 {/snippet}
 
-{#snippet mobileBar(navbar: RegisteredNavBar | undefined, position: 'top' | 'bottom')}
+{#snippet mobileBar(
+	navbar: RegisteredNavBar | undefined,
+	position: 'top' | 'bottom',
+	className = ''
+)}
 	<header
 		class={cn(
 			'border-kl-base-300 bg-kl-base-100 grid min-h-14 shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-[var(--kl-nav-px)] py-[var(--kl-nav-py)]',
-			position === 'top' ? 'border-b' : 'border-t'
+			position === 'top' ? 'border-b' : 'border-t',
+			className
 		)}
 	>
 		<button
@@ -456,13 +465,14 @@
 	</header>
 {/snippet}
 
-{#snippet sidebar(navbar: RegisteredNavBar, side: 'left' | 'right')}
+{#snippet sidebar(navbar: RegisteredNavBar, side: 'left' | 'right', className = '')}
 	{@const collapsed = shell.collapsed[side]}
 	<aside
 		class={cn(
 			'border-kl-base-300 bg-kl-base-100 text-kl-base-content flex h-full min-h-0 shrink-0 flex-col overflow-hidden transition-[width]',
 			side === 'left' ? 'border-r' : 'border-l',
-			collapsed ? 'w-16' : 'w-64'
+			collapsed ? 'w-16' : 'w-64',
+			className
 		)}
 	>
 		{#if navbar.brand || navbar.collapsible}
@@ -552,7 +562,6 @@
 {/snippet}
 
 <div
-	bind:clientWidth={shell.shellWidth}
 	class={cn(
 		'bg-kl-base-200 text-kl-base-content flex h-dvh min-h-screen w-full overflow-hidden',
 		className
@@ -562,35 +571,37 @@
 	style:--kl-shell-px={contentPaddingX}
 	style:--kl-shell-py={contentPaddingY}
 >
-	{#if desktop && leftNav}
-		{@render sidebar(leftNav, 'left')}
+	{#if leftNav}
+		{@render sidebar(leftNav, 'left', 'max-lg:hidden')}
 	{/if}
 
 	<div class="flex min-w-0 flex-1 flex-col">
-		{#if desktop}
-			{@render horizontalBar(topNav, 'top')}
-		{:else if mobileBarPosition === 'top'}
-			{@render mobileBar(mobileNav, 'top')}
+		{#if topNav}
+			{@render horizontalBar(topNav, 'top', 'max-lg:hidden')}
+		{/if}
+		{#if mobileBarPosition === 'top'}
+			{@render mobileBar(mobileNav, 'top', 'lg:hidden')}
 		{/if}
 
 		<main class="min-h-0 flex-1 overflow-y-auto px-[var(--kl-shell-px)] py-[var(--kl-shell-py)]">
 			{@render children()}
 		</main>
 
-		{#if desktop}
-			{@render horizontalBar(bottomNav, 'bottom')}
-		{:else if mobileBarPosition === 'bottom'}
-			{@render mobileBar(mobileNav, 'bottom')}
+		{#if bottomNav}
+			{@render horizontalBar(bottomNav, 'bottom', 'max-lg:hidden')}
+		{/if}
+		{#if mobileBarPosition === 'bottom'}
+			{@render mobileBar(mobileNav, 'bottom', 'lg:hidden')}
 		{/if}
 	</div>
 
-	{#if desktop && rightNav}
-		{@render sidebar(rightNav, 'right')}
+	{#if rightNav}
+		{@render sidebar(rightNav, 'right', 'max-lg:hidden')}
 	{/if}
 
-	{#if !desktop && shell.mobileMenuOpen}
+	{#if shell.mobileMenuOpen}
 		<div
-			class="bg-kl-base-100 text-kl-base-content fixed inset-0 z-[var(--kl-z-modal)] overflow-y-auto"
+			class="bg-kl-base-100 text-kl-base-content fixed inset-0 z-[var(--kl-z-modal)] overflow-y-auto lg:hidden"
 			transition:fly={{
 				x: mobileBarPosition === 'bottom' ? 0 : '-100%',
 				y: mobileBarPosition === 'bottom' ? '100%' : 0,

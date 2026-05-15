@@ -4,8 +4,6 @@ import type { MobileBarPosition, NavBarPosition, RegisteredNavBar } from './type
 export class AppShellState {
 	currentPath = $state('');
 	mobileBar = $state<MobileBarPosition>('top');
-	sidebarBreakpoint = $state(1024);
-	shellWidth = $state(0);
 	mobileMenuOpen = $state(false);
 	navbars = $state<Record<NavBarPosition, RegisteredNavBar | undefined>>({
 		top: undefined,
@@ -18,18 +16,9 @@ export class AppShellState {
 		right: false
 	});
 
-	constructor(options?: {
-		currentPath?: string;
-		mobileBar?: MobileBarPosition;
-		sidebarBreakpoint?: number;
-	}) {
+	constructor(options?: { currentPath?: string; mobileBar?: MobileBarPosition }) {
 		this.currentPath = options?.currentPath ?? '';
 		this.mobileBar = options?.mobileBar ?? 'top';
-		this.sidebarBreakpoint = options?.sidebarBreakpoint ?? 1024;
-	}
-
-	get isDesktop() {
-		return this.shellWidth >= this.sidebarBreakpoint;
 	}
 
 	get hasMobileNavigation() {

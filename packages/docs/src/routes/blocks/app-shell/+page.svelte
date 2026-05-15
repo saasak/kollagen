@@ -14,12 +14,6 @@
 			type: '"top" | "bottom"',
 			default: '"top"',
 			description: 'Which bar remains visible on mobile'
-		},
-		{
-			name: 'sidebarBreakpoint',
-			type: 'number',
-			default: '1024',
-			description: 'Container width where sidebars become inline'
 		}
 	];
 

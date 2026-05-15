@@ -8,19 +8,16 @@
 		currentPath?: string;
 		/** Which bar remains visible on mobile when both top and bottom exist */
 		mobileBar?: MobileBarPosition;
-		/** Container width, in pixels, where sidebars become inline */
-		sidebarBreakpoint?: number;
 		children: Snippet;
 	}
 
-	let { currentPath = '', mobileBar = 'top', sidebarBreakpoint = 1024, children }: Props = $props();
+	let { currentPath = '', mobileBar = 'top', children }: Props = $props();
 
 	const shell = new AppShellState();
 
 	function syncShell() {
 		shell.currentPath = currentPath;
 		shell.mobileBar = mobileBar;
-		shell.sidebarBreakpoint = sidebarBreakpoint;
 	}
 
 	syncShell();
