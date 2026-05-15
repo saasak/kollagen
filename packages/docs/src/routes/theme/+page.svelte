@@ -37,6 +37,7 @@
 	import { Toggle } from '$ui/toggle';
 	import { TreeView } from '$ui/tree-view';
 	import { ChatPanel } from '$blocks/chat-panel';
+	import { getFontPreset } from '$lib/font-presets';
 	import { parseDate } from '@internationalized/date';
 	import { onMount } from 'svelte';
 
@@ -58,6 +59,8 @@
 	type ThemeSnapshot = {
 		themeName: string;
 		modeName: 'light' | 'dark';
+		fontId: string;
+		fontName: string;
 		groups: TokenGroup[];
 	};
 
@@ -149,6 +152,15 @@
 			]
 		},
 		{
+			title: 'Typography',
+			tokens: [
+				{ name: 'Body font', variable: '--kl-font-body', kind: 'value' },
+				{ name: 'Heading font', variable: '--kl-font-heading', kind: 'value' },
+				{ name: 'Display font', variable: '--kl-font-display', kind: 'value' },
+				{ name: 'Mono font', variable: '--kl-font-mono', kind: 'value' }
+			]
+		},
+		{
 			title: 'Elevation',
 			tokens: [
 				{ name: 'Shadow sm', variable: '--kl-shadow-sm', kind: 'value' },
@@ -218,6 +230,10 @@
 			'Animation duration multiplier. Lower values make the theme feel snappier.',
 		'--kl-contrast-level':
 			'Theme contrast marker for comparing palettes and future contrast tuning.',
+		'--kl-font-body': 'Primary application font used by body text and default controls.',
+		'--kl-font-heading': 'Heading font used by h1-h6 and font-kl-heading.',
+		'--kl-font-display': 'Display font for larger editorial or hero-style type.',
+		'--kl-font-mono': 'Monospace font used by code, kbd, samp, pre, and font-mono.',
 		'--kl-shadow-sm': 'Low elevation shadow for subtle surfaces.',
 		'--kl-shadow-md': 'Medium elevation shadow for raised cards and controls.',
 		'--kl-shadow-lg': 'High elevation shadow for prominent surfaces and overlays.',
@@ -416,6 +432,10 @@
 	const renderingTokens = $derived(
 		snapshot.groups.find((group) => group.title === 'Rendering')?.tokens ?? []
 	);
+	const typographyTokens = $derived(
+		snapshot.groups.find((group) => group.title === 'Typography')?.tokens ?? []
+	);
+	const selectedFont = $derived(getFontPreset(snapshot.fontId));
 	const visibleOrders = $derived.by(() => {
 		let rows = orders.filter((order) => matchesOrder(order, query.search));
 		if (query.sort) {
@@ -436,15 +456,20 @@
 			return {
 				themeName: 'default',
 				modeName: 'light',
+				fontId: 'system',
+				fontName: getFontPreset('system').label,
 				groups: tokenDefinitions.map((group) => ({ title: group.title, tokens: [] }))
 			};
 		}
 
 		const root = document.documentElement;
 		const styles = getComputedStyle(root);
+		const font = getFontPreset(root.dataset.font);
 		return {
 			themeName: root.dataset.theme || 'default',
 			modeName: root.dataset.mode === 'dark' ? 'dark' : 'light',
+			fontId: font.id,
+			fontName: font.label,
 			groups: tokenDefinitions.map((group) => ({
 				title: group.title,
 				tokens: group.tokens.map((token) => ({
@@ -567,7 +592,7 @@
 		});
 		observer.observe(document.documentElement, {
 			attributes: true,
-			attributeFilter: ['data-theme', 'data-mode']
+			attributeFilter: ['data-theme', 'data-mode', 'data-font']
 		});
 
 		return () => observer.disconnect();
@@ -608,6 +633,7 @@
 								Current theme
 							</p>
 							<h1 class="mt-1 text-2xl font-bold capitalize">{snapshot.themeName}</h1>
+							<p class="text-kl-muted-content mt-1 text-xs">{snapshot.fontName}</p>
 						</div>
 						<Badge variant="outline" class="capitalize">{snapshot.modeName}</Badge>
 					</div>
@@ -771,6 +797,24 @@
 
 					<div>
 						<p class="text-kl-muted-content mb-2 text-xs font-semibold tracking-[0.14em] uppercase">
+							Typography
+						</p>
+						<div
+							class="divide-kl-base-300 rounded-kl-box border-kl-base-300 divide-y overflow-hidden border"
+						>
+							{#each typographyTokens as token (token.variable)}
+								<div class="px-2.5 py-2">
+									<div class="text-kl-base-content truncate text-xs font-medium">{token.name}</div>
+									<code class="text-kl-muted-content block truncate font-mono text-[0.68rem]">
+										{token.value || 'unset'}
+									</code>
+								</div>
+							{/each}
+						</div>
+					</div>
+
+					<div>
+						<p class="text-kl-muted-content mb-2 text-xs font-semibold tracking-[0.14em] uppercase">
 							Radius
 						</p>
 						<div class="grid grid-cols-3 gap-2">
@@ -873,6 +917,68 @@
 							</div>
 						{/each}
 					</div>
+				</div>
+			</section>
+
+			<section class="space-y-4">
+				{@render sectionTitle(
+					'Typography',
+					'Body, heading, display, mono, and numeric rhythm under the selected font preset.'
+				)}
+				<div class="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+					<Card title={`${selectedFont.label} specimen`} description={selectedFont.source}>
+						<div class="space-y-5">
+							<div>
+								<p class="text-kl-muted-content text-xs font-semibold tracking-[0.18em] uppercase">
+									Font preset
+								</p>
+								<h3 class="font-kl-display mt-2 text-5xl font-bold tracking-normal">
+									Kollagen ships composed UI.
+								</h3>
+								<p class="mt-4 max-w-2xl text-base leading-7">
+									The selected preset rewires global typography tokens while every component keeps
+									using the same semantic Tailwind utilities.
+								</p>
+							</div>
+							<div class="grid gap-3 md:grid-cols-3">
+								<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 border p-3">
+									<p class="text-kl-muted-content text-xs font-medium">Body</p>
+									<p class="mt-2 text-sm leading-6">
+										Fast dashboards need calm text, resilient fallbacks, and readable density.
+									</p>
+								</div>
+								<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 border p-3">
+									<p class="text-kl-muted-content text-xs font-medium">Heading</p>
+									<p class="font-kl-heading mt-2 text-xl font-semibold">Revenue workspace</p>
+								</div>
+								<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 border p-3">
+									<p class="text-kl-muted-content text-xs font-medium">Mono</p>
+									<code class="mt-2 block font-mono text-sm">pnpm build:registry</code>
+								</div>
+							</div>
+						</div>
+					</Card>
+
+					<Card title="Numeric rhythm" description="Tables, amounts, codes, and compact metadata.">
+						<div class="space-y-3">
+							{#each orders.slice(0, 4) as order (order.id)}
+								<div
+									class="border-kl-base-300 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b pb-3 last:border-0 last:pb-0"
+								>
+									<div class="min-w-0">
+										<p class="truncate text-sm font-medium">{order.customer}</p>
+										<p class="text-kl-muted-content mt-0.5 font-mono text-xs">{order.id}</p>
+									</div>
+									<div class="text-right">
+										<p class="font-mono text-sm font-semibold tabular-nums">
+											{currency(order.total)}
+										</p>
+										<p class="text-kl-muted-content mt-0.5 text-xs">{order.date}</p>
+									</div>
+								</div>
+							{/each}
+						</div>
+					</Card>
 				</div>
 			</section>
 

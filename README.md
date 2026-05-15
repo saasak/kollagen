@@ -45,6 +45,7 @@ DaisyUI-inspired theming system built on CSS variables:
 
 - **Base tokens**: field size, selector size, density, radius, colors, shadows — all configurable via CSS variables
 - **Multiple themes**: applied via `data-theme` attribute on the HTML element
+- **Typography tokens**: app-wide body, heading, display, and monospace font stacks
 - **Styled by default**: every component ships with a polished default look
 - **Full control**: tweak global CSS variables for broad changes, or edit the component source directly for deeper customization
 
@@ -56,10 +57,53 @@ DaisyUI-inspired theming system built on CSS variables:
 	/* DaisyUI-style component sizing */
 	--kl-size-field: 0.25rem;
 	--kl-size-selector: 0.25rem;
+
+	/* Typography */
+	--kl-font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--kl-font-heading: var(--kl-font-body);
+	--kl-font-display: var(--kl-font-heading);
+	--kl-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
 }
 ```
 
 `--kl-size-field` controls inputs, buttons, and field-like heights. `--kl-size-selector` controls checkboxes, radios, switches, toggles, slider thumbs/tracks, and similar selectors. Density tokens are retained for theme metadata and future use; they do not scale global Tailwind spacing.
+
+### Typography and fonts
+
+Kollagen's font API is the `--kl-font-*` token set. Components read these variables through Tailwind theme mappings (`font-kl-body`, `font-kl-heading`, `font-kl-display`, `font-kl-mono`) and global base styles.
+
+Themes are intentionally color/effect-first and generally do not prescribe fonts. The base theme uses system fonts, while a few expressive themes may override heading/display tokens when the theme concept needs it. For product apps, prefer setting fonts at the app level so the same font preset can work with any color theme.
+
+Load the font first, then set the tokens:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root {
+	--kl-font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--kl-font-heading: var(--kl-font-body);
+	--kl-font-display: var(--kl-font-heading);
+	--kl-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+}
+```
+
+If you want runtime font switching, add a small preset layer in your app and map an attribute to the same tokens:
+
+```css
+:root[data-font='geist'] {
+	--kl-font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--kl-font-heading: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--kl-font-display: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--kl-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+}
+```
+
+Recommended practice:
+
+- Keep color themes and font presets separate.
+- Do not hard-code `font-family` inside individual components unless that component is intentionally special.
+- Use `--kl-font-body` for app text and controls, `--kl-font-heading` for headings, `--kl-font-display` for large editorial type, and `--kl-font-mono` for code/numeric surfaces.
+- Self-host fonts for production if privacy, availability, or performance matters; Google Fonts and Fontshare are fine for previews and internal tools.
 
 ```html
 <!-- Switch theme -->

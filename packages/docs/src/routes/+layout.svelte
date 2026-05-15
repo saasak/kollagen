@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { page } from '$app/stores';
 	import { Menu } from 'lucide-svelte';
+	import FontSwitcher from '$lib/components/FontSwitcher.svelte';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import { sidebarState } from '$lib/sidebar-state.svelte';
@@ -57,6 +58,7 @@
 					Blocks
 				</a>
 				<ThemeSwitcher />
+				<FontSwitcher />
 				<ThemeToggle />
 			</div>
 		</header>

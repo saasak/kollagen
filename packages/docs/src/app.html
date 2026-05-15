@@ -9,8 +9,45 @@
 			(function () {
 				var theme = localStorage.getItem('kl-theme');
 				var mode = localStorage.getItem('kl-mode');
+				var font = localStorage.getItem('kl-font') || 'system';
+				var fontHrefs = {
+					geist:
+						'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap',
+					inter:
+						'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap',
+					manrope:
+						'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap',
+					satoshi: 'https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap',
+					jakarta:
+						'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap',
+					'dm-sans':
+						'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap',
+					outfit:
+						'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap',
+					'space-grotesk':
+						'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap',
+					'ibm-plex':
+						'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap',
+					instrument:
+						'https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap',
+					'host-grotesk':
+						'https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&display=swap',
+					onest: 'https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap',
+					urbanist:
+						'https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap',
+					roboto:
+						'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500;600&display=swap'
+				};
 				if (theme && theme !== 'default') document.documentElement.dataset.theme = theme;
 				if (mode === 'dark') document.documentElement.dataset.mode = 'dark';
+				document.documentElement.dataset.font = font;
+				if (fontHrefs[font]) {
+					var link = document.createElement('link');
+					link.id = 'kl-font-stylesheet';
+					link.rel = 'stylesheet';
+					link.href = fontHrefs[font];
+					document.head.appendChild(link);
+				}
 			})();
 		</script>
 		%sveltekit.head%

@@ -17,3 +17,116 @@
 
 @source '../../ui/src/templates/components';
 @source '../../ui/src/templates/blocks';
+
+@layer kollagen.base, kollagen.theme, kollagen.preview;
+
+@layer kollagen.preview {
+	:root[data-font='system'] {
+		--kl-font-body:
+			ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+			'Segoe UI Symbol', 'Noto Color Emoji';
+		--kl-font-heading: var(--kl-font-body);
+		--kl-font-display: var(--kl-font-heading);
+		--kl-font-mono:
+			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+			monospace;
+	}
+
+	:root[data-font='geist'] {
+		--kl-font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Geist', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Geist', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+	}
+
+	:root[data-font='inter'] {
+		--kl-font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Inter Tight', 'Inter', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='manrope'] {
+		--kl-font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='satoshi'] {
+		--kl-font-body: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='jakarta'] {
+		--kl-font-body: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='dm-sans'] {
+		--kl-font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='outfit'] {
+		--kl-font-body: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='space-grotesk'] {
+		--kl-font-body: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='ibm-plex'] {
+		--kl-font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+	}
+
+	:root[data-font='instrument'] {
+		--kl-font-body: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='host-grotesk'] {
+		--kl-font-body: 'Host Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Host Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Host Grotesk', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='onest'] {
+		--kl-font-body: 'Onest', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Onest', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Onest', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='urbanist'] {
+		--kl-font-body: 'Urbanist', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Urbanist', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Urbanist', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	:root[data-font='roboto'] {
+		--kl-font-body: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-heading: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-display: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+		--kl-font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace;
+	}
+}
