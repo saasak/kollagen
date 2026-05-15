@@ -20,6 +20,11 @@
 		onCheckedChange?: (checked: boolean) => void;
 		/** Additional CSS classes on the root element */
 		class?: string;
+		/** Native title tooltip */
+		title?: string;
+		/** Native button type for form submission */
+		type?: 'button' | 'submit' | 'reset';
+		[key: `aria-${string}`]: unknown;
 	}
 
 	let {
@@ -30,7 +35,8 @@
 		disabled = false,
 		required = false,
 		onCheckedChange,
-		class: className
+		class: className,
+		...restProps
 	}: Props = $props();
 
 	let classes = $derived(switchVariants({ disabled }));
@@ -38,6 +44,7 @@
 
 <label class={cn(classes.root(), className)}>
 	<Switch.Root
+		{...restProps}
 		bind:checked
 		{name}
 		{value}

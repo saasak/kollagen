@@ -20,6 +20,8 @@
 		invalid?: boolean;
 		/** Mark the input as required */
 		required?: boolean;
+		/** Input reference. Supports bind:inputRef */
+		inputRef?: HTMLInputElement | null;
 		/** Callback when visibility state changes */
 		onVisibilityChange?: (details: { visible: boolean }) => void;
 		/** Additional CSS classes on the root element */
@@ -35,6 +37,7 @@
 		disabled = false,
 		invalid = false,
 		required = false,
+		inputRef = $bindable<HTMLInputElement | null>(null),
 		onVisibilityChange,
 		class: className
 	}: Props = $props();
@@ -53,12 +56,20 @@
 		onVisibilityChange?.({ visible: next });
 	}
 
+	function setInputRef(node: HTMLInputElement) {
+		inputRef = node;
+		return () => {
+			if (inputRef === node) inputRef = null;
+		};
+	}
+
 	let classes = $derived(passwordInputVariants({ disabled, invalid }));
 </script>
 
 <div class={cn(`relative w-full`, className)}>
 	<div class={classes.fieldShell()}>
 		<input
+			{@attach setInputRef}
 			type={isVisible ? 'text' : 'password'}
 			bind:value
 			{name}

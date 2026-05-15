@@ -29,6 +29,18 @@
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the switch' },
 		{ name: 'required', type: 'boolean', default: 'false', description: 'Mark as required' },
 		{
+			name: 'title',
+			type: 'string',
+			default: '—',
+			description: 'Native title tooltip forwarded to the switch control'
+		},
+		{
+			name: 'type',
+			type: "'button' | 'submit' | 'reset'",
+			default: '—',
+			description: 'Native button type forwarded to the switch control'
+		},
+		{
 			name: 'onCheckedChange',
 			type: '(checked: boolean) => void',
 			default: '—',
@@ -39,6 +51,12 @@
 			type: 'string',
 			default: '—',
 			description: 'Additional CSS classes on the root element'
+		},
+		{
+			name: 'aria-*',
+			type: 'unknown',
+			default: '—',
+			description: 'Forwarded ARIA attributes on the switch control'
 		}
 	];
 </script>

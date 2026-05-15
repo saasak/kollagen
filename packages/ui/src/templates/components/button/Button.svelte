@@ -34,7 +34,11 @@
 		/** Native button name for form submission */
 		name?: string;
 		/** Native button value for form submission */
-		value?: string;
+		value?: string | number;
+		/** Native title tooltip */
+		title?: string;
+		/** Element reference. Supports bind:ref */
+		ref?: HTMLElement | null;
 		/** Accessible label, required for icon-only buttons */
 		ariaLabel?: string;
 		/** Additional CSS classes on the root element */
@@ -43,6 +47,7 @@
 		onclick?: (event: MouseEvent) => void;
 		/** Button content */
 		children?: Snippet;
+		[key: `data-${string}`]: unknown;
 	}
 
 	let {
@@ -58,10 +63,13 @@
 		download,
 		name,
 		value,
+		title,
+		ref = $bindable<HTMLElement | null>(null),
 		ariaLabel,
 		class: className,
 		onclick,
-		children
+		children,
+		...restProps
 	}: Props = $props();
 
 	let isDisabled = $derived(disabled || loading);
@@ -76,14 +84,24 @@
 
 		onclick?.(event);
 	}
+
+	function setRef(node: HTMLElement) {
+		ref = node;
+		return () => {
+			if (ref === node) ref = null;
+		};
+	}
 </script>
 
 {#if href}
 	<a
+		{...restProps}
+		{@attach setRef}
 		{href}
 		{target}
 		{rel}
 		{download}
+		{title}
 		aria-label={ariaLabel}
 		aria-disabled={isDisabled}
 		aria-busy={loading}
@@ -98,9 +116,12 @@
 	</a>
 {:else}
 	<button
+		{...restProps}
+		{@attach setRef}
 		{type}
 		{name}
-		{value}
+		value={value == null ? undefined : String(value)}
+		{title}
 		disabled={isDisabled}
 		aria-label={ariaLabel}
 		aria-busy={loading}

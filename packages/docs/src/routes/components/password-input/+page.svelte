@@ -55,6 +55,12 @@ ${scriptClose}
 			description: 'Mark the input as required'
 		},
 		{
+			name: 'inputRef',
+			type: 'HTMLInputElement | null',
+			default: 'null',
+			description: 'Input element reference. Supports bind:inputRef'
+		},
+		{
 			name: 'onVisibilityChange',
 			type: '(details: { visible: boolean }) => void',
 			default: '—',

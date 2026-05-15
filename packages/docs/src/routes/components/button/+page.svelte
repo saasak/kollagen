@@ -45,6 +45,48 @@
 			description: 'Render as a link when provided'
 		},
 		{
+			name: 'target',
+			type: 'string',
+			default: '—',
+			description: 'Link target when rendered as an anchor'
+		},
+		{
+			name: 'rel',
+			type: 'string',
+			default: '—',
+			description: 'Link rel when rendered as an anchor'
+		},
+		{
+			name: 'download',
+			type: 'string | boolean',
+			default: '—',
+			description: 'Link download attribute when rendered as an anchor'
+		},
+		{
+			name: 'name',
+			type: 'string',
+			default: '—',
+			description: 'Native button name for form submission'
+		},
+		{
+			name: 'value',
+			type: 'string | number',
+			default: '—',
+			description: 'Native button value for form submission'
+		},
+		{
+			name: 'title',
+			type: 'string',
+			default: '—',
+			description: 'Native title tooltip'
+		},
+		{
+			name: 'ref',
+			type: 'HTMLElement | null',
+			default: 'null',
+			description: 'Element reference. Supports bind:ref'
+		},
+		{
 			name: 'ariaLabel',
 			type: 'string',
 			default: '—',
@@ -61,6 +103,12 @@
 			type: 'string',
 			default: '—',
 			description: 'Additional CSS classes on the root element'
+		},
+		{
+			name: 'data-*',
+			type: 'unknown',
+			default: '—',
+			description: 'Forwarded data attributes on the rendered element'
 		},
 		{ name: 'children', type: 'Snippet', default: '—', description: 'Button content' }
 	];
