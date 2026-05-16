@@ -50,6 +50,17 @@
 			]
 		}
 	];
+	const simpleGroups: NavGroup[] = [
+		{
+			items: [
+				{ label: 'Profile', href: '/settings/profile', icon: Users },
+				{ label: 'Billing', href: '/settings/billing', icon: CreditCard },
+				{ label: 'Security', href: '/settings/security', icon: Settings, disabled: true }
+			]
+		}
+	];
+
+	let lastNavigation = $state('No navigation click yet');
 
 	const props = [
 		{ name: 'groups', type: 'NavGroup[]', default: '[]', description: 'Navigation groups' },
@@ -113,6 +124,48 @@
 				class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-[420px] w-16 overflow-hidden border"
 			>
 				<NavigationList {groups} currentPath="/dashboard/crm" collapsed />
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Exact matching"
+			description="Use simple groups for settings drawers and exact active states."
+			code={`<NavigationList
+  groups={simpleGroups}
+  currentPath="/settings/billing"
+  match="exact"
+/>`}
+		>
+			<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 max-w-sm overflow-hidden border">
+				<NavigationList
+					groups={simpleGroups}
+					currentPath="/settings/billing"
+					match="exact"
+					label="Settings"
+				/>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Navigation callback"
+			description="Use onNavigate to close mobile drawers after a link click."
+			code={`<NavigationList
+  {groups}
+  currentPath="/apps/chat"
+  onNavigate={() => closeDrawer()}
+/>`}
+		>
+			<div class="space-y-3">
+				<div
+					class="rounded-kl-box border-kl-base-300 bg-kl-base-100 h-64 max-w-sm overflow-hidden border"
+				>
+					<NavigationList
+						{groups}
+						currentPath="/apps/chat"
+						onNavigate={() => (lastNavigation = 'Navigation callback fired')}
+					/>
+				</div>
+				<p class="text-kl-muted-content text-sm">{lastNavigation}</p>
 			</div>
 		</DemoCard>
 	</section>

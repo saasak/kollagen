@@ -2,12 +2,27 @@
 	import { DateRangePicker } from '$ui/date-range-picker';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { CalendarDate } from '@internationalized/date';
+	import { CalendarDate, type DateValue } from '@internationalized/date';
 
 	let value = $state({
 		start: new CalendarDate(2026, 5, 14),
 		end: new CalendarDate(2026, 5, 18)
 	});
+	let singleMonthValue = $state({
+		start: new CalendarDate(2026, 6, 3),
+		end: new CalendarDate(2026, 6, 6)
+	});
+	let manualCloseValue = $state({
+		start: new CalendarDate(2026, 8, 10),
+		end: new CalendarDate(2026, 8, 12)
+	});
+
+	const minDate = new CalendarDate(2026, 5, 1);
+	const maxDate = new CalendarDate(2026, 9, 30);
+
+	function isCompanyHoliday(date: DateValue) {
+		return ['2026-06-19', '2026-07-04', '2026-09-07'].includes(date.toString());
+	}
 
 	const propsData = [
 		{
@@ -114,13 +129,70 @@
 		<h1 class="text-3xl font-bold">DateRangePicker</h1>
 		<p class="text-kl-muted-content mt-2">A range field with a calendar popover.</p>
 	</div>
-	<DemoCard
-		title="Picker"
-		description="Two-month range picker."
-		code="<DateRangePicker bind:value={value} />"
-	>
-		<DateRangePicker bind:value class="max-w-lg" />
-	</DemoCard>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard
+			title="Picker"
+			description="Two-month range picker."
+			code="<DateRangePicker bind:value={value} />"
+		>
+			<div class="space-y-3">
+				<DateRangePicker bind:value class="max-w-lg" />
+				<p class="text-kl-muted-content text-sm">
+					{value.start?.toString()} to {value.end?.toString()}
+				</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Single-month picker"
+			description="Use one visible month for dense filters."
+			code={`<DateRangePicker
+  bind:value={value}
+  numberOfMonths={1}
+  ariaLabel="Report range"
+/>`}
+		>
+			<DateRangePicker
+				bind:value={singleMonthValue}
+				numberOfMonths={1}
+				ariaLabel="Report range"
+				class="max-w-md"
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Unavailable holidays"
+			description="Mark dates that cannot be selected in booking flows."
+			code={`<DateRangePicker
+  bind:value={value}
+  minValue={minDate}
+  maxValue={maxDate}
+  isDateUnavailable={isCompanyHoliday}
+/>`}
+		>
+			<DateRangePicker
+				bind:value
+				minValue={minDate}
+				maxValue={maxDate}
+				isDateUnavailable={isCompanyHoliday}
+				class="max-w-lg"
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Manual close"
+			description="Keep the popover open while users refine the selected range."
+			code={`<DateRangePicker
+  bind:value={value}
+  closeOnRangeSelect={false}
+/>`}
+		>
+			<DateRangePicker bind:value={manualCloseValue} closeOnRangeSelect={false} class="max-w-lg" />
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>

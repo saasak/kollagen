@@ -4,6 +4,7 @@
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	let value = $state('Write a short note...');
+	let invalidValue = $state('');
 
 	const propsData = [
 		{
@@ -92,9 +93,66 @@
 		<h1 class="text-3xl font-bold">Textarea</h1>
 		<p class="text-kl-muted-content mt-2">A themed native textarea.</p>
 	</div>
-	<DemoCard title="Note" description="Supports bind:value." code="<Textarea bind:value={value} />">
-		<Textarea bind:value class="max-w-md" />
-	</DemoCard>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard
+			title="Note"
+			description="Supports bind:value."
+			code="<Textarea bind:value={value} />"
+		>
+			<div class="space-y-3">
+				<Textarea bind:value class="max-w-md" />
+				<p class="text-kl-muted-content text-sm">{value.length} characters</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Support reply"
+			description="Use rows and placeholder for longer customer responses."
+			code={`<Textarea
+  rows={6}
+  placeholder="Write a reply..."
+/>`}
+		>
+			<Textarea
+				rows={6}
+				placeholder="Write a reply..."
+				ariaLabel="Support reply"
+				class="max-w-xl"
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Invalid"
+			description="Set invalid when validation requires user attention."
+			code={`<Textarea bind:value={value} invalid required />`}
+		>
+			<div class="grid max-w-md gap-1.5">
+				<Textarea
+					bind:value={invalidValue}
+					invalid
+					required
+					placeholder="Explain why the account should be closed."
+					ariaLabel="Closure reason"
+				/>
+				<p class="text-kl-error text-sm">A closure reason is required.</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Read-only audit note"
+			description="Use readonly for system-generated or locked notes."
+			code="<Textarea value=&quot;Approved by finance.&quot; readonly />"
+		>
+			<Textarea
+				value="Approved by finance. Renewal quote locked on May 14."
+				readonly
+				class="max-w-md"
+			/>
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>

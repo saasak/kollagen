@@ -8,8 +8,16 @@
 		{ label: 'Week', value: 'week' },
 		{ label: 'Month', value: 'month' }
 	];
+	const densityItems = [
+		{ label: 'Compact', value: 'compact' },
+		{ label: 'Comfortable', value: 'comfortable' },
+		{ label: 'Spacious', value: 'spacious', disabled: true }
+	];
+	const stringItems = ['Draft', 'Published', 'Archived'];
 	let value = $state('week');
 	let multipleValue = $state(['day', 'month']);
+	let density = $state('comfortable');
+	let status = $state('published');
 
 	const propsData = [
 		{
@@ -77,7 +85,14 @@
 	<DemoCard
 		title="Single"
 		description="Single selected value."
-		code="<ToggleGroup {items} bind:value={value} />"
+		code={`<ToggleGroup
+  items={[
+    { label: "Day", value: "day" },
+    { label: "Week", value: "week" },
+    { label: "Month", value: "month" }
+  ]}
+  bind:value
+/>`}
 	>
 		<ToggleGroup {items} bind:value />
 	</DemoCard>
@@ -85,7 +100,15 @@
 	<DemoCard
 		title="Multiple"
 		description="Multiple selected values."
-		code="<ToggleGroup {items} multiple bind:value={multipleValue} />"
+		code={`<ToggleGroup
+  items={[
+    { label: "Day", value: "day" },
+    { label: "Week", value: "week" },
+    { label: "Month", value: "month" }
+  ]}
+  multiple
+  bind:value={multipleValue}
+/>`}
 	>
 		<div class="space-y-2">
 			<ToggleGroup {items} multiple bind:value={multipleValue} />
@@ -95,6 +118,41 @@
 				>
 			</p>
 		</div>
+	</DemoCard>
+
+	<DemoCard
+		title="Disabled item"
+		description="Disable individual items from the source data."
+		code={`<ToggleGroup
+  items={[
+    { label: "Compact", value: "compact" },
+    { label: "Comfortable", value: "comfortable" },
+    { label: "Spacious", value: "spacious", disabled: true }
+  ]}
+  bind:value={density}
+/>`}
+	>
+		<div class="space-y-2">
+			<ToggleGroup items={densityItems} bind:value={density} />
+			<p class="text-kl-muted-content text-sm">Density: {density}</p>
+		</div>
+	</DemoCard>
+
+	<DemoCard
+		title="String items"
+		description="Use custom mapping when items are plain values."
+		code={`<ToggleGroup
+  items={["Draft", "Published", "Archived"]}
+  itemToLabel={(item) => item}
+  itemToValue={(item) => item.toLowerCase()}
+/>`}
+	>
+		<ToggleGroup
+			items={stringItems}
+			bind:value={status}
+			itemToLabel={(item) => item}
+			itemToValue={(item) => item.toLowerCase()}
+		/>
 	</DemoCard>
 
 	<section class="space-y-4">

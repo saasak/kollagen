@@ -8,6 +8,17 @@
 		start: new Time(9, 0),
 		end: new Time(17, 30)
 	});
+	let constrainedValue = $state({
+		start: new Time(10, 0),
+		end: new Time(16, 0)
+	});
+	let preciseValue = $state({
+		start: new Time(9, 0, 30),
+		end: new Time(17, 30, 45)
+	});
+
+	const minTime = new Time(8, 0);
+	const maxTime = new Time(18, 0);
 
 	const propsData = [
 		{
@@ -134,6 +145,41 @@
 		code={`<TimeRangeField bind:value={value} hourCycle={24} />`}
 	>
 		<TimeRangeField bind:value label="Shift window" hourCycle={24} />
+	</DemoCard>
+
+	<DemoCard
+		title="Constrained hours"
+		description="Limit both endpoints to a valid operating window."
+		code={`<TimeRangeField
+  bind:value={value}
+  minValue={minTime}
+  maxValue={maxTime}
+/>`}
+	>
+		<TimeRangeField
+			bind:value={constrainedValue}
+			label="Appointment window"
+			minValue={minTime}
+			maxValue={maxTime}
+			hourCycle={24}
+		/>
+	</DemoCard>
+
+	<DemoCard
+		title="Second precision"
+		description="Expose seconds when scheduling needs exact timestamps."
+		code={`<TimeRangeField
+  bind:value={value}
+  granularity="second"
+  hourCycle={24}
+/>`}
+	>
+		<TimeRangeField
+			bind:value={preciseValue}
+			label="Maintenance window"
+			granularity="second"
+			hourCycle={24}
+		/>
 	</DemoCard>
 
 	<section class="space-y-4">

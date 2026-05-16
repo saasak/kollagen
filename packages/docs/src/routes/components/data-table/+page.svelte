@@ -11,7 +11,8 @@
 		type DataTableNumberRangeValue,
 		type DataTableQuery,
 		type DataTableRowAction,
-		type DataTableSelection
+		type DataTableSelection,
+		type DataTableTimeRangeValue
 	} from '$ui/data-table';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -27,6 +28,8 @@
 		trial: boolean;
 		mrr: number;
 		createdAt: string;
+		lastContactTime: string;
+		supportWindow: string;
 	};
 
 	const customers: Customer[] = [
@@ -39,7 +42,9 @@
 			owner: 'Maya',
 			trial: false,
 			mrr: 8400,
-			createdAt: '2026-01-08'
+			createdAt: '2026-01-08',
+			lastContactTime: '09:15',
+			supportWindow: '08:00-16:00'
 		},
 		{
 			id: 'cus_102',
@@ -50,7 +55,9 @@
 			owner: 'Noah',
 			trial: false,
 			mrr: 4200,
-			createdAt: '2026-01-14'
+			createdAt: '2026-01-14',
+			lastContactTime: '10:30',
+			supportWindow: '09:00-17:00'
 		},
 		{
 			id: 'cus_103',
@@ -61,7 +68,9 @@
 			owner: 'Iris',
 			trial: false,
 			mrr: 1900,
-			createdAt: '2026-02-03'
+			createdAt: '2026-02-03',
+			lastContactTime: '15:45',
+			supportWindow: '13:00-21:00'
 		},
 		{
 			id: 'cus_104',
@@ -72,7 +81,9 @@
 			owner: 'Maya',
 			trial: true,
 			mrr: 290,
-			createdAt: '2026-02-20'
+			createdAt: '2026-02-20',
+			lastContactTime: '08:20',
+			supportWindow: '08:00-12:00'
 		},
 		{
 			id: 'cus_105',
@@ -83,7 +94,9 @@
 			owner: 'Noah',
 			trial: false,
 			mrr: 9700,
-			createdAt: '2026-03-02'
+			createdAt: '2026-03-02',
+			lastContactTime: '11:05',
+			supportWindow: '10:00-18:00'
 		},
 		{
 			id: 'cus_106',
@@ -94,7 +107,9 @@
 			owner: 'Iris',
 			trial: false,
 			mrr: 0,
-			createdAt: '2026-03-11'
+			createdAt: '2026-03-11',
+			lastContactTime: '16:50',
+			supportWindow: '14:00-22:00'
 		},
 		{
 			id: 'cus_107',
@@ -105,7 +120,9 @@
 			owner: 'Maya',
 			trial: false,
 			mrr: 5100,
-			createdAt: '2026-03-28'
+			createdAt: '2026-03-28',
+			lastContactTime: '13:10',
+			supportWindow: '12:00-20:00'
 		},
 		{
 			id: 'cus_108',
@@ -116,7 +133,9 @@
 			owner: 'Noah',
 			trial: true,
 			mrr: 490,
-			createdAt: '2026-04-05'
+			createdAt: '2026-04-05',
+			lastContactTime: '07:55',
+			supportWindow: '07:00-15:00'
 		},
 		{
 			id: 'cus_109',
@@ -127,7 +146,9 @@
 			owner: 'Iris',
 			trial: false,
 			mrr: 11200,
-			createdAt: '2026-04-18'
+			createdAt: '2026-04-18',
+			lastContactTime: '18:25',
+			supportWindow: '16:00-23:00'
 		}
 	];
 
@@ -143,7 +164,9 @@
 			align: 'right',
 			format: (value) => `$${Number(value).toLocaleString()}`
 		},
-		{ id: 'createdAt', label: 'Created', sortable: true }
+		{ id: 'createdAt', label: 'Created', sortable: true },
+		{ id: 'lastContactTime', label: 'Contacted', sortable: true },
+		{ id: 'supportWindow', label: 'Support', sortable: true }
 	];
 
 	const filters: DataTableFilter[] = [
@@ -171,11 +194,16 @@
 		{ id: 'owner', label: 'Owner', type: 'text', placeholder: 'Owner name' },
 		{ id: 'trial', label: 'Trial', type: 'boolean', trueLabel: 'Trial', falseLabel: 'Paid' },
 		{ id: 'mrr', label: 'MRR', type: 'number-range' },
-		{ id: 'createdAt', label: 'Created', type: 'date-range' }
+		{ id: 'createdAt', label: 'Created', type: 'date-range' },
+		{ id: 'lastContactTime', label: 'Contacted after', type: 'time', hourCycle: 24 },
+		{ id: 'supportWindow', label: 'Support window', type: 'time-range', hourCycle: 24 }
 	];
 
 	const initialQuery = createDataTableQuery({ perPage: 5 });
 	let query: DataTableQuery = $state(initialQuery);
+	let simpleQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
+	let loadingQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
+	let emptyQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let selection: DataTableSelection = $state(createDataTableSelection());
 	let loading = $state(false);
 	let lastQuery = $state(JSON.stringify(initialQuery, null, 2));
@@ -265,6 +293,21 @@
 		const createdAt = query.filters.createdAt as DataTableDateRangeValue | undefined;
 		if (createdAt?.from) rows = rows.filter((customer) => customer.createdAt >= createdAt.from!);
 		if (createdAt?.to) rows = rows.filter((customer) => customer.createdAt <= createdAt.to!);
+
+		const lastContactTime = query.filters.lastContactTime;
+		if (typeof lastContactTime === 'string' && lastContactTime) {
+			rows = rows.filter((customer) => customer.lastContactTime >= lastContactTime);
+		}
+
+		const supportWindow = query.filters.supportWindow as DataTableTimeRangeValue | undefined;
+		if (supportWindow?.from) {
+			rows = rows.filter(
+				(customer) => getRangeStart(customer.supportWindow) >= supportWindow.from!
+			);
+		}
+		if (supportWindow?.to) {
+			rows = rows.filter((customer) => getRangeEnd(customer.supportWindow) <= supportWindow.to!);
+		}
 
 		if (query.sort) {
 			const direction = query.sort.direction === 'asc' ? 1 : -1;
@@ -366,6 +409,14 @@
 		return [customer.customer, customer.email, customer.plan, customer.status, customer.owner].some(
 			(field) => field.toLowerCase().includes(value)
 		);
+	}
+
+	function getRangeStart(value: string) {
+		return value.split('-')[0] ?? '';
+	}
+
+	function getRangeEnd(value: string) {
+		return value.split('-')[1] ?? '';
 	}
 
 	function handleQueryChange(nextQuery: DataTableQuery) {
@@ -475,6 +526,68 @@
 					</div>
 				</div>
 			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Read-only table"
+			description="Use the same component without filters, selection, or row actions."
+			code={`<DataTable
+  data={customers.slice(0, 3)}
+  columns={columns.slice(0, 4)}
+  totalCount={3}
+  bind:query={simpleQuery}
+/>`}
+		>
+			<DataTable
+				data={customers.slice(0, 3)}
+				columns={columns.slice(0, 4)}
+				totalCount={3}
+				bind:query={simpleQuery}
+				rowKey="id"
+				pageSizeOptions={[3]}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Loading state"
+			description="Keep the table shape visible while a server query is pending."
+			code={`<DataTable
+  data={customers.slice(0, 3)}
+  {columns}
+  totalCount={9}
+  loading
+/>`}
+		>
+			<DataTable
+				data={customers.slice(0, 3)}
+				columns={columns.slice(0, 4)}
+				totalCount={9}
+				bind:query={loadingQuery}
+				rowKey="id"
+				loading
+				pageSizeOptions={[3]}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Empty state"
+			description="Customize the no-results message for filtered tables."
+			code={`<DataTable
+  data={[]}
+  {columns}
+  totalCount={0}
+  emptyText="No customers match this segment"
+/>`}
+		>
+			<DataTable
+				data={[]}
+				columns={columns.slice(0, 4)}
+				totalCount={0}
+				bind:query={emptyQuery}
+				rowKey="id"
+				emptyText="No customers match this segment"
+				pageSizeOptions={[3]}
+			/>
 		</DemoCard>
 	</section>
 

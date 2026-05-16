@@ -2,9 +2,19 @@
 	import { Calendar } from '$ui/calendar';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { CalendarDate } from '@internationalized/date';
+	import { CalendarDate, type DateValue } from '@internationalized/date';
 
 	let value = $state(new CalendarDate(2026, 5, 14));
+	let constrainedValue = $state(new CalendarDate(2026, 5, 12));
+	let unavailableValue = $state(new CalendarDate(2026, 5, 19));
+
+	const minDate = new CalendarDate(2026, 5, 10);
+	const maxDate = new CalendarDate(2026, 5, 24);
+
+	function isWeekend(date: DateValue) {
+		const day = new Date(date.toString()).getUTCDay();
+		return day === 0 || day === 6;
+	}
 
 	const propsData = [
 		{
@@ -99,13 +109,63 @@
 		<h1 class="text-3xl font-bold">Calendar</h1>
 		<p class="text-kl-muted-content mt-2">A single-date calendar built with Bits UI.</p>
 	</div>
-	<DemoCard
-		title="Single date"
-		description="Supports bind:value."
-		code="<Calendar bind:value={value} />"
-	>
-		<Calendar bind:value />
-	</DemoCard>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard
+			title="Single date"
+			description="Supports bind:value."
+			code="<Calendar bind:value={value} />"
+		>
+			<div class="space-y-3">
+				<Calendar bind:value />
+				<p class="text-kl-muted-content text-sm">Selected: {value.toString()}</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Constrained booking"
+			description="Limit selection to a known scheduling window."
+			code={`<Calendar
+  bind:value={value}
+  minValue={minDate}
+  maxValue={maxDate}
+  preventDeselect
+/>`}
+		>
+			<div class="space-y-3">
+				<Calendar
+					bind:value={constrainedValue}
+					minValue={minDate}
+					maxValue={maxDate}
+					preventDeselect
+				/>
+				<p class="text-kl-muted-content text-sm">
+					Available from {minDate.toString()} to {maxDate.toString()}.
+				</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Unavailable days"
+			description="Block weekends or blackout dates while preserving the calendar view."
+			code={`<Calendar
+  bind:value={value}
+  isDateUnavailable={isWeekend}
+/>`}
+		>
+			<Calendar bind:value={unavailableValue} isDateUnavailable={isWeekend} />
+		</DemoCard>
+
+		<DemoCard
+			title="Read-only review"
+			description="Show a selected date without allowing edits."
+			code={`<Calendar value={value} readonly />`}
+		>
+			<Calendar value={new CalendarDate(2026, 5, 21)} readonly />
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>

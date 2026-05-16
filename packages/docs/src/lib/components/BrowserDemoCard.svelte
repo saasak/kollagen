@@ -10,7 +10,7 @@
 	}: {
 		title: string;
 		description?: string;
-		code?: string;
+		code?: unknown;
 		src: string;
 		browserTitle?: string;
 		height?: number | string;
@@ -28,6 +28,14 @@
 	let startWidth = 0;
 
 	const previewHeight = $derived(typeof height === 'number' ? `${height}px` : height);
+	const codeText = $derived(formatCode(code));
+
+	function formatCode(value: unknown) {
+		if (typeof value === 'string') return value;
+		if (value == null) return '';
+
+		return JSON.stringify(value, null, 2) ?? String(value);
+	}
 
 	function clampPreviewWidth(width: number) {
 		const max = availableWidth || width;
@@ -84,7 +92,7 @@
 					<p class="text-kl-muted-content mt-1 text-sm">{description}</p>
 				{/if}
 			</div>
-			{#if code}
+			{#if codeText}
 				<button
 					type="button"
 					onclick={() => (showCode = !showCode)}
@@ -129,9 +137,9 @@
 		</div>
 	</div>
 
-	{#if code && showCode}
+	{#if codeText && showCode}
 		<div class="border-kl-base-300 border-t">
-			<pre class="bg-kl-base-200 overflow-x-auto p-4 font-mono text-sm">{code}</pre>
+			<pre class="bg-kl-base-200 overflow-x-auto p-4 font-mono text-sm">{codeText}</pre>
 		</div>
 	{/if}
 </div>

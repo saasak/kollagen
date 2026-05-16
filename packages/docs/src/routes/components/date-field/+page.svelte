@@ -5,6 +5,11 @@
 	import { CalendarDate } from '@internationalized/date';
 
 	let value = $state(new CalendarDate(2026, 5, 14));
+	let constrainedValue = $state(new CalendarDate(2026, 5, 20));
+	let localizedValue = $state(new CalendarDate(2026, 12, 5));
+
+	const minDate = new CalendarDate(2026, 5, 1);
+	const maxDate = new CalendarDate(2026, 5, 31);
 
 	const propsData = [
 		{
@@ -87,13 +92,75 @@
 		<h1 class="text-3xl font-bold">DateField</h1>
 		<p class="text-kl-muted-content mt-2">Segmented date input without a calendar popover.</p>
 	</div>
-	<DemoCard
-		title="Field"
-		description="Editable date segments."
-		code="<DateField bind:value={value} />"
-	>
-		<DateField bind:value label="Start date" class="max-w-sm" />
-	</DemoCard>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard
+			title="Field"
+			description="Editable date segments."
+			code="<DateField bind:value={value} />"
+		>
+			<div class="space-y-3">
+				<DateField bind:value label="Start date" class="max-w-sm" />
+				<p class="text-kl-muted-content text-sm">Selected: {value.toString()}</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Required form field"
+			description="Forward names to native form data with a visible required label."
+			code={`<DateField
+  name="contract-start"
+  label="Contract start"
+  required
+/>`}
+		>
+			<DateField
+				name="contract-start"
+				label="Contract start"
+				placeholder={new CalendarDate(2026, 5, 1)}
+				required
+				class="max-w-sm"
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Constrained month"
+			description="Limit edits to a valid business window."
+			code={`<DateField
+  bind:value={value}
+  minValue={minDate}
+  maxValue={maxDate}
+/>`}
+		>
+			<DateField
+				bind:value={constrainedValue}
+				label="Billing date"
+				minValue={minDate}
+				maxValue={maxDate}
+				class="max-w-sm"
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Localized readonly"
+			description="Use locale and readonly for review screens."
+			code={`<DateField
+  value={value}
+  locale="fr-FR"
+  readonly
+/>`}
+		>
+			<DateField
+				value={localizedValue}
+				label="Renewal date"
+				locale="fr-FR"
+				readonly
+				class="max-w-sm"
+			/>
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>

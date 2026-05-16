@@ -21,9 +21,15 @@
 		},
 		{
 			name: 'size',
-			type: "'xs' | 'sm' | 'md' | 'lg' | 'icon-sm' | 'icon' | 'icon-lg'",
+			type: "'xs' | 'sm' | 'md' | 'lg'",
 			default: "'md'",
-			description: 'Button size'
+			description: 'Button size scale'
+		},
+		{
+			name: 'content',
+			type: "'normal' | 'icon'",
+			default: "'normal'",
+			description: 'Content layout; use icon for square icon-only buttons'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the action' },
 		{
@@ -183,15 +189,16 @@
 
 		<DemoCard
 			title="Sizes"
-			description="Text and icon sizes for dense interfaces."
+			description="Size controls scale; content controls square icon-only layout."
 			code={`<div class="flex flex-wrap items-center gap-2">
   <Button size="xs">Extra small</Button>
   <Button size="sm">Small</Button>
   <Button>Default</Button>
   <Button size="lg">Large</Button>
-  <Button size="icon-sm" ariaLabel="Add"><Plus /></Button>
-  <Button size="icon" ariaLabel="Save"><Save /></Button>
-  <Button size="icon-lg" ariaLabel="Download"><Download /></Button>
+  <Button content="icon" size="xs" ariaLabel="Add"><Plus /></Button>
+  <Button content="icon" size="sm" ariaLabel="Mail"><Mail /></Button>
+  <Button content="icon" size="md" ariaLabel="Save"><Save /></Button>
+  <Button content="icon" size="lg" ariaLabel="Download"><Download /></Button>
 </div>`}
 		>
 			<div class="flex flex-wrap items-center gap-2">
@@ -199,9 +206,10 @@
 				<Button size="sm">Small</Button>
 				<Button>Default</Button>
 				<Button size="lg">Large</Button>
-				<Button size="icon-sm" ariaLabel="Add"><Plus /></Button>
-				<Button size="icon" ariaLabel="Save"><Save /></Button>
-				<Button size="icon-lg" ariaLabel="Download"><Download /></Button>
+				<Button content="icon" size="xs" ariaLabel="Add"><Plus /></Button>
+				<Button content="icon" size="sm" ariaLabel="Mail"><Mail /></Button>
+				<Button content="icon" size="md" ariaLabel="Save"><Save /></Button>
+				<Button content="icon" size="lg" ariaLabel="Download"><Download /></Button>
 			</div>
 		</DemoCard>
 

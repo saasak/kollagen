@@ -5,6 +5,11 @@
 	import { Time } from '@internationalized/date';
 
 	let value = $state(new Time(9, 30));
+	let constrainedValue = $state(new Time(14, 15));
+	let readonlyValue = $state(new Time(18, 0));
+
+	const minTime = new Time(9, 0);
+	const maxTime = new Time(17, 30);
 
 	const propsData = [
 		{
@@ -98,6 +103,12 @@
 			description: 'Called when value changes.'
 		},
 		{
+			name: 'ariaLabel',
+			type: 'string',
+			default: '-',
+			description: 'Accessible label when no visible label is provided.'
+		},
+		{
 			name: 'class',
 			type: 'string',
 			default: '-',
@@ -128,6 +139,45 @@
 			bind:value
 			label="Precise time"
 			granularity="second"
+			hourCycle={24}
+			class="max-w-sm"
+		/>
+	</DemoCard>
+
+	<DemoCard
+		title="Business hours"
+		description="Constrain editing to a valid time window."
+		code={`<TimeField
+  bind:value={value}
+  minValue={minTime}
+  maxValue={maxTime}
+  hourCycle={24}
+/>`}
+	>
+		<TimeField
+			bind:value={constrainedValue}
+			label="Support starts"
+			minValue={minTime}
+			maxValue={maxTime}
+			hourCycle={24}
+			class="max-w-sm"
+		/>
+	</DemoCard>
+
+	<DemoCard
+		title="Named readonly field"
+		description="Use readonly when the value is submitted or reviewed but not edited."
+		code={`<TimeField
+  name="cutoff"
+  value={value}
+  readonly
+/>`}
+	>
+		<TimeField
+			name="cutoff"
+			value={readonlyValue}
+			label="Daily cutoff"
+			readonly
 			hourCycle={24}
 			class="max-w-sm"
 		/>

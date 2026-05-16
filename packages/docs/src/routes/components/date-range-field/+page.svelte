@@ -8,6 +8,17 @@
 		start: new CalendarDate(2026, 5, 14),
 		end: new CalendarDate(2026, 5, 18)
 	});
+	let constrainedValue = $state({
+		start: new CalendarDate(2026, 5, 20),
+		end: new CalendarDate(2026, 5, 24)
+	});
+	let localizedValue = $state({
+		start: new CalendarDate(2026, 7, 1),
+		end: new CalendarDate(2026, 7, 15)
+	});
+
+	const minDate = new CalendarDate(2026, 5, 1);
+	const maxDate = new CalendarDate(2026, 5, 30);
 
 	const propsData = [
 		{
@@ -96,13 +107,71 @@
 		<h1 class="text-3xl font-bold">DateRangeField</h1>
 		<p class="text-kl-muted-content mt-2">Segmented start and end date inputs.</p>
 	</div>
-	<DemoCard
-		title="Range field"
-		description="Supports bind:value."
-		code="<DateRangeField bind:value={value} />"
-	>
-		<DateRangeField bind:value label="Booking window" />
-	</DemoCard>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard
+			title="Range field"
+			description="Supports bind:value."
+			code="<DateRangeField bind:value={value} />"
+		>
+			<div class="space-y-3">
+				<DateRangeField bind:value label="Booking window" />
+				<p class="text-kl-muted-content text-sm">
+					{value.start?.toString()} to {value.end?.toString()}
+				</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Named form inputs"
+			description="Submit start and end values through separate hidden inputs."
+			code={`<DateRangeField
+  startName="starts_at"
+  endName="ends_at"
+  label="Campaign dates"
+  required
+/>`}
+		>
+			<DateRangeField
+				startName="starts_at"
+				endName="ends_at"
+				label="Campaign dates"
+				placeholder={new CalendarDate(2026, 5, 1)}
+				required
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Constrained sprint"
+			description="Keep ranges inside a planning month."
+			code={`<DateRangeField
+  bind:value={value}
+  minValue={minDate}
+  maxValue={maxDate}
+/>`}
+		>
+			<DateRangeField
+				bind:value={constrainedValue}
+				label="Sprint"
+				minValue={minDate}
+				maxValue={maxDate}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Localized review"
+			description="Render localized segments while preventing edits."
+			code={`<DateRangeField
+  value={value}
+  locale="fr-FR"
+  readonly
+/>`}
+		>
+			<DateRangeField value={localizedValue} label="Vacation" locale="fr-FR" readonly />
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>

@@ -8,6 +8,20 @@
 		{ label: 'Invite member', value: 'invite', group: 'Actions' },
 		{ label: 'Create report', value: 'report', group: 'Actions' }
 	];
+	const adminItems = [
+		{ label: 'Open audit log', value: 'audit', group: 'Admin', keywords: ['security'] },
+		{ label: 'Manage billing', value: 'billing', group: 'Admin' },
+		{ label: 'Suspend workspace', value: 'suspend', group: 'Danger zone', disabled: true },
+		{ label: 'Transfer ownership', value: 'transfer', group: 'Danger zone' }
+	];
+	const emptyItems = [
+		{ label: 'Archive customer', value: 'archive', group: 'Customers' },
+		{ label: 'Assign owner', value: 'assign', group: 'Customers' }
+	];
+
+	let selected = $state('');
+	let search = $state('owner');
+	let lastSelected = $state('Nothing selected');
 
 	const propsData = [
 		{
@@ -78,9 +92,67 @@
 		<h1 class="text-3xl font-bold">Command</h1>
 		<p class="text-kl-muted-content mt-2">A command menu with built-in filtering.</p>
 	</div>
-	<DemoCard title="Palette" description="Data-driven command items." code="<Command {items} />">
-		<Command {items} class="max-w-md" />
-	</DemoCard>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard title="Palette" description="Data-driven command items." code="<Command {items} />">
+			<Command {items} class="max-w-md" />
+		</DemoCard>
+
+		<DemoCard
+			title="Controlled value"
+			description="Bind selected value and react to command selection."
+			code={`<Command
+  {items}
+  bind:value={selected}
+  onSelect={(value) => (lastSelected = value)}
+/>`}
+		>
+			<div class="space-y-3">
+				<Command
+					{items}
+					bind:value={selected}
+					onSelect={(value) => (lastSelected = `Selected ${value}`)}
+					class="max-w-md"
+				/>
+				<p class="text-kl-muted-content text-sm">{lastSelected}</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Grouped admin actions"
+			description="Group commands and disable unavailable actions."
+			code={`<Command
+  items={adminItems}
+  placeholder="Search admin actions..."
+/>`}
+		>
+			<Command
+				items={adminItems}
+				placeholder="Search admin actions..."
+				label="Admin actions"
+				class="max-w-md"
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Search and empty state"
+			description="Bind the query and customize empty text."
+			code={`<Command
+  items={emptyItems}
+  bind:search
+  emptyText="No customer command matches."
+/>`}
+		>
+			<Command
+				items={emptyItems}
+				bind:search
+				emptyText="No customer command matches."
+				class="max-w-md"
+			/>
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$ui/button';
 	import { ButtonGroup, ButtonGroupSeparator } from '$ui/button-group';
+	import { MenuContent, MenuItem, MenuPortal, MenuRoot, MenuTrigger } from '$ui/menu';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import {
@@ -94,7 +95,7 @@
 			description="Nested groups create compact action bars."
 			code={`<ButtonGroup role="toolbar" ariaLabel="Message toolbar" attached={false}>
   <ButtonGroup>
-    <Button variant="outline" size="icon-sm" ariaLabel="Back"><ArrowLeft /></Button>
+    <Button variant="outline" content="icon" size="sm" ariaLabel="Back"><ArrowLeft /></Button>
   </ButtonGroup>
   <ButtonGroup>
     <Button variant="outline" size="sm">Archive</Button>
@@ -102,14 +103,29 @@
     <Button variant="outline" size="sm">Snooze</Button>
   </ButtonGroup>
   <ButtonGroup>
-    <Button variant="outline" size="icon-sm" ariaLabel="Download"><Download /></Button>
-    <Button variant="outline" size="icon-sm" ariaLabel="More"><MoreHorizontal /></Button>
+    <Button variant="outline" content="icon" size="sm" ariaLabel="Download"><Download /></Button>
+    <MenuRoot>
+      <MenuTrigger>
+        {#snippet child({ props })}
+          <Button {...props} variant="outline" content="icon" size="sm" ariaLabel="More">
+            <MoreHorizontal />
+          </Button>
+        {/snippet}
+      </MenuTrigger>
+      <MenuPortal>
+        <MenuContent align="end">
+          <MenuItem>Mark as unread</MenuItem>
+          <MenuItem>Move to folder</MenuItem>
+          <MenuItem>Mute thread</MenuItem>
+        </MenuContent>
+      </MenuPortal>
+    </MenuRoot>
   </ButtonGroup>
 </ButtonGroup>`}
 		>
 			<ButtonGroup role="toolbar" ariaLabel="Message toolbar" attached={false}>
 				<ButtonGroup>
-					<Button variant="outline" size="icon-sm" ariaLabel="Back"><ArrowLeft /></Button>
+					<Button variant="outline" content="icon" size="sm" ariaLabel="Back"><ArrowLeft /></Button>
 				</ButtonGroup>
 				<ButtonGroup>
 					<Button variant="outline" size="sm">Archive</Button>
@@ -117,8 +133,25 @@
 					<Button variant="outline" size="sm">Snooze</Button>
 				</ButtonGroup>
 				<ButtonGroup>
-					<Button variant="outline" size="icon-sm" ariaLabel="Download"><Download /></Button>
-					<Button variant="outline" size="icon-sm" ariaLabel="More"><MoreHorizontal /></Button>
+					<Button variant="outline" content="icon" size="sm" ariaLabel="Download">
+						<Download />
+					</Button>
+					<MenuRoot>
+						<MenuTrigger>
+							{#snippet child({ props })}
+								<Button {...props} variant="outline" content="icon" size="sm" ariaLabel="More">
+									<MoreHorizontal />
+								</Button>
+							{/snippet}
+						</MenuTrigger>
+						<MenuPortal>
+							<MenuContent align="end">
+								<MenuItem>Mark as unread</MenuItem>
+								<MenuItem>Move to folder</MenuItem>
+								<MenuItem>Mute thread</MenuItem>
+							</MenuContent>
+						</MenuPortal>
+					</MenuRoot>
 				</ButtonGroup>
 			</ButtonGroup>
 		</DemoCard>
@@ -127,13 +160,13 @@
 			title="Orientation"
 			description="Use vertical orientation for compact steppers."
 			code={`<ButtonGroup orientation="vertical" ariaLabel="Quantity controls">
-  <Button variant="outline" size="icon" ariaLabel="Increase"><Plus /></Button>
-  <Button variant="outline" size="icon" ariaLabel="Decrease"><Minus /></Button>
+  <Button variant="outline" content="icon" size="md" ariaLabel="Increase"><Plus /></Button>
+  <Button variant="outline" content="icon" size="md" ariaLabel="Decrease"><Minus /></Button>
 </ButtonGroup>`}
 		>
 			<ButtonGroup orientation="vertical" ariaLabel="Quantity controls">
-				<Button variant="outline" size="icon" ariaLabel="Increase"><Plus /></Button>
-				<Button variant="outline" size="icon" ariaLabel="Decrease"><Minus /></Button>
+				<Button variant="outline" content="icon" size="md" ariaLabel="Increase"><Plus /></Button>
+				<Button variant="outline" content="icon" size="md" ariaLabel="Decrease"><Minus /></Button>
 			</ButtonGroup>
 		</DemoCard>
 
@@ -144,17 +177,17 @@
   <ButtonGroup>
     <Button variant="outline" size="sm">Small</Button>
     <Button variant="outline" size="sm">Group</Button>
-    <Button variant="outline" size="icon-sm" ariaLabel="Next"><ArrowRight /></Button>
+    <Button variant="outline" content="icon" size="sm" ariaLabel="Next"><ArrowRight /></Button>
   </ButtonGroup>
   <ButtonGroup>
     <Button variant="outline">Default</Button>
     <Button variant="outline">Group</Button>
-    <Button variant="outline" size="icon" ariaLabel="Next"><ArrowRight /></Button>
+    <Button variant="outline" content="icon" size="md" ariaLabel="Next"><ArrowRight /></Button>
   </ButtonGroup>
   <ButtonGroup>
     <Button variant="outline" size="lg">Large</Button>
     <Button variant="outline" size="lg">Group</Button>
-    <Button variant="outline" size="icon-lg" ariaLabel="Next"><ArrowRight /></Button>
+    <Button variant="outline" content="icon" size="lg" ariaLabel="Next"><ArrowRight /></Button>
   </ButtonGroup>
 </div>`}
 		>
@@ -162,17 +195,23 @@
 				<ButtonGroup>
 					<Button variant="outline" size="sm">Small</Button>
 					<Button variant="outline" size="sm">Group</Button>
-					<Button variant="outline" size="icon-sm" ariaLabel="Next"><ArrowRight /></Button>
+					<Button variant="outline" content="icon" size="sm" ariaLabel="Next">
+						<ArrowRight />
+					</Button>
 				</ButtonGroup>
 				<ButtonGroup>
 					<Button variant="outline">Default</Button>
 					<Button variant="outline">Group</Button>
-					<Button variant="outline" size="icon" ariaLabel="Next"><ArrowRight /></Button>
+					<Button variant="outline" content="icon" size="md" ariaLabel="Next">
+						<ArrowRight />
+					</Button>
 				</ButtonGroup>
 				<ButtonGroup>
 					<Button variant="outline" size="lg">Large</Button>
 					<Button variant="outline" size="lg">Group</Button>
-					<Button variant="outline" size="icon-lg" ariaLabel="Next"><ArrowRight /></Button>
+					<Button variant="outline" content="icon" size="lg" ariaLabel="Next">
+						<ArrowRight />
+					</Button>
 				</ButtonGroup>
 			</div>
 		</DemoCard>
