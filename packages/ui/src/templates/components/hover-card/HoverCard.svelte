@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { LinkPreview } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -13,7 +14,7 @@
 		alignOffset?: number;
 		arrow?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		trigger: Snippet;
+		body: Snippet;
 		children: Snippet;
 		class?: string;
 	}
@@ -28,15 +29,19 @@
 		alignOffset = 0,
 		arrow = true,
 		onOpenChange,
-		trigger,
+		body,
 		children,
 		class: className
 	}: Props = $props();
 </script>
 
 <LinkPreview.Root bind:open {openDelay} {closeDelay} {onOpenChange}>
-	<LinkPreview.Trigger class="inline-flex">
-		{@render trigger()}
+	<LinkPreview.Trigger>
+		{#snippet child({ props })}
+			<TriggerProvider {props}>
+				{@render children()}
+			</TriggerProvider>
+		{/snippet}
 	</LinkPreview.Trigger>
 
 	<LinkPreview.Content
@@ -49,7 +54,7 @@
 			className
 		)}
 	>
-		{@render children()}
+		{@render body()}
 		{#if arrow}
 			<LinkPreview.Arrow class="fill-kl-base-100 stroke-kl-base-300" />
 		{/if}

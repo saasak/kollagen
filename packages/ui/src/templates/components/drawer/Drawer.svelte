@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -16,8 +17,8 @@
 		dismissible?: boolean;
 		disabled?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		trigger?: Snippet;
 		footer?: Snippet;
+		body?: Snippet;
 		children?: Snippet;
 		class?: string;
 	}
@@ -32,8 +33,8 @@
 		dismissible = true,
 		disabled = false,
 		onOpenChange,
-		trigger,
 		footer,
+		body,
 		children,
 		class: className
 	}: Props = $props();
@@ -72,15 +73,12 @@
 	{dismissible}
 	onOpenChange={handleOpenChange}
 >
-	{#if trigger}
+	{#if children}
 		<Drawer.Trigger {disabled}>
 			{#snippet child({ props })}
-				<button
-					{...props}
-					class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-				>
-					{@render trigger()}
-				</button>
+				<TriggerProvider {props}>
+					{@render children()}
+				</TriggerProvider>
 			{/snippet}
 		</Drawer.Trigger>
 	{/if}
@@ -118,9 +116,9 @@
 					<p class="text-kl-muted-content mt-1 text-sm">{description}</p>
 				{/if}
 
-				{#if children}
+				{#if body}
 					<div class="mt-4">
-						{@render children()}
+						{@render body()}
 					</div>
 				{/if}
 

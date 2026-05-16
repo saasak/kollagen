@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Tooltip } from '$ui/tooltip';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -50,7 +51,7 @@
 			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'The trigger element wrapped by the tooltip'
+			description: 'Implicit trigger content, usually a Trigger component'
 		},
 		{
 			name: 'class',
@@ -77,15 +78,11 @@
 			title="Basic"
 			description="Hover over the button to see the tooltip."
 			code={`<Tooltip content="Save your progress">
-  <button>Hover me</button>
+  <Trigger>Hover me</Trigger>
 </Tooltip>`}
 		>
 			<Tooltip content="Save your progress">
-				<button
-					class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium"
-				>
-					Hover me
-				</button>
+				<Trigger color="primary">Hover me</Trigger>
 			</Tooltip>
 		</DemoCard>
 
@@ -93,33 +90,21 @@
 			title="Custom placement"
 			description="Position the tooltip on different sides of the trigger."
 			code={`<Tooltip content="Right side" side="right">
-  <button>Right</button>
+  <Trigger variant="outline">Right</Trigger>
 </Tooltip>`}
 		>
 			<div class="flex gap-4">
 				<Tooltip content="Top tooltip" side="top">
-					<button
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-						>Top</button
-					>
+					<Trigger variant="outline">Top</Trigger>
 				</Tooltip>
 				<Tooltip content="Right tooltip" side="right">
-					<button
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-						>Right</button
-					>
+					<Trigger variant="outline">Right</Trigger>
 				</Tooltip>
 				<Tooltip content="Bottom tooltip" side="bottom">
-					<button
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-						>Bottom</button
-					>
+					<Trigger variant="outline">Bottom</Trigger>
 				</Tooltip>
 				<Tooltip content="Left tooltip" side="left">
-					<button
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-						>Left</button
-					>
+					<Trigger variant="outline">Left</Trigger>
 				</Tooltip>
 			</div>
 		</DemoCard>
@@ -128,13 +113,11 @@
 			title="Instant open"
 			description="Set delayDuration to 0 for immediate display."
 			code={`<Tooltip content="No delay!" delayDuration={0}>
-  <button>Instant</button>
+  <Trigger variant="outline">Instant</Trigger>
 </Tooltip>`}
 		>
 			<Tooltip content="No delay!" delayDuration={0}>
-				<button class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm">
-					Instant tooltip
-				</button>
+				<Trigger variant="outline">Instant tooltip</Trigger>
 			</Tooltip>
 		</DemoCard>
 
@@ -142,13 +125,11 @@
 			title="Disabled"
 			description="Tooltip is suppressed when disabled."
 			code={`<Tooltip content="You won't see this" disabled={true}>
-  <button>Disabled tooltip</button>
+  <Trigger variant="outline">Disabled tooltip</Trigger>
 </Tooltip>`}
 		>
 			<Tooltip content="You won't see this" disabled={true}>
-				<button class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm">
-					Disabled tooltip
-				</button>
+				<Trigger variant="outline">Disabled tooltip</Trigger>
 			</Tooltip>
 		</DemoCard>
 	</section>

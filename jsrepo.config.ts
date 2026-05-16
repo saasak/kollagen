@@ -25,6 +25,7 @@ export default defineConfig({
 			{
 				name: 'alert-dialog',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/alert-dialog' }]
 			},
 			{
@@ -46,6 +47,12 @@ export default defineConfig({
 				name: 'button',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/button' }]
+			},
+			{
+				name: 'trigger',
+				type: 'component',
+				registryDependencies: ['button'],
+				files: [{ path: 'packages/ui/src/templates/components/trigger' }]
 			},
 			{
 				name: 'button-group',
@@ -85,6 +92,7 @@ export default defineConfig({
 			{
 				name: 'collapsible',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/collapsible' }]
 			},
 			{
@@ -133,18 +141,21 @@ export default defineConfig({
 					'popover',
 					'select',
 					'time-field',
-					'time-range-field'
+					'time-range-field',
+					'trigger'
 				],
 				files: [{ path: 'packages/ui/src/templates/components/data-table' }]
 			},
 			{
 				name: 'dialog',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/dialog' }]
 			},
 			{
 				name: 'drawer',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/drawer' }]
 			},
 			{
@@ -175,6 +186,7 @@ export default defineConfig({
 			{
 				name: 'hover-card',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/hover-card' }]
 			},
 			{
@@ -221,6 +233,7 @@ export default defineConfig({
 			{
 				name: 'menu',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/menu' }]
 			},
 			{
@@ -231,6 +244,7 @@ export default defineConfig({
 			{
 				name: 'action-sheet',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/action-sheet' }]
 			},
 			{
@@ -276,6 +290,7 @@ export default defineConfig({
 			{
 				name: 'popover',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/popover' }]
 			},
 			{
@@ -401,6 +416,7 @@ export default defineConfig({
 			{
 				name: 'tooltip',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/tooltip' }]
 			},
 			{

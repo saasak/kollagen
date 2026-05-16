@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ActionSheet } from '$ui/action-sheet';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -68,10 +69,10 @@
 			description: 'Callback when open state changes'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'Trigger button content (Svelte 5 snippet)'
+			description: 'Implicit trigger content, usually a Trigger component'
 		},
 		{
 			name: 'footer',
@@ -79,7 +80,7 @@
 			default: '—',
 			description: 'Footer content, e.g. action buttons (Svelte 5 snippet)'
 		},
-		{ name: 'children', type: 'Snippet', default: '—', description: 'Action sheet body content' },
+		{ name: 'body', type: 'Snippet', default: '—', description: 'Action sheet body content' },
 		{
 			name: 'class',
 			type: 'string',
@@ -109,30 +110,22 @@
 ${'<'}/script>
 
 <ActionSheet title="Welcome" description="This is a responsive action sheet.">
-  {#snippet trigger()}
-    <button
-      class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-    >
-      Open ActionSheet
-    </button>
-  {/snippet}
+  <Trigger color="primary">Open ActionSheet</Trigger>
 
-  <p class="text-kl-base-content text-sm">
-    This renders as a dialog on desktop and a drawer on mobile. Try resizing your browser.
-  </p>
+  {#snippet body()}
+    <p class="text-kl-base-content text-sm">
+      This renders as a dialog on desktop and a drawer on mobile. Try resizing your browser.
+    </p>
+  {/snippet}
 </ActionSheet>`}
 		>
 			<ActionSheet title="Welcome" description="This is a responsive action sheet.">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open ActionSheet
-					</button>
+				<Trigger color="primary">Open ActionSheet</Trigger>
+				{#snippet body()}
+					<p class="text-kl-base-content text-sm">
+						This renders as a dialog on desktop and a drawer on mobile. Try resizing your browser.
+					</p>
 				{/snippet}
-				<p class="text-kl-base-content text-sm">
-					This renders as a dialog on desktop and a drawer on mobile. Try resizing your browser.
-				</p>
 			</ActionSheet>
 		</DemoCard>
 
@@ -144,30 +137,22 @@ ${'<'}/script>
 ${'<'}/script>
 
 <ActionSheet variant="drawer" title="Bottom Sheet" description="Always a drawer.">
-  {#snippet trigger()}
-    <button
-      class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-    >
-      Open Drawer
-    </button>
-  {/snippet}
+  <Trigger color="primary">Open Drawer</Trigger>
 
-  <p class="text-kl-base-content text-sm">
-    This is always a bottom-sheet drawer, even on desktop. Swipe down to dismiss.
-  </p>
+  {#snippet body()}
+    <p class="text-kl-base-content text-sm">
+      This is always a bottom-sheet drawer, even on desktop. Swipe down to dismiss.
+    </p>
+  {/snippet}
 </ActionSheet>`}
 		>
 			<ActionSheet variant="drawer" title="Bottom Sheet" description="Always a drawer.">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open Drawer
-					</button>
+				<Trigger color="primary">Open Drawer</Trigger>
+				{#snippet body()}
+					<p class="text-kl-base-content text-sm">
+						This is always a bottom-sheet drawer, even on desktop. Swipe down to dismiss.
+					</p>
 				{/snippet}
-				<p class="text-kl-base-content text-sm">
-					This is always a bottom-sheet drawer, even on desktop. Swipe down to dismiss.
-				</p>
 			</ActionSheet>
 		</DemoCard>
 
@@ -193,30 +178,26 @@ ${'<'}/script>
   description="Drag the grabber to snap between positions."
   snapPoints={[0.25, 0.5, 1]}
 >
-  {#snippet trigger()}
-    <button
-      class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-    >
-      Open Map Drawer
-    </button>
-  {/snippet}
+  <Trigger color="primary">Open Map Drawer</Trigger>
 
-  <div class="space-y-3">
-    <p class="text-kl-base-content text-sm">
-      This drawer snaps to 25%, 50%, and 100% of the viewport height.
-    </p>
-    <div class="space-y-2">
-      {#each places as place (place.name)}
-        <div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
-          <div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
-          <div class="min-w-0 flex-1">
-            <div class="text-kl-base-content text-sm font-medium">{place.name}</div>
-            <div class="text-kl-muted-content text-xs">{place.distance}</div>
+  {#snippet body()}
+    <div class="space-y-3">
+      <p class="text-kl-base-content text-sm">
+        This drawer snaps to 25%, 50%, and 100% of the viewport height.
+      </p>
+      <div class="space-y-2">
+        {#each places as place (place.name)}
+          <div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
+            <div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
+            <div class="min-w-0 flex-1">
+              <div class="text-kl-base-content text-sm font-medium">{place.name}</div>
+              <div class="text-kl-muted-content text-xs">{place.distance}</div>
+            </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+      </div>
     </div>
-  </div>
+  {/snippet}
 </ActionSheet>`}
 		>
 			<ActionSheet
@@ -225,29 +206,25 @@ ${'<'}/script>
 				description="Drag the grabber to snap between positions."
 				snapPoints={[0.25, 0.5, 1]}
 			>
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open Map Drawer
-					</button>
-				{/snippet}
-				<div class="space-y-3">
-					<p class="text-kl-base-content text-sm">
-						This drawer snaps to 25%, 50%, and 100% of the viewport height.
-					</p>
-					<div class="space-y-2">
-						{#each places as place (place.name)}
-							<div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
-								<div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
-								<div class="min-w-0 flex-1">
-									<div class="text-kl-base-content text-sm font-medium">{place.name}</div>
-									<div class="text-kl-muted-content text-xs">{place.distance}</div>
+				<Trigger color="primary">Open Map Drawer</Trigger>
+				{#snippet body()}
+					<div class="space-y-3">
+						<p class="text-kl-base-content text-sm">
+							This drawer snaps to 25%, 50%, and 100% of the viewport height.
+						</p>
+						<div class="space-y-2">
+							{#each places as place (place.name)}
+								<div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
+									<div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
+									<div class="min-w-0 flex-1">
+										<div class="text-kl-base-content text-sm font-medium">{place.name}</div>
+										<div class="text-kl-muted-content text-xs">{place.distance}</div>
+									</div>
 								</div>
-							</div>
-						{/each}
+							{/each}
+						</div>
 					</div>
-				</div>
+				{/snippet}
 			</ActionSheet>
 		</DemoCard>
 
@@ -259,15 +236,11 @@ ${'<'}/script>
 ${'<'}/script>
 
 <ActionSheet title="Confirm action" description="Are you sure you want to proceed?">
-  {#snippet trigger()}
-    <button
-      class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-    >
-      Confirm
-    </button>
-  {/snippet}
+  <Trigger color="primary">Confirm</Trigger>
 
-  <p class="text-kl-base-content text-sm">This action cannot be undone.</p>
+  {#snippet body()}
+    <p class="text-kl-base-content text-sm">This action cannot be undone.</p>
+  {/snippet}
 
   {#snippet footer()}
     <button
@@ -284,14 +257,10 @@ ${'<'}/script>
 </ActionSheet>`}
 		>
 			<ActionSheet title="Confirm action" description="Are you sure you want to proceed?">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Confirm
-					</button>
+				<Trigger color="primary">Confirm</Trigger>
+				{#snippet body()}
+					<p class="text-kl-base-content text-sm">This action cannot be undone.</p>
 				{/snippet}
-				<p class="text-kl-base-content text-sm">This action cannot be undone.</p>
 				{#snippet footer()}
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-muted border px-4 py-2 text-sm font-medium transition-colors"
@@ -317,12 +286,7 @@ ${'<'}/script>
 ${'<'}/script>
 
 <div class="flex items-center gap-3">
-  <button
-    onclick={() => (open = true)}
-    class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-  >
-    Open externally
-  </button>
+  <Trigger color="primary" onclick={() => (open = true)}>Open externally</Trigger>
   <span class="text-kl-muted-content text-sm">
     State: {open ? "open" : "closed"}
   </span>
@@ -333,18 +297,15 @@ ${'<'}/script>
   title="Controlled ActionSheet"
   description="This action sheet is controlled via bind:open."
 >
-  <p class="text-kl-base-content text-sm">
-    Opened via external state. Close me with the X button, Escape key, or swipe down on mobile.
-  </p>
+  {#snippet body()}
+    <p class="text-kl-base-content text-sm">
+      Opened via external state. Close me with the X button, Escape key, or swipe down on mobile.
+    </p>
+  {/snippet}
 </ActionSheet>`}
 		>
 			<div class="flex items-center gap-3">
-				<button
-					onclick={() => (controlledOpen = true)}
-					class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-				>
-					Open externally
-				</button>
+				<Trigger color="primary" onclick={() => (controlledOpen = true)}>Open externally</Trigger>
 				<span class="text-kl-muted-content text-sm">
 					State: {controlledOpen ? 'open' : 'closed'}
 				</span>
@@ -354,10 +315,12 @@ ${'<'}/script>
 				title="Controlled ActionSheet"
 				description="This action sheet is controlled via bind:open."
 			>
-				<p class="text-kl-base-content text-sm">
-					Opened via external state. Close me with the X button, Escape key, or swipe down on
-					mobile.
-				</p>
+				{#snippet body()}
+					<p class="text-kl-base-content text-sm">
+						Opened via external state. Close me with the X button, Escape key, or swipe down on
+						mobile.
+					</p>
+				{/snippet}
 			</ActionSheet>
 		</DemoCard>
 	</section>

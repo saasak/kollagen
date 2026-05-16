@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
 	import { Collapsible } from 'bits-ui';
-	import { ChevronDown } from 'lucide-svelte';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		/** The trigger label text */
-		label: string;
 		/** Controlled open state. Supports bind:open */
 		open?: boolean;
 		/** Whether the collapsible is disabled */
@@ -15,19 +13,18 @@
 		onOpenChange?: (open: boolean) => void;
 		/** Additional CSS classes on the root element */
 		class?: string;
-		/** Trigger snippet for custom trigger content */
-		trigger?: Snippet;
 		/** Content to display when expanded */
-		children: Snippet;
+		body?: Snippet;
+		/** Trigger content */
+		children?: Snippet;
 	}
 
 	let {
-		label,
 		open = $bindable(false),
 		disabled = false,
 		onOpenChange,
 		class: className,
-		trigger,
+		body,
 		children
 	}: Props = $props();
 </script>
@@ -41,22 +38,20 @@
 		className as string | undefined
 	)}
 >
-	<Collapsible.Trigger
-		class="text-kl-base-content hover:bg-kl-base-200 flex w-full cursor-pointer items-center justify-between border-none bg-transparent px-4 py-3 text-sm font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50"
-	>
-		{#if trigger}
-			{@render trigger()}
-		{:else}
-			<span>{label}</span>
-		{/if}
-		<ChevronDown
-			size={16}
-			class="text-kl-muted-content transition-transform duration-150 {open ? 'rotate-180' : ''}"
-		/>
-	</Collapsible.Trigger>
-	<Collapsible.Content class="overflow-hidden">
-		<div class="border-kl-base-300 text-kl-base-content border-t px-4 py-3 text-sm">
-			{@render children()}
-		</div>
-	</Collapsible.Content>
+	{#if children}
+		<Collapsible.Trigger {disabled}>
+			{#snippet child({ props })}
+				<TriggerProvider {props}>
+					{@render children()}
+				</TriggerProvider>
+			{/snippet}
+		</Collapsible.Trigger>
+	{/if}
+	{#if body}
+		<Collapsible.Content class="overflow-hidden">
+			<div class="border-kl-base-300 text-kl-base-content border-t px-4 py-3 text-sm">
+				{@render body()}
+			</div>
+		</Collapsible.Content>
+	{/if}
 </Collapsible.Root>

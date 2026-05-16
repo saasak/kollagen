@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { AlertDialog } from 'bits-ui';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -14,9 +15,9 @@
 		onAction?: () => void;
 		onCancel?: () => void;
 		onOpenChange?: (open: boolean) => void;
-		trigger?: Snippet;
-		children?: Snippet;
+		body?: Snippet;
 		footer?: Snippet;
+		children?: Snippet;
 		class?: string;
 	}
 
@@ -30,20 +31,21 @@
 		onAction,
 		onCancel,
 		onOpenChange,
-		trigger,
-		children,
+		body,
 		footer,
+		children,
 		class: className
 	}: Props = $props();
 </script>
 
 <AlertDialog.Root bind:open {onOpenChange}>
-	{#if trigger}
-		<AlertDialog.Trigger
-			{disabled}
-			class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-		>
-			{@render trigger()}
+	{#if children}
+		<AlertDialog.Trigger {disabled}>
+			{#snippet child({ props })}
+				<TriggerProvider {props}>
+					{@render children()}
+				</TriggerProvider>
+			{/snippet}
 		</AlertDialog.Trigger>
 	{/if}
 
@@ -73,9 +75,9 @@
 					{description}
 				</AlertDialog.Description>
 			{/if}
-			{#if children}
+			{#if body}
 				<div class="text-kl-base-content mt-4 text-sm">
-					{@render children()}
+					{@render body()}
 				</div>
 			{/if}
 			<div class="mt-6 flex items-center justify-end gap-2">

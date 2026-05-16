@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
 	import { menuVariants } from './Menu.variants';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { DropdownMenu } from 'bits-ui';
 	import { ChevronRight } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -35,8 +36,8 @@
 		loop?: boolean;
 		onSelect?: (value: string) => void;
 		onOpenChange?: (open: boolean) => void;
-		trigger: Snippet;
 		class?: string;
+		children: Snippet;
 	}
 
 	let {
@@ -46,8 +47,8 @@
 		loop = false,
 		onSelect,
 		onOpenChange,
-		trigger,
-		class: className
+		class: className,
+		children
 	}: Props = $props();
 
 	function isSeparator(entry: MenuEntry): entry is MenuSeparator {
@@ -101,11 +102,12 @@
 {/snippet}
 
 <DropdownMenu.Root bind:open {onOpenChange}>
-	<DropdownMenu.Trigger
-		{disabled}
-		class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-	>
-		{@render trigger()}
+	<DropdownMenu.Trigger {disabled}>
+		{#snippet child({ props })}
+			<TriggerProvider {props}>
+				{@render children()}
+			</TriggerProvider>
+		{/snippet}
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Portal>

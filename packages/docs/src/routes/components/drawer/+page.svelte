@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Drawer } from '$ui/drawer';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -54,10 +55,10 @@
 			description: 'Callback when open state changes'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'Trigger button content (Svelte 5 snippet)'
+			description: 'Implicit trigger content, usually a Trigger component'
 		},
 		{
 			name: 'footer',
@@ -65,7 +66,7 @@
 			default: '—',
 			description: 'Footer content, e.g. action buttons (Svelte 5 snippet)'
 		},
-		{ name: 'children', type: 'Snippet', default: '—', description: 'Drawer body content' },
+		{ name: 'body', type: 'Snippet', default: '—', description: 'Drawer body content' },
 		{
 			name: 'class',
 			type: 'string',
@@ -99,24 +100,20 @@
 			title="Bottom (default)"
 			description="Bottom sheet drawer with a grabber handle. Swipe down to dismiss."
 			code={`<Drawer title="Bottom Sheet" description="Swipe down to dismiss.">
-  {#snippet trigger()}
-    <button class="btn">Open Bottom Drawer</button>
+  <Trigger>Open Bottom Drawer</Trigger>
+  {#snippet body()}
+    <p>This is a bottom sheet drawer.</p>
   {/snippet}
-  <p>This is a bottom sheet drawer.</p>
 </Drawer>`}
 		>
 			<Drawer title="Bottom Sheet" description="Swipe down to dismiss.">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open Bottom Drawer
-					</button>
+				<Trigger color="primary">Open Bottom Drawer</Trigger>
+				{#snippet body()}
+					<p class="text-kl-base-content text-sm">
+						This is a bottom sheet drawer with a grabber handle. Swipe down or click outside to
+						dismiss.
+					</p>
 				{/snippet}
-				<p class="text-kl-base-content text-sm">
-					This is a bottom sheet drawer with a grabber handle. Swipe down or click outside to
-					dismiss.
-				</p>
 			</Drawer>
 		</DemoCard>
 
@@ -124,30 +121,26 @@
 			title="Left navigation"
 			description="A side navigation drawer using direction=&quot;left&quot;."
 			code={`<Drawer direction="left" title="Navigation">
-  {#snippet trigger()}
-    <button class="btn">Open Menu</button>
+  <Trigger>Open Menu</Trigger>
+  {#snippet body()}
+    <!-- nav items -->
   {/snippet}
-  <!-- nav items -->
 </Drawer>`}
 		>
 			<Drawer direction="left" title="Navigation">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open Menu
-					</button>
+				<Trigger color="primary">Open Menu</Trigger>
+				{#snippet body()}
+					<nav class="space-y-1">
+						{#each navItems as item (item.label)}
+							<button
+								class="rounded-kl-field text-kl-base-content hover:bg-kl-muted flex w-full items-center gap-3 px-3 py-2.5 text-sm transition-colors"
+							>
+								<span>{item.icon}</span>
+								<span>{item.label}</span>
+							</button>
+						{/each}
+					</nav>
 				{/snippet}
-				<nav class="space-y-1">
-					{#each navItems as item (item.label)}
-						<button
-							class="rounded-kl-field text-kl-base-content hover:bg-kl-muted flex w-full items-center gap-3 px-3 py-2.5 text-sm transition-colors"
-						>
-							<span>{item.icon}</span>
-							<span>{item.label}</span>
-						</button>
-					{/each}
-				</nav>
 			</Drawer>
 		</DemoCard>
 
@@ -155,34 +148,30 @@
 			title="Right panel"
 			description="A detail panel using direction=&quot;right&quot;."
 			code={`<Drawer direction="right" title="Details">
-  {#snippet trigger()}
-    <button class="btn">Open Panel</button>
+  <Trigger>Open Panel</Trigger>
+  {#snippet body()}
+    <p>Side panel content.</p>
   {/snippet}
-  <p>Side panel content.</p>
 </Drawer>`}
 		>
 			<Drawer direction="right" title="Item Details" description="View and edit item properties.">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open Panel
-					</button>
+				<Trigger color="primary">Open Panel</Trigger>
+				{#snippet body()}
+					<div class="space-y-4">
+						<div>
+							<span class="text-kl-muted-content text-xs font-medium">Name</span>
+							<p class="text-kl-base-content text-sm">Example Item</p>
+						</div>
+						<div>
+							<span class="text-kl-muted-content text-xs font-medium">Status</span>
+							<p class="text-kl-base-content text-sm">Active</p>
+						</div>
+						<div>
+							<span class="text-kl-muted-content text-xs font-medium">Created</span>
+							<p class="text-kl-base-content text-sm">April 12, 2026</p>
+						</div>
+					</div>
 				{/snippet}
-				<div class="space-y-4">
-					<div>
-						<span class="text-kl-muted-content text-xs font-medium">Name</span>
-						<p class="text-kl-base-content text-sm">Example Item</p>
-					</div>
-					<div>
-						<span class="text-kl-muted-content text-xs font-medium">Status</span>
-						<p class="text-kl-base-content text-sm">Active</p>
-					</div>
-					<div>
-						<span class="text-kl-muted-content text-xs font-medium">Created</span>
-						<p class="text-kl-base-content text-sm">April 12, 2026</p>
-					</div>
-				</div>
 			</Drawer>
 		</DemoCard>
 
@@ -193,10 +182,10 @@
   title="Explore nearby"
   snapPoints={[0.25, 0.5, 1]}
 >
-  {#snippet trigger()}
-    <button class="btn">Open Map Drawer</button>
+  <Trigger>Open Map Drawer</Trigger>
+  {#snippet body()}
+    <!-- scrollable content -->
   {/snippet}
-  <!-- scrollable content -->
 </Drawer>`}
 		>
 			<Drawer
@@ -204,24 +193,20 @@
 				description="Drag the grabber to snap between positions."
 				snapPoints={[0.25, 0.5, 1]}
 			>
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Open Map Drawer
-					</button>
-				{/snippet}
-				<div class="space-y-2">
-					{#each Array(8) as _, i (i)}
-						<div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
-							<div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
-							<div class="min-w-0 flex-1">
-								<div class="text-kl-base-content text-sm font-medium">Place {i + 1}</div>
-								<div class="text-kl-muted-content text-xs">0.{i + 1} km away</div>
+				<Trigger color="primary">Open Map Drawer</Trigger>
+				{#snippet body()}
+					<div class="space-y-2">
+						{#each Array(8) as _, i (i)}
+							<div class="rounded-kl-field border-kl-base-300 flex items-center gap-3 border p-3">
+								<div class="bg-kl-muted h-10 w-10 shrink-0 rounded-full"></div>
+								<div class="min-w-0 flex-1">
+									<div class="text-kl-base-content text-sm font-medium">Place {i + 1}</div>
+									<div class="text-kl-muted-content text-xs">0.{i + 1} km away</div>
+								</div>
 							</div>
-						</div>
-					{/each}
-				</div>
+						{/each}
+					</div>
+				{/snippet}
 			</Drawer>
 		</DemoCard>
 
@@ -229,10 +214,10 @@
 			title="With footer"
 			description="Drawer with action buttons in the footer."
 			code={`<Drawer title="Filters" description="Adjust your search filters.">
-  {#snippet trigger()}
-    <button class="btn">Filters</button>
+  <Trigger>Filters</Trigger>
+  {#snippet body()}
+    <p>Filter content here.</p>
   {/snippet}
-  <p>Filter content here.</p>
   {#snippet footer()}
     <button class="btn-secondary">Reset</button>
     <button class="btn-primary">Apply</button>
@@ -240,14 +225,10 @@
 </Drawer>`}
 		>
 			<Drawer title="Filters" description="Adjust your search filters.">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-					>
-						Filters
-					</button>
+				<Trigger color="primary">Filters</Trigger>
+				{#snippet body()}
+					<p class="text-kl-base-content text-sm">Filter controls would go here.</p>
 				{/snippet}
-				<p class="text-kl-base-content text-sm">Filter controls would go here.</p>
 				{#snippet footer()}
 					<button
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-muted border px-4 py-2 text-sm font-medium transition-colors"

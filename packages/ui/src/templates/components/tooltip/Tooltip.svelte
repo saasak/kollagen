@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { Tooltip } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
@@ -29,12 +30,18 @@
 </script>
 
 {#if disabled}
-	{@render children()}
+	<TriggerProvider props={{ disabled: true }}>
+		{@render children()}
+	</TriggerProvider>
 {:else}
 	<Tooltip.Provider>
 		<Tooltip.Root bind:open {delayDuration} {onOpenChange}>
-			<Tooltip.Trigger class="inline-flex">
-				{@render children()}
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
+					<TriggerProvider {props}>
+						{@render children()}
+					</TriggerProvider>
+				{/snippet}
 			</Tooltip.Trigger>
 			<Tooltip.Content
 				{side}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { Dialog } from 'bits-ui';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -12,8 +13,8 @@
 		closeOnInteractOutside?: boolean;
 		disabled?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		trigger?: Snippet;
 		footer?: Snippet;
+		body?: Snippet;
 		children?: Snippet;
 		class?: string;
 	}
@@ -26,20 +27,21 @@
 		closeOnInteractOutside = true,
 		disabled = false,
 		onOpenChange,
-		trigger,
 		footer,
+		body,
 		children,
 		class: className
 	}: Props = $props();
 </script>
 
 <Dialog.Root bind:open {onOpenChange}>
-	{#if trigger}
-		<Dialog.Trigger
-			{disabled}
-			class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-		>
-			{@render trigger()}
+	{#if children}
+		<Dialog.Trigger {disabled}>
+			{#snippet child({ props })}
+				<TriggerProvider {props}>
+					{@render children()}
+				</TriggerProvider>
+			{/snippet}
 		</Dialog.Trigger>
 	{/if}
 
@@ -73,9 +75,9 @@
 				</Dialog.Description>
 			{/if}
 
-			{#if children}
+			{#if body}
 				<div class="mt-4">
-					{@render children()}
+					{@render body()}
 				</div>
 			{/if}
 

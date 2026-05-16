@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { HoverCard } from '$ui/hover-card';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -59,13 +60,13 @@
 			description: 'Callback when the hover card opens or closes'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'The trigger element rendered inside the hover zone'
+			description: 'Implicit trigger content, usually a Trigger component'
 		},
 		{
-			name: 'children',
+			name: 'body',
 			type: 'Snippet',
 			default: '—',
 			description: 'Content rendered inside the hover card popover'
@@ -101,25 +102,25 @@
 			title="Basic"
 			description="Hover over the link to see a preview card."
 			code={`<HoverCard>
-  {#snippet trigger()}
-    <span class="underline cursor-pointer">@kollagen</span>
+  <Trigger variant="link">@kollagen</Trigger>
+  {#snippet body()}
+    <div class="space-y-2">
+      <p class="font-semibold">Kollagen UI</p>
+      <p class="text-kl-muted-content">Ready-to-use, themed SvelteKit components built on bits-ui.</p>
+    </div>
   {/snippet}
-  <div class="space-y-2">
-    <p class="font-semibold">Kollagen UI</p>
-    <p class="text-kl-muted-content">Ready-to-use, themed SvelteKit components built on bits-ui.</p>
-  </div>
 </HoverCard>`}
 		>
 			<HoverCard>
-				{#snippet trigger()}
-					<span class="text-kl-primary cursor-pointer font-medium underline">@kollagen</span>
+				<Trigger variant="link" color="primary">@kollagen</Trigger>
+				{#snippet body()}
+					<div class="space-y-2">
+						<p class="font-semibold">Kollagen UI</p>
+						<p class="text-kl-muted-content">
+							Ready-to-use, themed SvelteKit components built on bits-ui.
+						</p>
+					</div>
 				{/snippet}
-				<div class="space-y-2">
-					<p class="font-semibold">Kollagen UI</p>
-					<p class="text-kl-muted-content">
-						Ready-to-use, themed SvelteKit components built on bits-ui.
-					</p>
-				</div>
 			</HoverCard>
 		</DemoCard>
 
@@ -127,33 +128,33 @@
 			title="User profile"
 			description="Show a user profile card on hover."
 			code={`<HoverCard>
-  {#snippet trigger()}
-    <span>Jane Doe</span>
-  {/snippet}
-  <div class="flex items-center gap-3">
-    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-kl-primary text-kl-primary-content text-sm font-bold">JD</div>
-    <div>
-      <p class="font-semibold">Jane Doe</p>
-      <p class="text-xs text-kl-muted-content">Engineer · Joined Mar 2024</p>
+  <Trigger variant="link">Jane Doe</Trigger>
+  {#snippet body()}
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 items-center justify-center rounded-full bg-kl-primary text-kl-primary-content text-sm font-bold">JD</div>
+      <div>
+        <p class="font-semibold">Jane Doe</p>
+        <p class="text-xs text-kl-muted-content">Engineer · Joined Mar 2024</p>
+      </div>
     </div>
-  </div>
+  {/snippet}
 </HoverCard>`}
 		>
 			<HoverCard>
-				{#snippet trigger()}
-					<span class="text-kl-primary cursor-pointer font-medium underline">Jane Doe</span>
+				<Trigger variant="link" color="primary">Jane Doe</Trigger>
+				{#snippet body()}
+					<div class="flex items-center gap-3">
+						<div
+							class="bg-kl-primary text-kl-primary-content flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
+						>
+							JD
+						</div>
+						<div>
+							<p class="font-semibold">Jane Doe</p>
+							<p class="text-kl-muted-content text-xs">Engineer · Joined Mar 2024</p>
+						</div>
+					</div>
 				{/snippet}
-				<div class="flex items-center gap-3">
-					<div
-						class="bg-kl-primary text-kl-primary-content flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
-					>
-						JD
-					</div>
-					<div>
-						<p class="font-semibold">Jane Doe</p>
-						<p class="text-kl-muted-content text-xs">Engineer · Joined Mar 2024</p>
-					</div>
-				</div>
 			</HoverCard>
 		</DemoCard>
 
@@ -161,39 +162,30 @@
 			title="Custom placement"
 			description="Position the hover card on different sides of the trigger."
 			code={`<HoverCard side="right">
-  {#snippet trigger()}
-    <span>Hover right</span>
+  <Trigger variant="outline">Hover right</Trigger>
+  {#snippet body()}
+    <p>This card appears to the right.</p>
   {/snippet}
-  <p>This card appears to the right.</p>
 </HoverCard>`}
 		>
 			<div class="flex gap-6">
 				<HoverCard side="top">
-					{#snippet trigger()}
-						<span
-							class="rounded-kl-field border-kl-base-300 cursor-pointer border px-3 py-1.5 text-sm"
-							>Top</span
-						>
+					<Trigger variant="outline">Top</Trigger>
+					{#snippet body()}
+						<p>Hover card on top.</p>
 					{/snippet}
-					<p>Hover card on top.</p>
 				</HoverCard>
 				<HoverCard side="right">
-					{#snippet trigger()}
-						<span
-							class="rounded-kl-field border-kl-base-300 cursor-pointer border px-3 py-1.5 text-sm"
-							>Right</span
-						>
+					<Trigger variant="outline">Right</Trigger>
+					{#snippet body()}
+						<p>Hover card on the right.</p>
 					{/snippet}
-					<p>Hover card on the right.</p>
 				</HoverCard>
 				<HoverCard side="bottom">
-					{#snippet trigger()}
-						<span
-							class="rounded-kl-field border-kl-base-300 cursor-pointer border px-3 py-1.5 text-sm"
-							>Bottom</span
-						>
+					<Trigger variant="outline">Bottom</Trigger>
+					{#snippet body()}
+						<p>Hover card on the bottom.</p>
 					{/snippet}
-					<p>Hover card on the bottom.</p>
 				</HoverCard>
 			</div>
 		</DemoCard>
@@ -202,17 +194,17 @@
 			title="No arrow"
 			description="Hide the arrow pointing to the trigger."
 			code={`<HoverCard arrow={false}>
-  {#snippet trigger()}
-    <span>No arrow</span>
+  <Trigger variant="link">No arrow</Trigger>
+  {#snippet body()}
+    <p>This card has no arrow.</p>
   {/snippet}
-  <p>This card has no arrow.</p>
 </HoverCard>`}
 		>
 			<HoverCard arrow={false}>
-				{#snippet trigger()}
-					<span class="text-kl-primary cursor-pointer font-medium underline">No arrow</span>
+				<Trigger variant="link" color="primary">No arrow</Trigger>
+				{#snippet body()}
+					<p>This card has no arrow indicator.</p>
 				{/snippet}
-				<p>This card has no arrow indicator.</p>
 			</HoverCard>
 		</DemoCard>
 
@@ -220,17 +212,17 @@
 			title="Instant open"
 			description="Set openDelay to 0 for immediate display."
 			code={`<HoverCard openDelay={0}>
-  {#snippet trigger()}
-    <span>Instant</span>
+  <Trigger variant="link">Instant</Trigger>
+  {#snippet body()}
+    <p>Opens immediately on hover.</p>
   {/snippet}
-  <p>Opens immediately on hover.</p>
 </HoverCard>`}
 		>
 			<HoverCard openDelay={0}>
-				{#snippet trigger()}
-					<span class="text-kl-primary cursor-pointer font-medium underline">Instant hover</span>
+				<Trigger variant="link" color="primary">Instant hover</Trigger>
+				{#snippet body()}
+					<p>This card opens immediately on hover.</p>
 				{/snippet}
-				<p>This card opens immediately on hover.</p>
 			</HoverCard>
 		</DemoCard>
 	</section>

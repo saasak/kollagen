@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Collapsible } from '$ui/collapsible';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	let controlledOpen = $state(false);
 
 	const propsData = [
-		{ name: 'label', type: 'string', default: '—', description: 'The trigger label text' },
 		{
 			name: 'open',
 			type: 'boolean',
@@ -32,13 +32,13 @@
 			description: 'Additional CSS classes on the root element'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'Custom trigger snippet to replace the default label'
+			description: 'Trigger content, usually a Trigger component'
 		},
 		{
-			name: 'children',
+			name: 'body',
 			type: 'Snippet',
 			default: '—',
 			description: 'Content to display when expanded'
@@ -61,14 +61,20 @@
 
 		<DemoCard
 			title="Basic"
-			description="Simple collapsible with a label trigger."
-			code={`<Collapsible label="Show details">
-  <p>Here are the details you were looking for.</p>
+			description="Simple collapsible with a Trigger."
+			code={`<Collapsible>
+  <Trigger>Show details</Trigger>
+  {#snippet body()}
+    <p>Here are the details you were looking for.</p>
+  {/snippet}
 </Collapsible>`}
 		>
 			<div class="max-w-md">
-				<Collapsible label="Show details">
-					<p>Here are the details you were looking for.</p>
+				<Collapsible>
+					<Trigger>Show details</Trigger>
+					{#snippet body()}
+						<p>Here are the details you were looking for.</p>
+					{/snippet}
 				</Collapsible>
 			</div>
 		</DemoCard>
@@ -76,13 +82,19 @@
 		<DemoCard
 			title="Default open"
 			description="Starts in the expanded state."
-			code={`<Collapsible label="Already open" open={true}>
-  <p>This content is visible on load.</p>
+			code={`<Collapsible open={true}>
+  <Trigger>Already open</Trigger>
+  {#snippet body()}
+    <p>This content is visible on load.</p>
+  {/snippet}
 </Collapsible>`}
 		>
 			<div class="max-w-md">
-				<Collapsible label="Already open" open={true}>
-					<p>This content is visible on load.</p>
+				<Collapsible open={true}>
+					<Trigger>Already open</Trigger>
+					{#snippet body()}
+						<p>This content is visible on load.</p>
+					{/snippet}
 				</Collapsible>
 			</div>
 		</DemoCard>
@@ -93,8 +105,11 @@
 			code={`<button onclick={() => open = !open}>
   {open ? 'Close' : 'Open'}
 </button>
-<Collapsible label="Controlled panel" bind:open>
-  <p>Controlled from outside the component.</p>
+<Collapsible bind:open>
+  <Trigger>Controlled panel</Trigger>
+  {#snippet body()}
+    <p>Controlled from outside the component.</p>
+  {/snippet}
 </Collapsible>`}
 		>
 			<div class="max-w-md space-y-3">
@@ -104,8 +119,11 @@
 				>
 					{controlledOpen ? 'Close' : 'Open'}
 				</button>
-				<Collapsible label="Controlled panel" bind:open={controlledOpen}>
-					<p>Controlled from outside the component.</p>
+				<Collapsible bind:open={controlledOpen}>
+					<Trigger>Controlled panel</Trigger>
+					{#snippet body()}
+						<p>Controlled from outside the component.</p>
+					{/snippet}
 				</Collapsible>
 			</div>
 		</DemoCard>
@@ -113,13 +131,19 @@
 		<DemoCard
 			title="Disabled"
 			description="Collapsible in disabled state."
-			code={`<Collapsible label="Cannot toggle" disabled={true}>
-  <p>You should not see this.</p>
+			code={`<Collapsible disabled={true}>
+  <Trigger>Cannot toggle</Trigger>
+  {#snippet body()}
+    <p>You should not see this.</p>
+  {/snippet}
 </Collapsible>`}
 		>
 			<div class="max-w-md">
-				<Collapsible label="Cannot toggle" disabled={true}>
-					<p>You should not see this.</p>
+				<Collapsible disabled={true}>
+					<Trigger>Cannot toggle</Trigger>
+					{#snippet body()}
+						<p>You should not see this.</p>
+					{/snippet}
 				</Collapsible>
 			</div>
 		</DemoCard>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { Popover } from 'bits-ui';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -13,7 +14,7 @@
 		align?: 'start' | 'center' | 'end';
 		alignOffset?: number;
 		onOpenChange?: (open: boolean) => void;
-		trigger?: Snippet;
+		body?: Snippet;
 		children?: Snippet;
 		class?: string;
 	}
@@ -27,16 +28,20 @@
 		align = 'center',
 		alignOffset = 0,
 		onOpenChange,
-		trigger,
+		body,
 		children,
 		class: className
 	}: Props = $props();
 </script>
 
 <Popover.Root bind:open {onOpenChange}>
-	{#if trigger}
-		<Popover.Trigger class="inline-flex cursor-pointer items-center">
-			{@render trigger()}
+	{#if children}
+		<Popover.Trigger>
+			{#snippet child({ props })}
+				<TriggerProvider {props}>
+					{@render children()}
+				</TriggerProvider>
+			{/snippet}
 		</Popover.Trigger>
 	{/if}
 
@@ -74,9 +79,9 @@
 				</button>
 			</div>
 
-			{#if children}
+			{#if body}
 				<div class="mt-3">
-					{@render children()}
+					{@render body()}
 				</div>
 			{/if}
 		</Popover.Content>

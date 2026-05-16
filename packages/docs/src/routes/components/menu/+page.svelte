@@ -12,6 +12,7 @@
 		Separator as MenuSeparator,
 		Trigger as MenuTrigger
 	} from '$ui/menu';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import { Check } from 'lucide-svelte';
@@ -134,10 +135,10 @@
 			description: 'Callback when the menu opens or closes'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'Content rendered inside the trigger button'
+			description: 'Implicit trigger content, usually a Trigger component'
 		},
 		{
 			name: 'class',
@@ -172,7 +173,7 @@
   ]}
   onSelect={(value) => console.log(value)}
 >
-  {#snippet trigger()}File{/snippet}
+  <Trigger>File</Trigger>
 </Menu>`}
 		>
 			<div class="max-w-sm">
@@ -182,7 +183,7 @@
 						lastAction = value;
 					}}
 				>
-					{#snippet trigger()}File{/snippet}
+					<Trigger>File</Trigger>
 				</Menu>
 				{#if lastAction}
 					<p class="text-kl-muted-content mt-2 text-sm">
@@ -206,12 +207,12 @@
     { label: "Select All", value: "select-all" },
   ]}
 >
-  {#snippet trigger()}Edit{/snippet}
+  <Trigger>Edit</Trigger>
 </Menu>`}
 		>
 			<div class="max-w-sm">
 				<Menu items={mixedItems}>
-					{#snippet trigger()}Edit{/snippet}
+					<Trigger>Edit</Trigger>
 				</Menu>
 			</div>
 		</DemoCard>
@@ -240,12 +241,12 @@
     },
   ]}
 >
-  {#snippet trigger()}Options{/snippet}
+  <Trigger>Options</Trigger>
 </Menu>`}
 		>
 			<div class="max-w-sm">
 				<Menu items={groupedItems}>
-					{#snippet trigger()}Options{/snippet}
+					<Trigger>Options</Trigger>
 				</Menu>
 			</div>
 		</DemoCard>
@@ -276,12 +277,12 @@
     { label: "Settings", value: "settings" },
   ]}
 >
-  {#snippet trigger()}File{/snippet}
+  <Trigger>File</Trigger>
 </Menu>`}
 		>
 			<div class="max-w-sm">
 				<Menu items={nestedItems}>
-					{#snippet trigger()}File{/snippet}
+					<Trigger>File</Trigger>
 				</Menu>
 			</div>
 		</DemoCard>
@@ -299,12 +300,12 @@
     { label: "Paste", value: "paste" },
   ]}
 >
-  {#snippet trigger()}Edit{/snippet}
+  <Trigger>Edit</Trigger>
 </Menu>`}
 		>
 			<div class="max-w-sm">
 				<Menu items={withDisabledItems}>
-					{#snippet trigger()}Edit{/snippet}
+					<Trigger>Edit</Trigger>
 				</Menu>
 			</div>
 		</DemoCard>
@@ -313,12 +314,12 @@
 			title="Disabled trigger"
 			description="The entire menu can be disabled via the trigger."
 			code={`<Menu items={fileItems} disabled={true}>
-  {#snippet trigger()}Disabled{/snippet}
+  <Trigger>Disabled</Trigger>
 </Menu>`}
 		>
 			<div class="max-w-sm">
 				<Menu items={fileItems} disabled={true}>
-					{#snippet trigger()}Disabled{/snippet}
+					<Trigger>Disabled</Trigger>
 				</Menu>
 			</div>
 		</DemoCard>

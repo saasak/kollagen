@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { Dialog } from 'bits-ui';
 	import { Drawer } from 'vaul-svelte';
 	import { X } from 'lucide-svelte';
@@ -15,8 +16,8 @@
 		snapPoints?: (number | string)[];
 		disabled?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		trigger?: Snippet;
 		footer?: Snippet;
+		body?: Snippet;
 		children?: Snippet;
 		class?: string;
 	}
@@ -31,8 +32,8 @@
 		snapPoints,
 		disabled = false,
 		onOpenChange,
-		trigger,
 		footer,
+		body,
 		children,
 		class: className
 	}: Props = $props();
@@ -60,15 +61,12 @@
 
 {#if showDrawer}
 	<Drawer.Root bind:open {snapPoints} bind:activeSnapPoint onOpenChange={handleDrawerOpenChange}>
-		{#if trigger}
+		{#if children}
 			<Drawer.Trigger {disabled}>
 				{#snippet child({ props })}
-					<button
-						{...props}
-						class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-					>
-						{@render trigger()}
-					</button>
+					<TriggerProvider {props}>
+						{@render children()}
+					</TriggerProvider>
 				{/snippet}
 			</Drawer.Trigger>
 		{/if}
@@ -109,9 +107,9 @@
 						</Drawer.Description>
 					{/if}
 
-					{#if children}
+					{#if body}
 						<div class="mt-4">
-							{@render children()}
+							{@render body()}
 						</div>
 					{/if}
 
@@ -126,12 +124,13 @@
 	</Drawer.Root>
 {:else}
 	<Dialog.Root bind:open {onOpenChange}>
-		{#if trigger}
-			<Dialog.Trigger
-				{disabled}
-				class="inline-flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
-			>
-				{@render trigger()}
+		{#if children}
+			<Dialog.Trigger {disabled}>
+				{#snippet child({ props })}
+					<TriggerProvider {props}>
+						{@render children()}
+					</TriggerProvider>
+				{/snippet}
 			</Dialog.Trigger>
 		{/if}
 
@@ -164,9 +163,9 @@
 					</Dialog.Description>
 				{/if}
 
-				{#if children}
+				{#if body}
 					<div class="mt-4">
-						{@render children()}
+						{@render body()}
 					</div>
 				{/if}
 

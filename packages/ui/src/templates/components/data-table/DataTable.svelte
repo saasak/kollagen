@@ -8,6 +8,7 @@
 	import { Select } from '../select';
 	import { TimeField } from '../time-field';
 	import { TimeRangeField } from '../time-range-field';
+	import { Trigger } from '../trigger';
 	import { parseDate, parseTime, type DateValue } from '@internationalized/date';
 	import type { DateRange, TimeRange, TimeValue } from 'bits-ui';
 	import {
@@ -556,146 +557,146 @@
 		<div class="flex items-center justify-between gap-2 lg:justify-end">
 			{#if hasFilters}
 				<Popover title="Filters" side="bottom" align="end" class="w-[min(28rem,calc(100vw-2rem))]">
-					{#snippet trigger()}
-						<button
-							type="button"
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md relative inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
-						>
-							<SlidersHorizontal size={16} />
-							<span>Filters</span>
-							{#if activeFilterCount > 0}
-								<span
-									class="bg-kl-primary text-kl-primary-content rounded-kl-selector h-kl-selector-sm min-w-kl-selector-sm inline-flex items-center justify-center px-1.5 text-xs font-semibold"
-								>
-									{activeFilterCount}
-								</span>
-							{/if}
-						</button>
-					{/snippet}
-
-					<form class="space-y-4" onsubmit={(event) => event.preventDefault()}>
-						<div class="grid gap-3">
-							{#each filters as filter (filter.id)}
-								<div class="space-y-1.5">
-									<span class="text-kl-muted-content block text-xs font-medium">
-										{filter.label}
-									</span>
-
-									{#if filter.type === 'select'}
-										<Select
-											items={[{ label: filter.placeholder ?? 'Any', value: '' }, ...filter.values]}
-											value={getStringFilterValue(filter.id)}
-											allowDeselect
-											onValueChange={(value) => updateFilter(filter.id, value)}
-										/>
-									{:else if filter.type === 'multi-select'}
-										<Select
-											items={filter.values}
-											multiple
-											value={getStringArrayFilterValue(filter.id)}
-											placeholder={filter.placeholder ?? 'Any'}
-											onValueChange={(value) => updateFilter(filter.id, value)}
-										/>
-									{:else if filter.type === 'boolean'}
-										<Select
-											items={[
-												{ label: filter.placeholder ?? 'Any', value: '' },
-												{ label: filter.trueLabel ?? 'True', value: 'true' },
-												{ label: filter.falseLabel ?? 'False', value: 'false' }
-											]}
-											value={getBooleanFilterValue(filter.id)}
-											allowDeselect
-											onValueChange={(value) => updateBooleanFilter(filter.id, value)}
-										/>
-									{:else if filter.type === 'text'}
-										<input
-											type="text"
-											aria-label={filter.label}
-											value={getStringFilterValue(filter.id)}
-											placeholder={filter.placeholder ?? filter.label}
-											oninput={(event) => updateFilter(filter.id, event.currentTarget.value)}
-											class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border px-3 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-										/>
-									{:else if filter.type === 'date-range'}
-										<DateRangePicker
-											ariaLabel={filter.label}
-											value={getDateRangePickerValue(filter.id)}
-											numberOfMonths={filter.numberOfMonths ?? 2}
-											weekStartsOn={filter.weekStartsOn}
-											locale={filter.locale ?? 'en'}
-											onValueChange={(value) => updateDateRangeFilter(filter.id, value)}
-										/>
-									{:else if filter.type === 'number-range'}
-										<div class="grid grid-cols-2 gap-2">
-											<input
-												type="number"
-												aria-label="{filter.label} minimum"
-												value={getNumberRangeFilterValue(filter.id).min ?? ''}
-												placeholder="Min"
-												oninput={(event) =>
-													updateFilter(filter.id, {
-														...getNumberRangeFilterValue(filter.id),
-														min:
-															event.currentTarget.value === ''
-																? undefined
-																: Number(event.currentTarget.value)
-													})}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-											/>
-											<input
-												type="number"
-												aria-label="{filter.label} maximum"
-												value={getNumberRangeFilterValue(filter.id).max ?? ''}
-												placeholder="Max"
-												oninput={(event) =>
-													updateFilter(filter.id, {
-														...getNumberRangeFilterValue(filter.id),
-														max:
-															event.currentTarget.value === ''
-																? undefined
-																: Number(event.currentTarget.value)
-													})}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-											/>
-										</div>
-									{:else if filter.type === 'time'}
-										<TimeField
-											ariaLabel={filter.label}
-											value={getTimeFilterValue(filter.id)}
-											placeholder={filter.placeholder}
-											hourCycle={filter.hourCycle}
-											granularity={filter.granularity ?? 'minute'}
-											locale={filter.locale ?? 'en'}
-											onValueChange={(value) =>
-												updateTimeFilter(filter.id, value, filter.granularity ?? 'minute')}
-										/>
-									{:else if filter.type === 'time-range'}
-										<TimeRangeField
-											value={getTimeRangeFieldValue(filter.id)}
-											placeholder={filter.placeholder}
-											hourCycle={filter.hourCycle}
-											granularity={filter.granularity ?? 'minute'}
-											locale={filter.locale ?? 'en'}
-											onValueChange={(value) =>
-												updateTimeRangeFilter(filter.id, value, filter.granularity ?? 'minute')}
-										/>
-									{/if}
-								</div>
-							{/each}
-						</div>
-
-						<div class="border-kl-base-300 flex justify-end border-t pt-3">
-							<button
-								type="button"
-								disabled={activeFilterCount === 0}
-								onclick={() => updateQuery({ filters: {} }, true)}
-								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+					<Trigger variant="outline" class="relative">
+						<SlidersHorizontal size={16} />
+						<span>Filters</span>
+						{#if activeFilterCount > 0}
+							<span
+								class="bg-kl-primary text-kl-primary-content rounded-kl-selector h-kl-selector-sm min-w-kl-selector-sm inline-flex items-center justify-center px-1.5 text-xs font-semibold"
 							>
-								<X size={16} />
-								Clear filters
-							</button>
-						</div>
-					</form>
+								{activeFilterCount}
+							</span>
+						{/if}
+					</Trigger>
+
+					{#snippet body()}
+						<form class="space-y-4" onsubmit={(event) => event.preventDefault()}>
+							<div class="grid gap-3">
+								{#each filters as filter (filter.id)}
+									<div class="space-y-1.5">
+										<span class="text-kl-muted-content block text-xs font-medium">
+											{filter.label}
+										</span>
+
+										{#if filter.type === 'select'}
+											<Select
+												items={[
+													{ label: filter.placeholder ?? 'Any', value: '' },
+													...filter.values
+												]}
+												value={getStringFilterValue(filter.id)}
+												allowDeselect
+												onValueChange={(value) => updateFilter(filter.id, value)}
+											/>
+										{:else if filter.type === 'multi-select'}
+											<Select
+												items={filter.values}
+												multiple
+												value={getStringArrayFilterValue(filter.id)}
+												placeholder={filter.placeholder ?? 'Any'}
+												onValueChange={(value) => updateFilter(filter.id, value)}
+											/>
+										{:else if filter.type === 'boolean'}
+											<Select
+												items={[
+													{ label: filter.placeholder ?? 'Any', value: '' },
+													{ label: filter.trueLabel ?? 'True', value: 'true' },
+													{ label: filter.falseLabel ?? 'False', value: 'false' }
+												]}
+												value={getBooleanFilterValue(filter.id)}
+												allowDeselect
+												onValueChange={(value) => updateBooleanFilter(filter.id, value)}
+											/>
+										{:else if filter.type === 'text'}
+											<input
+												type="text"
+												aria-label={filter.label}
+												value={getStringFilterValue(filter.id)}
+												placeholder={filter.placeholder ?? filter.label}
+												oninput={(event) => updateFilter(filter.id, event.currentTarget.value)}
+												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border px-3 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
+											/>
+										{:else if filter.type === 'date-range'}
+											<DateRangePicker
+												ariaLabel={filter.label}
+												value={getDateRangePickerValue(filter.id)}
+												numberOfMonths={filter.numberOfMonths ?? 2}
+												weekStartsOn={filter.weekStartsOn}
+												locale={filter.locale ?? 'en'}
+												onValueChange={(value) => updateDateRangeFilter(filter.id, value)}
+											/>
+										{:else if filter.type === 'number-range'}
+											<div class="grid grid-cols-2 gap-2">
+												<input
+													type="number"
+													aria-label="{filter.label} minimum"
+													value={getNumberRangeFilterValue(filter.id).min ?? ''}
+													placeholder="Min"
+													oninput={(event) =>
+														updateFilter(filter.id, {
+															...getNumberRangeFilterValue(filter.id),
+															min:
+																event.currentTarget.value === ''
+																	? undefined
+																	: Number(event.currentTarget.value)
+														})}
+													class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
+												/>
+												<input
+													type="number"
+													aria-label="{filter.label} maximum"
+													value={getNumberRangeFilterValue(filter.id).max ?? ''}
+													placeholder="Max"
+													oninput={(event) =>
+														updateFilter(filter.id, {
+															...getNumberRangeFilterValue(filter.id),
+															max:
+																event.currentTarget.value === ''
+																	? undefined
+																	: Number(event.currentTarget.value)
+														})}
+													class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
+												/>
+											</div>
+										{:else if filter.type === 'time'}
+											<TimeField
+												ariaLabel={filter.label}
+												value={getTimeFilterValue(filter.id)}
+												placeholder={filter.placeholder}
+												hourCycle={filter.hourCycle}
+												granularity={filter.granularity ?? 'minute'}
+												locale={filter.locale ?? 'en'}
+												onValueChange={(value) =>
+													updateTimeFilter(filter.id, value, filter.granularity ?? 'minute')}
+											/>
+										{:else if filter.type === 'time-range'}
+											<TimeRangeField
+												value={getTimeRangeFieldValue(filter.id)}
+												placeholder={filter.placeholder}
+												hourCycle={filter.hourCycle}
+												granularity={filter.granularity ?? 'minute'}
+												locale={filter.locale ?? 'en'}
+												onValueChange={(value) =>
+													updateTimeRangeFilter(filter.id, value, filter.granularity ?? 'minute')}
+											/>
+										{/if}
+									</div>
+								{/each}
+							</div>
+
+							<div class="border-kl-base-300 flex justify-end border-t pt-3">
+								<button
+									type="button"
+									disabled={activeFilterCount === 0}
+									onclick={() => updateQuery({ filters: {} }, true)}
+									class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+								>
+									<X size={16} />
+									Clear filters
+								</button>
+							</div>
+						</form>
+					{/snippet}
 				</Popover>
 			{/if}
 
@@ -736,15 +737,10 @@
 
 				{#if hasBatchActions}
 					<Menu items={getBatchActionItems()} onSelect={selectBatchAction} class="min-w-40">
-						{#snippet trigger()}
-							<button
-								type="button"
-								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
-							>
-								<MoreHorizontal size={16} />
-								Actions
-							</button>
-						{/snippet}
+						<Trigger variant="outline" size="sm">
+							<MoreHorizontal size={16} />
+							Actions
+						</Trigger>
 					</Menu>
 				{/if}
 
@@ -857,15 +853,9 @@
 										onSelect={(value) => selectRowAction(row, value)}
 										class="min-w-36"
 									>
-										{#snippet trigger()}
-											<button
-												type="button"
-												class="rounded-kl-selector text-kl-muted-content hover:bg-kl-base-200 hover:text-kl-base-content size-kl-selector-lg inline-flex cursor-pointer items-center justify-center transition-colors duration-[var(--kl-transition-fast)]"
-												aria-label="Row actions"
-											>
-												<MoreHorizontal size={16} />
-											</button>
-										{/snippet}
+										<Trigger variant="ghost" size="sm" content="icon" ariaLabel="Row actions">
+											<MoreHorizontal size={16} />
+										</Trigger>
 									</Menu>
 								</td>
 							{/if}

@@ -4,7 +4,7 @@
 		AlertDialog,
 		Cancel as AlertDialogCancel
 	} from '$ui/alert-dialog';
-	import { Button } from '$ui/button';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -68,13 +68,13 @@
 			description: 'Called when open state changes.'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '-',
-			description: 'Trigger content.'
+			description: 'Implicit trigger content, usually a Trigger component.'
 		},
 		{
-			name: 'children',
+			name: 'body',
 			type: 'Snippet',
 			default: '-',
 			description: 'Dialog body content.'
@@ -113,9 +113,7 @@
   cancelLabel="Keep project"
   onAction={() => deleteProject()}
 >
-  {#snippet trigger()}
-    <Button color="error">Delete project</Button>
-  {/snippet}
+  <Trigger color="error">Delete project</Trigger>
 </AlertDialog>`}
 		>
 			<div class="space-y-3">
@@ -127,7 +125,7 @@
 					onAction={() => (lastAction = 'Project deletion confirmed')}
 					onCancel={() => (cancelReason = 'Deletion cancelled')}
 				>
-					{#snippet trigger()}<Button color="error">Delete project</Button>{/snippet}
+					<Trigger color="error">Delete project</Trigger>
 				</AlertDialog>
 				<p class="text-kl-muted-content text-sm">{lastAction} · {cancelReason}</p>
 			</div>
@@ -142,8 +140,9 @@
   actionLabel="Publish"
   cancelLabel="Review again"
 >
-  {#snippet trigger()}
-    <Button>Publish release</Button>
+  <Trigger>Publish release</Trigger>
+  {#snippet body()}
+    <div>Release details...</div>
   {/snippet}
 </AlertDialog>`}
 		>
@@ -153,24 +152,26 @@
 				actionLabel="Publish"
 				cancelLabel="Review again"
 			>
-				{#snippet trigger()}<Button>Publish release</Button>{/snippet}
-				<div class="rounded-kl-field bg-kl-base-200 p-3">
-					<p class="font-medium">Release 2026.05</p>
-					<p class="text-kl-muted-content mt-1">
-						Includes billing exports, account notes, and role audit events.
-					</p>
-				</div>
+				<Trigger>Publish release</Trigger>
+				{#snippet body()}
+					<div class="rounded-kl-field bg-kl-base-200 p-3">
+						<p class="font-medium">Release 2026.05</p>
+						<p class="text-kl-muted-content mt-1">
+							Includes billing exports, account notes, and role audit events.
+						</p>
+					</div>
+				{/snippet}
 			</AlertDialog>
 		</DemoCard>
 
 		<DemoCard
 			title="Controlled open state"
 			description="Drive the dialog from external state and reflect the current status."
-			code={`<Button onclick={() => (open = true)}>Open controlled dialog</Button>
+			code={`<Trigger onclick={() => (open = true)}>Open controlled dialog</Trigger>
 <AlertDialog bind:open title="Rotate API key" />`}
 		>
 			<div class="flex flex-wrap items-center gap-3">
-				<Button onclick={() => (controlledOpen = true)}>Open controlled dialog</Button>
+				<Trigger onclick={() => (controlledOpen = true)}>Open controlled dialog</Trigger>
 				<span class="text-kl-muted-content text-sm">
 					State: {controlledOpen ? 'open' : 'closed'}
 				</span>
@@ -188,6 +189,10 @@
 			title="Custom footer"
 			description="Use exported primitives when footer buttons should close the dialog correctly."
 			code={`<AlertDialog title="Archive workspace">
+  <Trigger variant="outline">Archive workspace</Trigger>
+  {#snippet body()}
+    <p>The workspace remains searchable and can be restored by an admin.</p>
+  {/snippet}
   {#snippet footer()}
     <AlertDialogCancel>Cancel</AlertDialogCancel>
     <AlertDialogAction>Archive</AlertDialogAction>
@@ -195,8 +200,10 @@
 </AlertDialog>`}
 		>
 			<AlertDialog title="Archive workspace" description="Archived workspaces become read-only.">
-				{#snippet trigger()}<Button variant="outline">Archive workspace</Button>{/snippet}
-				<p>The workspace remains searchable and can be restored by an admin.</p>
+				<Trigger variant="outline">Archive workspace</Trigger>
+				{#snippet body()}
+					<p>The workspace remains searchable and can be restored by an admin.</p>
+				{/snippet}
 				{#snippet footer()}
 					<AlertDialogCancel
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md cursor-pointer border px-3 text-sm font-medium transition-colors duration-150"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Popover } from '$ui/popover';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -48,12 +49,12 @@
 			description: 'Callback when the popover opens or closes'
 		},
 		{
-			name: 'trigger',
+			name: 'children',
 			type: 'Snippet',
 			default: '—',
-			description: 'Trigger element that toggles the popover'
+			description: 'Implicit trigger content, usually a Trigger component'
 		},
-		{ name: 'children', type: 'Snippet', default: '—', description: 'Popover body content' },
+		{ name: 'body', type: 'Snippet', default: '—', description: 'Popover body content' },
 		{
 			name: 'class',
 			type: 'string',
@@ -79,32 +80,28 @@
 			title="Basic"
 			description="Click the trigger to open the popover."
 			code={`<Popover title="Dimensions" description="Set the dimensions for the layer.">
-  {#snippet trigger()}
-    <button>Open popover</button>
+  <Trigger>Open popover</Trigger>
+  {#snippet body()}
+    <div class="grid gap-2">
+      <label class="text-sm">Width</label>
+      <input type="text" value="100%" class="rounded-kl-field border border-kl-base-300 bg-kl-base-100 px-3 py-1.5 text-sm" />
+    </div>
   {/snippet}
-  <div class="grid gap-2">
-    <label class="text-sm">Width</label>
-    <input type="text" value="100%" class="rounded-kl-field border border-kl-base-300 bg-kl-base-100 px-3 py-1.5 text-sm" />
-  </div>
 </Popover>`}
 		>
 			<Popover title="Dimensions" description="Set the dimensions for the layer.">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium"
-					>
-						Open popover
-					</button>
+				<Trigger color="primary">Open popover</Trigger>
+				{#snippet body()}
+					<div class="grid gap-2">
+						<label for="popover-width" class="text-kl-base-content text-sm">Width</label>
+						<input
+							id="popover-width"
+							type="text"
+							value="100%"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-3 py-1.5 text-sm"
+						/>
+					</div>
 				{/snippet}
-				<div class="grid gap-2">
-					<label for="popover-width" class="text-kl-base-content text-sm">Width</label>
-					<input
-						id="popover-width"
-						type="text"
-						value="100%"
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-3 py-1.5 text-sm"
-					/>
-				</div>
 			</Popover>
 		</DemoCard>
 
@@ -112,39 +109,30 @@
 			title="Custom placement"
 			description="Position the popover on different sides."
 			code={`<Popover title="Settings" side="right">
-  {#snippet trigger()}
-    <button>Right</button>
+  <Trigger>Right</Trigger>
+  {#snippet body()}
+    <p>Content goes here.</p>
   {/snippet}
-  <p>Content goes here.</p>
 </Popover>`}
 		>
 			<div class="flex gap-4">
 				<Popover title="Top" side="top">
-					{#snippet trigger()}
-						<button
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-							>Top</button
-						>
+					<Trigger variant="outline">Top</Trigger>
+					{#snippet body()}
+						<p class="text-kl-muted-content text-sm">Popover positioned on top.</p>
 					{/snippet}
-					<p class="text-kl-muted-content text-sm">Popover positioned on top.</p>
 				</Popover>
 				<Popover title="Right" side="right">
-					{#snippet trigger()}
-						<button
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-							>Right</button
-						>
+					<Trigger variant="outline">Right</Trigger>
+					{#snippet body()}
+						<p class="text-kl-muted-content text-sm">Popover positioned on the right.</p>
 					{/snippet}
-					<p class="text-kl-muted-content text-sm">Popover positioned on the right.</p>
 				</Popover>
 				<Popover title="Bottom" side="bottom">
-					{#snippet trigger()}
-						<button
-							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-							>Bottom</button
-						>
+					<Trigger variant="outline">Bottom</Trigger>
+					{#snippet body()}
+						<p class="text-kl-muted-content text-sm">Popover positioned on the bottom.</p>
 					{/snippet}
-					<p class="text-kl-muted-content text-sm">Popover positioned on the bottom.</p>
 				</Popover>
 			</div>
 		</DemoCard>
@@ -153,35 +141,31 @@
 			title="With form content"
 			description="Popovers can contain interactive form elements."
 			code={`<Popover title="Feedback" description="How are we doing?">
-  {#snippet trigger()}
-    <button>Give feedback</button>
+  <Trigger color="secondary">Give feedback</Trigger>
+  {#snippet body()}
+    <div class="grid gap-3">
+      <textarea rows="3" placeholder="Your feedback..." class="..." />
+      <button class="...">Submit</button>
+    </div>
   {/snippet}
-  <div class="grid gap-3">
-    <textarea rows="3" placeholder="Your feedback..." class="..." />
-    <button class="...">Submit</button>
-  </div>
 </Popover>`}
 		>
 			<Popover title="Feedback" description="How are we doing?">
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field bg-kl-secondary text-kl-secondary-content px-4 py-2 text-sm font-medium"
-					>
-						Give feedback
-					</button>
+				<Trigger color="secondary">Give feedback</Trigger>
+				{#snippet body()}
+					<div class="grid gap-3">
+						<textarea
+							rows={3}
+							placeholder="Your feedback..."
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-3 py-1.5 text-sm"
+						></textarea>
+						<button
+							class="rounded-kl-field bg-kl-primary text-kl-primary-content px-3 py-1.5 text-sm font-medium"
+						>
+							Submit
+						</button>
+					</div>
 				{/snippet}
-				<div class="grid gap-3">
-					<textarea
-						rows={3}
-						placeholder="Your feedback..."
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-3 py-1.5 text-sm"
-					></textarea>
-					<button
-						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-3 py-1.5 text-sm font-medium"
-					>
-						Submit
-					</button>
-				</div>
 			</Popover>
 		</DemoCard>
 
@@ -189,21 +173,17 @@
 			title="Initially open"
 			description="Start with the popover open using bind:open."
 			code={`<Popover title="Welcome" description="This popover opens by default." open={true}>
-  {#snippet trigger()}
-    <button>Already open</button>
+  <Trigger variant="outline">Already open</Trigger>
+  {#snippet body()}
+    <p>Popover content here.</p>
   {/snippet}
-  <p>Popover content here.</p>
 </Popover>`}
 		>
 			<Popover title="Welcome" description="This popover opens by default." open={true}>
-				{#snippet trigger()}
-					<button
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-4 py-2 text-sm"
-					>
-						Already open
-					</button>
+				<Trigger variant="outline">Already open</Trigger>
+				{#snippet body()}
+					<p class="text-kl-muted-content text-sm">Popover content here.</p>
 				{/snippet}
-				<p class="text-kl-muted-content text-sm">Popover content here.</p>
 			</Popover>
 		</DemoCard>
 	</section>
