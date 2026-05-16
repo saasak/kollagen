@@ -1,3 +1,28 @@
+<script module lang="ts">
+	export type MenuItemDef = {
+		label: string;
+		value: string;
+		disabled?: boolean;
+	};
+
+	export type MenuSeparatorDef = { type: 'separator' };
+
+	export type MenuGroupDef = {
+		type: 'group';
+		label: string;
+		items?: MenuEntry[];
+	};
+
+	export type MenuSubmenuDef = {
+		type: 'submenu';
+		label: string;
+		disabled?: boolean;
+		items: MenuEntry[];
+	};
+
+	export type MenuEntry = MenuItemDef | MenuSeparatorDef | MenuGroupDef | MenuSubmenuDef;
+</script>
+
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
 	import { menuVariants } from './Menu.variants';
@@ -5,29 +30,6 @@
 	import { DropdownMenu } from 'bits-ui';
 	import { ChevronRight } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
-
-	type MenuItemDef = {
-		label: string;
-		value: string;
-		disabled?: boolean;
-	};
-
-	type MenuSeparator = { type: 'separator' };
-
-	type MenuGroupDef = {
-		type: 'group';
-		label: string;
-		items?: MenuEntry[];
-	};
-
-	type MenuSubmenuDef = {
-		type: 'submenu';
-		label: string;
-		disabled?: boolean;
-		items: MenuEntry[];
-	};
-
-	type MenuEntry = MenuItemDef | MenuSeparator | MenuGroupDef | MenuSubmenuDef;
 
 	interface Props {
 		items: MenuEntry[];
@@ -51,7 +53,7 @@
 		children
 	}: Props = $props();
 
-	function isSeparator(entry: MenuEntry): entry is MenuSeparator {
+	function isSeparator(entry: MenuEntry): entry is MenuSeparatorDef {
 		return 'type' in entry && entry.type === 'separator';
 	}
 

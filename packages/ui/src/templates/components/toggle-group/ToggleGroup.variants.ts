@@ -1,18 +1,23 @@
 import { tv } from 'tailwind-variants';
 
 export const toggleGroupVariants = tv({
-	slots: {
-		root: 'rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border',
-		item: 'rounded-kl-selector text-kl-base-content data-[state=on]:bg-kl-primary data-[state=on]:text-kl-primary-content hover:bg-kl-base-200 h-kl-field-sm cursor-pointer px-3 text-sm font-medium outline-none transition-colors data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
-	},
+	base: 'inline-flex w-fit items-stretch',
 	variants: {
 		orientation: {
-			horizontal: {},
-			vertical: {
-				root: 'flex-col'
-			}
+			horizontal: 'flex-row',
+			vertical: 'flex-col'
 		}
 	},
+	compoundVariants: [
+		{
+			orientation: 'horizontal',
+			class: '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none'
+		},
+		{
+			orientation: 'vertical',
+			class: '[&>*:not(:first-child)]:rounded-t-none [&>*:not(:last-child)]:rounded-b-none'
+		}
+	],
 	defaultVariants: {
 		orientation: 'horizontal'
 	}

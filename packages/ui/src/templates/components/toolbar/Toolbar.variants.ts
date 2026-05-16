@@ -1,10 +1,10 @@
-import { tv } from 'tailwind-variants';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 export const toolbarVariants = tv({
-	base: 'rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border p-1',
+	base: 'inline-flex w-fit items-stretch gap-1',
 	variants: {
 		orientation: {
-			horizontal: '',
+			horizontal: 'flex-row',
 			vertical: 'flex-col'
 		}
 	},
@@ -12,3 +12,6 @@ export const toolbarVariants = tv({
 		orientation: 'horizontal'
 	}
 });
+
+export type ToolbarVariants = VariantProps<typeof toolbarVariants>;
+export type ToolbarOrientation = NonNullable<ToolbarVariants['orientation']>;

@@ -1,6 +1,7 @@
 import { Menubar as Primitive } from 'bits-ui';
 
 export { default as Menubar } from './Menubar.svelte';
+export type { MenubarItem, MenubarMenu, MenubarOrientation } from './Menubar.svelte';
 export const Root = Primitive.Root;
 export const Menu = Primitive.Menu;
 export const Trigger = Primitive.Trigger;

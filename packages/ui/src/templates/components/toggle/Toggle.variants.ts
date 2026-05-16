@@ -1,5 +1,24 @@
-import { tv } from 'tailwind-variants';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 export const toggleVariants = tv({
-	base: 'rounded-kl-selector border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 data-[state=on]:border-kl-primary data-[state=on]:bg-kl-primary data-[state=on]:text-kl-primary-content data-[focus]:outline-kl-primary h-kl-selector-md inline-flex cursor-pointer items-center gap-1.5 border px-3 text-sm font-medium transition-colors duration-150 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[focus]:outline'
+	base: 'data-[state=on]:[--kl-btn-bg:var(--kl-toggle-bg)] data-[state=on]:[--kl-btn-border:color-mix(in_oklab,var(--kl-toggle-bg),#000_calc(var(--kl-depth)*5%))] data-[state=on]:[--kl-btn-fg:var(--kl-toggle-fg)] data-[state=on]:[--kl-btn-noise:var(--kl-fx-noise)] data-[state=on]:hover:[--kl-btn-bg:color-mix(in_oklab,var(--kl-toggle-bg),#000_7%)] data-[state=on]:active:[--kl-btn-bg:color-mix(in_oklab,var(--kl-toggle-bg),#000_5%)] data-[focus]:outline data-[focus]:outline-[var(--kl-btn-color,var(--kl-primary))]',
+	variants: {
+		color: {
+			base: '[--kl-toggle-bg:var(--kl-primary)] [--kl-toggle-fg:var(--kl-primary-content)]',
+			neutral: '[--kl-toggle-bg:var(--kl-neutral)] [--kl-toggle-fg:var(--kl-neutral-content)]',
+			primary: '[--kl-toggle-bg:var(--kl-primary)] [--kl-toggle-fg:var(--kl-primary-content)]',
+			secondary:
+				'[--kl-toggle-bg:var(--kl-secondary)] [--kl-toggle-fg:var(--kl-secondary-content)]',
+			accent: '[--kl-toggle-bg:var(--kl-accent)] [--kl-toggle-fg:var(--kl-accent-content)]',
+			info: '[--kl-toggle-bg:var(--kl-info)] [--kl-toggle-fg:var(--kl-info-content)]',
+			success: '[--kl-toggle-bg:var(--kl-success)] [--kl-toggle-fg:var(--kl-success-content)]',
+			warning: '[--kl-toggle-bg:var(--kl-warning)] [--kl-toggle-fg:var(--kl-warning-content)]',
+			error: '[--kl-toggle-bg:var(--kl-error)] [--kl-toggle-fg:var(--kl-error-content)]'
+		}
+	},
+	defaultVariants: {
+		color: 'base'
+	}
 });
+
+export type ToggleVariants = VariantProps<typeof toggleVariants>;

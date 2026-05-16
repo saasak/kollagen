@@ -1,6 +1,13 @@
 import { DropdownMenu as Primitive } from 'bits-ui';
 
 export { default as Menu } from './Menu.svelte';
+export type {
+	MenuEntry,
+	MenuGroupDef,
+	MenuItemDef,
+	MenuSeparatorDef,
+	MenuSubmenuDef
+} from './Menu.svelte';
 export { default as Root } from './MenuRoot.svelte';
 export { default as Trigger } from './MenuTrigger.svelte';
 export { default as Portal } from './MenuPortal.svelte';

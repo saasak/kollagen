@@ -6,29 +6,20 @@ export const buttonGroupVariants = tv({
 		orientation: {
 			horizontal: 'flex-row',
 			vertical: 'flex-col'
-		},
-		attached: {
-			true: '',
-			false: 'gap-2'
 		}
 	},
 	compoundVariants: [
 		{
 			orientation: 'horizontal',
-			attached: true,
-			class:
-				'[&>*:not(:first-child)]:-ml-px [&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none'
+			class: '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none'
 		},
 		{
 			orientation: 'vertical',
-			attached: true,
-			class:
-				'[&>*:not(:first-child)]:-mt-px [&>*:not(:first-child)]:rounded-t-none [&>*:not(:last-child)]:rounded-b-none'
+			class: '[&>*:not(:first-child)]:rounded-t-none [&>*:not(:last-child)]:rounded-b-none'
 		}
 	],
 	defaultVariants: {
-		orientation: 'horizontal',
-		attached: true
+		orientation: 'horizontal'
 	}
 });
 
