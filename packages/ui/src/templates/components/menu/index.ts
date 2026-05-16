@@ -1,3 +1,5 @@
+import { DropdownMenu as Primitive } from 'bits-ui';
+
 export { default as Menu } from './Menu.svelte';
 export { default as Root } from './MenuRoot.svelte';
 export { default as Trigger } from './MenuTrigger.svelte';
@@ -15,3 +17,14 @@ export { default as MenuItem } from './MenuItem.svelte';
 export { default as MenuSeparator } from './MenuSeparator.svelte';
 export { default as MenuGroup } from './MenuGroup.svelte';
 export { default as MenuGroupHeading } from './MenuGroupHeading.svelte';
+
+export const Sub = Primitive.Sub;
+export const SubTrigger = Primitive.SubTrigger;
+export const SubContent = Primitive.SubContent;
+export const SubContentStatic = Primitive.SubContentStatic;
+export const Arrow = Primitive.Arrow;
+export const ContentStatic = Primitive.ContentStatic;
+export const CheckboxGroup = Primitive.CheckboxGroup;
+export const CheckboxItem = Primitive.CheckboxItem;
+export const RadioGroup = Primitive.RadioGroup;
+export const RadioItem = Primitive.RadioItem;

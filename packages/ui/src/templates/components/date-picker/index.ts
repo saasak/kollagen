@@ -1,1 +1,27 @@
+import { DatePicker as Primitive } from 'bits-ui';
+
 export { default as DatePicker } from './DatePicker.svelte';
+export const Root = Primitive.Root;
+export const Calendar = Primitive.Calendar;
+export const Content = Primitive.Content;
+export const ContentStatic = Primitive.ContentStatic;
+export const Trigger = Primitive.Trigger;
+export const Arrow = Primitive.Arrow;
+export const Close = Primitive.Close;
+export const Input = Primitive.Input;
+export const Label = Primitive.Label;
+export const Segment = Primitive.Segment;
+export const GridBody = Primitive.GridBody;
+export const GridHead = Primitive.GridHead;
+export const GridRow = Primitive.GridRow;
+export const Grid = Primitive.Grid;
+export const HeadCell = Primitive.HeadCell;
+export const Header = Primitive.Header;
+export const Heading = Primitive.Heading;
+export const NextButton = Primitive.NextButton;
+export const PrevButton = Primitive.PrevButton;
+export const MonthSelect = Primitive.MonthSelect;
+export const YearSelect = Primitive.YearSelect;
+export const Cell = Primitive.Cell;
+export const Day = Primitive.Day;
+export const Portal = Primitive.Portal;
