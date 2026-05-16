@@ -1,12 +1,15 @@
 <script lang="ts" generics="T extends Record<string, any>">
 	import { cn } from '$lib/utils/cn';
 	import { Checkbox } from '../checkbox';
-	import { DatePicker } from '../date-picker';
+	import { DateRangePicker } from '../date-range-picker';
 	import { Menu } from '../menu';
 	import { Pagination } from '../pagination';
 	import { Popover } from '../popover';
 	import { Select } from '../select';
-	import { parseDate, type DateValue } from '@internationalized/date';
+	import { TimeField } from '../time-field';
+	import { TimeRangeField } from '../time-range-field';
+	import { parseDate, parseTime, type DateValue } from '@internationalized/date';
+	import type { DateRange, TimeRange, TimeValue } from 'bits-ui';
 	import {
 		ArrowDown,
 		ArrowUp,
@@ -34,7 +37,9 @@
 		type DataTableRowAction,
 		type DataTableRowKey,
 		type DataTableSelection,
-		type DataTableSort
+		type DataTableSort,
+		type DataTableTimeGranularity,
+		type DataTableTimeRangeValue
 	} from './types';
 
 	interface Props {
@@ -388,6 +393,13 @@
 		}
 	}
 
+	function getDateRangePickerValue(id: string): DateRange {
+		return {
+			start: getDateFilterValue(id, 'from'),
+			end: getDateFilterValue(id, 'to')
+		};
+	}
+
 	function formatDateFilterValue(value: DateValue | undefined) {
 		if (!value) return undefined;
 		const month = String(value.month).padStart(2, '0');
@@ -395,14 +407,10 @@
 		return `${value.year}-${month}-${day}`;
 	}
 
-	function updateDateRangeFilter(
-		id: string,
-		key: keyof DataTableDateRangeValue,
-		value: DateValue | undefined
-	) {
+	function updateDateRangeFilter(id: string, value: DateRange | undefined) {
 		updateFilter(id, {
-			...getDateRangeFilterValue(id),
-			[key]: formatDateFilterValue(value)
+			from: formatDateFilterValue(value?.start),
+			to: formatDateFilterValue(value?.end)
 		});
 	}
 
@@ -428,6 +436,77 @@
 			return;
 		}
 		updateFilter(id, value === 'true');
+	}
+
+	function getTimeFilterValue(id: string): TimeValue | undefined {
+		const value = query.filters[id];
+		if (typeof value !== 'string' || !value) return undefined;
+
+		try {
+			return parseTime(value);
+		} catch {
+			return undefined;
+		}
+	}
+
+	function formatTimeFilterValue(
+		value: TimeValue | undefined,
+		granularity: DataTableTimeGranularity = 'minute'
+	) {
+		if (!value) return undefined;
+		const hour = String(value.hour).padStart(2, '0');
+		const minute = String(value.minute).padStart(2, '0');
+		if (granularity === 'second') {
+			const second = String(value.second).padStart(2, '0');
+			return `${hour}:${minute}:${second}`;
+		}
+		return `${hour}:${minute}`;
+	}
+
+	function updateTimeFilter(
+		id: string,
+		value: TimeValue | undefined,
+		granularity: DataTableTimeGranularity = 'minute'
+	) {
+		updateFilter(id, formatTimeFilterValue(value, granularity) ?? null);
+	}
+
+	function getTimeRangeFilterValue(id: string): DataTableTimeRangeValue {
+		const value = query.filters[id];
+		if (!isRangeObject(value)) return {};
+		const range = value as DataTableTimeRangeValue;
+		return {
+			from: typeof range.from === 'string' ? range.from : undefined,
+			to: typeof range.to === 'string' ? range.to : undefined
+		};
+	}
+
+	function getTimeRangeFieldValue(id: string): TimeRange {
+		const range = getTimeRangeFilterValue(id);
+		return {
+			start: parseTimeFilterValue(range.from),
+			end: parseTimeFilterValue(range.to)
+		};
+	}
+
+	function parseTimeFilterValue(value: string | undefined) {
+		if (!value) return undefined;
+		try {
+			return parseTime(value);
+		} catch {
+			return undefined;
+		}
+	}
+
+	function updateTimeRangeFilter(
+		id: string,
+		value: TimeRange | undefined,
+		granularity: DataTableTimeGranularity = 'minute'
+	) {
+		updateFilter(id, {
+			from: formatTimeFilterValue(value?.start, granularity),
+			to: formatTimeFilterValue(value?.end, granularity)
+		});
 	}
 
 	function isRangeObject(value: DataTableFilterValue): value is Record<string, string | number> {
@@ -538,18 +617,14 @@
 											class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border px-3 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 										/>
 									{:else if filter.type === 'date-range'}
-										<div class="grid grid-cols-2 gap-2">
-											<DatePicker
-												ariaLabel="{filter.label} from"
-												value={getDateFilterValue(filter.id, 'from')}
-												onValueChange={(value) => updateDateRangeFilter(filter.id, 'from', value)}
-											/>
-											<DatePicker
-												ariaLabel="{filter.label} to"
-												value={getDateFilterValue(filter.id, 'to')}
-												onValueChange={(value) => updateDateRangeFilter(filter.id, 'to', value)}
-											/>
-										</div>
+										<DateRangePicker
+											ariaLabel={filter.label}
+											value={getDateRangePickerValue(filter.id)}
+											numberOfMonths={filter.numberOfMonths ?? 2}
+											weekStartsOn={filter.weekStartsOn}
+											locale={filter.locale ?? 'en'}
+											onValueChange={(value) => updateDateRangeFilter(filter.id, value)}
+										/>
 									{:else if filter.type === 'number-range'}
 										<div class="grid grid-cols-2 gap-2">
 											<input
@@ -583,6 +658,27 @@
 												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 											/>
 										</div>
+									{:else if filter.type === 'time'}
+										<TimeField
+											ariaLabel={filter.label}
+											value={getTimeFilterValue(filter.id)}
+											placeholder={filter.placeholder}
+											hourCycle={filter.hourCycle}
+											granularity={filter.granularity ?? 'minute'}
+											locale={filter.locale ?? 'en'}
+											onValueChange={(value) =>
+												updateTimeFilter(filter.id, value, filter.granularity ?? 'minute')}
+										/>
+									{:else if filter.type === 'time-range'}
+										<TimeRangeField
+											value={getTimeRangeFieldValue(filter.id)}
+											placeholder={filter.placeholder}
+											hourCycle={filter.hourCycle}
+											granularity={filter.granularity ?? 'minute'}
+											locale={filter.locale ?? 'en'}
+											onValueChange={(value) =>
+												updateTimeRangeFilter(filter.id, value, filter.granularity ?? 'minute')}
+										/>
 									{/if}
 								</div>
 							{/each}

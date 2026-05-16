@@ -16,5 +16,8 @@ export {
 	type DataTableRowKey,
 	type DataTableSelection,
 	type DataTableSort,
-	type DataTableSortDirection
+	type DataTableSortDirection,
+	type DataTableTimeGranularity,
+	type DataTableTimeRangeValue,
+	type DataTableTimeValue
 } from './types';

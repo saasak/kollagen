@@ -26,16 +26,58 @@ export const buttonVariants = tv({
 			error: '[--kl-btn-color:var(--kl-error)] [--kl-btn-content:var(--kl-error-content)]'
 		},
 		size: {
-			xs: 'h-kl-field-xs gap-1.5 px-2 text-xs',
-			sm: 'h-kl-field-sm gap-1.5 px-3 text-sm',
-			md: 'h-kl-field-md gap-2 px-3.5 text-sm',
-			lg: 'h-kl-field-lg gap-2 px-4 text-sm',
-			'icon-sm': 'size-kl-field-sm p-0',
-			icon: 'size-kl-field-md p-0',
-			'icon-lg': 'size-kl-field-lg p-0'
+			xs: '',
+			sm: '',
+			md: '',
+			lg: ''
+		},
+		content: {
+			normal: '',
+			icon: 'gap-0 p-0'
 		}
 	},
 	compoundVariants: [
+		{
+			size: 'xs',
+			content: 'normal',
+			class: 'h-kl-field-xs gap-1.5 px-2 text-xs'
+		},
+		{
+			size: 'sm',
+			content: 'normal',
+			class: 'h-kl-field-sm gap-1.5 px-3 text-sm'
+		},
+		{
+			size: 'md',
+			content: 'normal',
+			class: 'h-kl-field-md gap-2 px-3.5 text-sm'
+		},
+		{
+			size: 'lg',
+			content: 'normal',
+			class: 'h-kl-field-lg gap-2 px-4 text-sm'
+		},
+		{
+			size: 'xs',
+			content: 'icon',
+			class: 'size-kl-field-xs'
+		},
+		{
+			size: 'sm',
+			content: 'icon',
+			class: 'size-kl-field-sm'
+		},
+		{
+			size: 'md',
+			content: 'icon',
+			class: 'size-kl-field-md'
+		},
+		{
+			size: 'lg',
+			content: 'icon',
+			class: 'size-kl-field-lg'
+		},
+		{ variant: 'link', content: 'normal', class: 'h-auto px-0' },
 		{ variant: ['outline', 'dash'], color: 'base', class: '[--kl-btn-border:var(--kl-base-300)]' },
 		{ variant: 'link', color: 'base', class: '[--kl-btn-color:var(--kl-base-content)]' },
 		{ variant: 'link', color: 'neutral', class: 'text-kl-neutral' },
@@ -50,7 +92,8 @@ export const buttonVariants = tv({
 	defaultVariants: {
 		variant: 'solid',
 		color: 'base',
-		size: 'md'
+		size: 'md',
+		content: 'normal'
 	}
 });
 
@@ -58,3 +101,4 @@ export type ButtonVariants = VariantProps<typeof buttonVariants>;
 export type ButtonVariant = NonNullable<ButtonVariants['variant']>;
 export type ButtonColor = NonNullable<ButtonVariants['color']>;
 export type ButtonSize = NonNullable<ButtonVariants['size']>;
+export type ButtonContent = NonNullable<ButtonVariants['content']>;

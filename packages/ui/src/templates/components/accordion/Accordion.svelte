@@ -20,7 +20,7 @@
 		/** Additional CSS classes on the root element */
 		class?: string;
 		/** Content snippet — receives the current item */
-		children: Snippet<[T]>;
+		children?: Snippet<[T]>;
 	}
 
 	let {
@@ -51,7 +51,11 @@
 			</Accordion.Header>
 			<Accordion.Content class="overflow-hidden">
 				<div class="text-kl-base-content px-4 py-3 text-sm">
-					{@render children(item)}
+					{#if children}
+						{@render children(item)}
+					{:else}
+						{item.value}
+					{/if}
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>

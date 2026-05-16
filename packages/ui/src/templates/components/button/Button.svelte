@@ -1,5 +1,6 @@
 <script module lang="ts">
 	export type ButtonColor = import('./Button.variants').ButtonColor;
+	export type ButtonContent = import('./Button.variants').ButtonContent;
 	export type ButtonSize = import('./Button.variants').ButtonSize;
 	export type ButtonVariant = import('./Button.variants').ButtonVariant;
 </script>
@@ -17,6 +18,8 @@
 		color?: ButtonColor;
 		/** Button size */
 		size?: ButtonSize;
+		/** Button content layout */
+		content?: ButtonContent;
 		/** Disable the action */
 		disabled?: boolean;
 		/** Show a loading spinner and disable the action */
@@ -54,6 +57,7 @@
 		variant = 'solid',
 		color = 'base',
 		size = 'md',
+		content = 'normal',
 		disabled = false,
 		loading = false,
 		type = 'button',
@@ -73,7 +77,7 @@
 	}: Props = $props();
 
 	let isDisabled = $derived(disabled || loading);
-	let buttonClass = $derived(buttonVariants({ variant, color, size }));
+	let buttonClass = $derived(buttonVariants({ variant, color, size, content }));
 
 	function handleClick(event: MouseEvent) {
 		if (isDisabled) {

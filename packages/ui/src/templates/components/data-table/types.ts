@@ -1,4 +1,5 @@
 import type { Snippet } from 'svelte';
+import type { TimeValue } from 'bits-ui';
 
 export type DataTableSortDirection = 'asc' | 'desc';
 
@@ -29,12 +30,22 @@ export type DataTableNumberRangeValue = {
 	max?: number;
 };
 
+export type DataTableTimeValue = string;
+
+export type DataTableTimeRangeValue = {
+	from?: string;
+	to?: string;
+};
+
+export type DataTableTimeGranularity = 'hour' | 'minute' | 'second';
+
 export type DataTableFilterValue =
 	| string
 	| string[]
 	| boolean
 	| DataTableDateRangeValue
 	| DataTableNumberRangeValue
+	| DataTableTimeRangeValue
 	| null;
 
 export type DataTableQuery = {
@@ -83,11 +94,32 @@ export type DataTableFilter =
 			id: string;
 			label: string;
 			type: 'date-range';
+			numberOfMonths?: number;
+			weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+			locale?: string;
 	  }
 	| {
 			id: string;
 			label: string;
 			type: 'number-range';
+	  }
+	| {
+			id: string;
+			label: string;
+			type: 'time';
+			placeholder?: TimeValue;
+			hourCycle?: 12 | 24;
+			granularity?: DataTableTimeGranularity;
+			locale?: string;
+	  }
+	| {
+			id: string;
+			label: string;
+			type: 'time-range';
+			placeholder?: TimeValue;
+			hourCycle?: 12 | 24;
+			granularity?: DataTableTimeGranularity;
+			locale?: string;
 	  };
 
 export type DataTableCellSnippet<T> = Snippet<[row: T, value: unknown]>;

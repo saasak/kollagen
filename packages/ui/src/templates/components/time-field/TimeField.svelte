@@ -24,6 +24,7 @@
 		validate?: TimeValidator<TimeValue>;
 		onInvalid?: TimeOnInvalid;
 		errorMessageId?: string;
+		ariaLabel?: string;
 		onValueChange?: (value: TimeValue | undefined) => void;
 		class?: string;
 	}
@@ -46,6 +47,7 @@
 		validate,
 		onInvalid,
 		errorMessageId,
+		ariaLabel,
 		onValueChange,
 		class: className
 	}: Props = $props();
@@ -77,7 +79,7 @@
 				{label}
 			</TimeFieldPrimitive.Label>
 		{/if}
-		<TimeFieldPrimitive.Input {name} class={classes.input()}>
+		<TimeFieldPrimitive.Input {name} aria-label={ariaLabel} class={classes.input()}>
 			{#snippet children({ segments })}
 				{#each segments as { part, value: segmentValue }, i (part + i)}
 					{#if part === 'literal'}

@@ -157,7 +157,7 @@
 @theme inline {
 	/* Tailwind default spacing scale */
 	--spacing: 0.25rem;
-	--spacing-kl-field-xs: calc(var(--kl-size-field) * 6);
+	--spacing-kl-field-xs: calc(var(--kl-size-field) * 7);
 	--spacing-kl-field-sm: calc(var(--kl-size-field) * 8);
 	--spacing-kl-field-md: calc(var(--kl-size-field) * 10);
 	--spacing-kl-field-lg: calc(var(--kl-size-field) * 12);

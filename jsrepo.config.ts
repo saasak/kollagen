@@ -127,11 +127,13 @@ export default defineConfig({
 				type: 'component',
 				registryDependencies: [
 					'checkbox',
-					'date-picker',
+					'date-range-picker',
 					'menu',
 					'pagination',
 					'popover',
-					'select'
+					'select',
+					'time-field',
+					'time-range-field'
 				],
 				files: [{ path: 'packages/ui/src/templates/components/data-table' }]
 			},
