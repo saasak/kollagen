@@ -57,6 +57,7 @@ export default defineConfig({
 			{
 				name: 'button-group',
 				type: 'component',
+				registryDependencies: ['button', 'menu', 'trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/button-group' }]
 			},
 			{
@@ -228,6 +229,7 @@ export default defineConfig({
 			{
 				name: 'menubar',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/menubar' }]
 			},
 			{
@@ -240,6 +242,12 @@ export default defineConfig({
 				name: 'meter',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/meter' }]
+			},
+			{
+				name: 'multibar',
+				type: 'component',
+				registryDependencies: ['button-group', 'menubar', 'toggle-group', 'toolbar'],
+				files: [{ path: 'packages/ui/src/templates/components/multibar' }]
 			},
 			{
 				name: 'action-sheet',
@@ -401,16 +409,19 @@ export default defineConfig({
 			{
 				name: 'toggle',
 				type: 'component',
+				registryDependencies: ['button'],
 				files: [{ path: 'packages/ui/src/templates/components/toggle' }]
 			},
 			{
 				name: 'toggle-group',
 				type: 'component',
+				registryDependencies: ['button', 'toggle'],
 				files: [{ path: 'packages/ui/src/templates/components/toggle-group' }]
 			},
 			{
 				name: 'toolbar',
 				type: 'component',
+				registryDependencies: ['button'],
 				files: [{ path: 'packages/ui/src/templates/components/toolbar' }]
 			},
 			{
