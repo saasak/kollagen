@@ -85,7 +85,9 @@
 		>
 			<ButtonGroup ariaLabel="File actions">
 				<Button variant="outline">Archive</Button>
+				<ButtonGroupSeparator />
 				<Button variant="outline">Report</Button>
+				<ButtonGroupSeparator />
 				<Button variant="outline">Snooze</Button>
 			</ButtonGroup>
 		</DemoCard>

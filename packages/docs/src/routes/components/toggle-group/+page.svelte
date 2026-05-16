@@ -185,7 +185,7 @@
 		<ToggleGroupRoot
 			type="single"
 			bind:value={alignment}
-			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border p-1"
+			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border"
 		>
 			<ToggleGroupItem value="left" aria-label="Align left" class={iconItemClass}>
 				<AlignLeft size={16} aria-hidden="true" />
