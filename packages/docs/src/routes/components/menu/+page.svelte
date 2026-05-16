@@ -1,7 +1,20 @@
 <script lang="ts">
-	import { Menu } from '$ui/menu';
+	import {
+		CheckboxGroup,
+		CheckboxItem,
+		Content as MenuContent,
+		GroupHeading as MenuGroupHeading,
+		Menu,
+		Portal as MenuPortal,
+		RadioGroup,
+		RadioItem,
+		Root as MenuRoot,
+		Separator as MenuSeparator,
+		Trigger as MenuTrigger
+	} from '$ui/menu';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
+	import { Check } from 'lucide-svelte';
 
 	const fileItems = [
 		{ label: 'New File', value: 'new-file' },
@@ -70,6 +83,12 @@
 	];
 
 	let lastAction = $state('');
+	let menuDensity = $state('comfortable');
+	let visiblePanels = $state(['sidebar', 'activity']);
+
+	const menuItemClass =
+		'rounded-kl-selector text-kl-base-content data-[highlighted]:bg-kl-base-200 flex cursor-pointer items-center px-3 py-2 text-sm transition-colors duration-150 outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50';
+	const indicatorClass = 'mr-2 flex size-4 items-center justify-center';
 
 	const propsData = [
 		{
@@ -301,6 +320,136 @@
 				<Menu items={fileItems} disabled={true}>
 					{#snippet trigger()}Disabled{/snippet}
 				</Menu>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Radio and checkbox groups"
+			description="Compose the exposed Bits UI primitives for stateful menu options."
+			code={`<script lang="ts">
+  import {
+    CheckboxGroup,
+    CheckboxItem,
+    Content,
+    GroupHeading,
+    Portal,
+    RadioGroup,
+    RadioItem,
+    Root,
+    Separator,
+    Trigger
+  } from "$ui/menu";
+
+  let density = $state("comfortable");
+  let panels = $state(["sidebar", "activity"]);
+</${'script'}>
+
+<Root>
+  <Trigger>View</Trigger>
+  <Portal>
+    <Content>
+      <GroupHeading>Density</GroupHeading>
+      <RadioGroup bind:value={density}>
+        <RadioItem value="compact" closeOnSelect={false}>Compact</RadioItem>
+        <RadioItem value="comfortable" closeOnSelect={false}>Comfortable</RadioItem>
+        <RadioItem value="spacious" closeOnSelect={false}>Spacious</RadioItem>
+      </RadioGroup>
+      <Separator />
+      <GroupHeading>Panels</GroupHeading>
+      <CheckboxGroup bind:value={panels}>
+        <CheckboxItem value="sidebar" closeOnSelect={false}>Sidebar</CheckboxItem>
+        <CheckboxItem value="activity" closeOnSelect={false}>Activity</CheckboxItem>
+        <CheckboxItem value="preview" closeOnSelect={false}>Preview</CheckboxItem>
+      </CheckboxGroup>
+    </Content>
+  </Portal>
+</Root>`}
+		>
+			<div class="space-y-3">
+				<MenuRoot>
+					<MenuTrigger
+						class="rounded-kl-field border-kl-base-300 hover:bg-kl-base-200 border px-3 py-1.5 text-sm"
+					>
+						View
+					</MenuTrigger>
+					<MenuPortal>
+						<MenuContent class="w-52">
+							<MenuGroupHeading>Density</MenuGroupHeading>
+							<RadioGroup bind:value={menuDensity}>
+								<RadioItem value="compact" closeOnSelect={false} class={menuItemClass}>
+									{#snippet children({ checked })}
+										<span class={indicatorClass}>
+											{#if checked}
+												<Check size={14} strokeWidth={3} aria-hidden="true" />
+											{/if}
+										</span>
+										<span>Compact</span>
+									{/snippet}
+								</RadioItem>
+								<RadioItem value="comfortable" closeOnSelect={false} class={menuItemClass}>
+									{#snippet children({ checked })}
+										<span class={indicatorClass}>
+											{#if checked}
+												<Check size={14} strokeWidth={3} aria-hidden="true" />
+											{/if}
+										</span>
+										<span>Comfortable</span>
+									{/snippet}
+								</RadioItem>
+								<RadioItem value="spacious" closeOnSelect={false} class={menuItemClass}>
+									{#snippet children({ checked })}
+										<span class={indicatorClass}>
+											{#if checked}
+												<Check size={14} strokeWidth={3} aria-hidden="true" />
+											{/if}
+										</span>
+										<span>Spacious</span>
+									{/snippet}
+								</RadioItem>
+							</RadioGroup>
+
+							<MenuSeparator />
+
+							<MenuGroupHeading>Panels</MenuGroupHeading>
+							<CheckboxGroup bind:value={visiblePanels}>
+								<CheckboxItem value="sidebar" closeOnSelect={false} class={menuItemClass}>
+									{#snippet children({ checked })}
+										<span class={indicatorClass}>
+											{#if checked}
+												<Check size={14} strokeWidth={3} aria-hidden="true" />
+											{/if}
+										</span>
+										<span>Sidebar</span>
+									{/snippet}
+								</CheckboxItem>
+								<CheckboxItem value="activity" closeOnSelect={false} class={menuItemClass}>
+									{#snippet children({ checked })}
+										<span class={indicatorClass}>
+											{#if checked}
+												<Check size={14} strokeWidth={3} aria-hidden="true" />
+											{/if}
+										</span>
+										<span>Activity</span>
+									{/snippet}
+								</CheckboxItem>
+								<CheckboxItem value="preview" closeOnSelect={false} class={menuItemClass}>
+									{#snippet children({ checked })}
+										<span class={indicatorClass}>
+											{#if checked}
+												<Check size={14} strokeWidth={3} aria-hidden="true" />
+											{/if}
+										</span>
+										<span>Preview</span>
+									{/snippet}
+								</CheckboxItem>
+							</CheckboxGroup>
+						</MenuContent>
+					</MenuPortal>
+				</MenuRoot>
+
+				<p class="text-kl-muted-content text-sm">
+					{menuDensity} / {visiblePanels.join(', ') || 'no panels'}
+				</p>
 			</div>
 		</DemoCard>
 	</section>

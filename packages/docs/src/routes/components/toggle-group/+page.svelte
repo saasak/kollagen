@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { ToggleGroup } from '$ui/toggle-group';
+	import { Item as ToggleGroupItem, Root as ToggleGroupRoot, ToggleGroup } from '$ui/toggle-group';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
+	import { AlignCenter, AlignLeft, AlignRight } from 'lucide-svelte';
 
 	const items = [
 		{ label: 'Day', value: 'day' },
@@ -18,6 +19,10 @@
 	let multipleValue = $state(['day', 'month']);
 	let density = $state('comfortable');
 	let status = $state('published');
+	let alignment = $state('left');
+
+	const iconItemClass =
+		'rounded-kl-selector text-kl-base-content data-[state=on]:bg-kl-primary data-[state=on]:text-kl-primary-content hover:bg-kl-base-200 flex size-9 cursor-pointer items-center justify-center outline-none transition-colors data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50';
 
 	const propsData = [
 		{
@@ -153,6 +158,45 @@
 			itemToLabel={(item) => item}
 			itemToValue={(item) => item.toLowerCase()}
 		/>
+	</DemoCard>
+
+	<DemoCard
+		title="Icons only"
+		description="Use the exposed primitives when items need custom content."
+		code={`<script lang="ts">
+  import { Item, Root } from "$ui/toggle-group";
+  import { AlignCenter, AlignLeft, AlignRight } from "lucide-svelte";
+
+  let alignment = $state("left");
+</${'script'}>
+
+<Root type="single" bind:value={alignment}>
+  <Item value="left" aria-label="Align left">
+    <AlignLeft size={16} />
+  </Item>
+  <Item value="center" aria-label="Align center">
+    <AlignCenter size={16} />
+  </Item>
+  <Item value="right" aria-label="Align right">
+    <AlignRight size={16} />
+  </Item>
+</Root>`}
+	>
+		<ToggleGroupRoot
+			type="single"
+			bind:value={alignment}
+			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border p-1"
+		>
+			<ToggleGroupItem value="left" aria-label="Align left" class={iconItemClass}>
+				<AlignLeft size={16} aria-hidden="true" />
+			</ToggleGroupItem>
+			<ToggleGroupItem value="center" aria-label="Align center" class={iconItemClass}>
+				<AlignCenter size={16} aria-hidden="true" />
+			</ToggleGroupItem>
+			<ToggleGroupItem value="right" aria-label="Align right" class={iconItemClass}>
+				<AlignRight size={16} aria-hidden="true" />
+			</ToggleGroupItem>
+		</ToggleGroupRoot>
 	</DemoCard>
 
 	<section class="space-y-4">
