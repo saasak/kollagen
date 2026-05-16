@@ -1,15 +1,13 @@
-import { Command as Primitive } from 'bits-ui';
-
 export { default as Command } from './Command.svelte';
-export const Root = Primitive.Root;
-export const Input = Primitive.Input;
-export const List = Primitive.List;
-export const Empty = Primitive.Empty;
-export const Group = Primitive.Group;
-export const GroupHeading = Primitive.GroupHeading;
-export const GroupItems = Primitive.GroupItems;
-export const Item = Primitive.Item;
-export const LinkItem = Primitive.LinkItem;
-export const Separator = Primitive.Separator;
-export const Loading = Primitive.Loading;
-export const Viewport = Primitive.Viewport;
+export { default as Root } from './CommandRoot.svelte';
+export { default as Input } from './CommandInput.svelte';
+export { default as List } from './CommandList.svelte';
+export { default as Empty } from './CommandEmpty.svelte';
+export { default as Group } from './CommandGroup.svelte';
+export { default as GroupHeading } from './CommandGroupHeading.svelte';
+export { default as GroupItems } from './CommandGroupItems.svelte';
+export { default as Item } from './CommandItem.svelte';
+export { default as LinkItem } from './CommandLinkItem.svelte';
+export { default as Separator } from './CommandSeparator.svelte';
+export { default as Loading } from './CommandLoading.svelte';
+export { default as Viewport } from './CommandViewport.svelte';

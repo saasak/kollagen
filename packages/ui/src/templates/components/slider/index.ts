@@ -1,10 +1,8 @@
-import { Slider as Primitive } from 'bits-ui';
-
 export { default as Slider } from './Slider.svelte';
 export type { SliderColor } from './Slider.svelte';
-export const Root = Primitive.Root;
-export const Range = Primitive.Range;
-export const Thumb = Primitive.Thumb;
-export const Tick = Primitive.Tick;
-export const TickLabel = Primitive.TickLabel;
-export const ThumbLabel = Primitive.ThumbLabel;
+export { default as Root } from './SliderRoot.svelte';
+export { default as Range } from './SliderRange.svelte';
+export { default as Thumb } from './SliderThumb.svelte';
+export { default as Tick } from './SliderTick.svelte';
+export { default as TickLabel } from './SliderTickLabel.svelte';
+export { default as ThumbLabel } from './SliderThumbLabel.svelte';

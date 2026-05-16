@@ -1,6 +1,4 @@
-import { Checkbox as Primitive } from 'bits-ui';
-
 export { default as CheckboxGroup } from './CheckboxGroup.svelte';
-export const Root = Primitive.Root;
-export const Group = Primitive.Group;
-export const GroupLabel = Primitive.GroupLabel;
+export { default as Root } from './CheckboxGroupRoot.svelte';
+export { default as Group } from './CheckboxGroupGroup.svelte';
+export { default as GroupLabel } from './CheckboxGroupGroupLabel.svelte';

@@ -1,12 +1,10 @@
-import { NavigationMenu as Primitive } from 'bits-ui';
-
 export { default as NavigationMenu } from './NavigationMenu.svelte';
-export const Root = Primitive.Root;
-export const List = Primitive.List;
-export const Item = Primitive.Item;
-export const Trigger = Primitive.Trigger;
-export const Content = Primitive.Content;
-export const Link = Primitive.Link;
-export const Viewport = Primitive.Viewport;
-export const Indicator = Primitive.Indicator;
-export const Sub = Primitive.Sub;
+export { default as Root } from './NavigationMenuRoot.svelte';
+export { default as List } from './NavigationMenuList.svelte';
+export { default as Item } from './NavigationMenuItem.svelte';
+export { default as Trigger } from './NavigationMenuTrigger.svelte';
+export { default as Content } from './NavigationMenuContent.svelte';
+export { default as Link } from './NavigationMenuLink.svelte';
+export { default as Viewport } from './NavigationMenuViewport.svelte';
+export { default as Indicator } from './NavigationMenuIndicator.svelte';
+export { default as Sub } from './NavigationMenuSub.svelte';

@@ -1,8 +1,6 @@
-import { ScrollArea as Primitive } from 'bits-ui';
-
 export { default as ScrollArea } from './ScrollArea.svelte';
-export const Root = Primitive.Root;
-export const Viewport = Primitive.Viewport;
-export const Scrollbar = Primitive.Scrollbar;
-export const Thumb = Primitive.Thumb;
-export const Corner = Primitive.Corner;
+export { default as Root } from './ScrollAreaRoot.svelte';
+export { default as Viewport } from './ScrollAreaViewport.svelte';
+export { default as Scrollbar } from './ScrollAreaScrollbar.svelte';
+export { default as Thumb } from './ScrollAreaThumb.svelte';
+export { default as Corner } from './ScrollAreaCorner.svelte';

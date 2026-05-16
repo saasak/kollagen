@@ -1,5 +1,3 @@
-import { RatingGroup as Primitive } from 'bits-ui';
-
 export { default as RatingGroup } from './RatingGroup.svelte';
-export const Root = Primitive.Root;
-export const Item = Primitive.Item;
+export { default as Root } from './RatingGroupRoot.svelte';
+export { default as Item } from './RatingGroupItem.svelte';

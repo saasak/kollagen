@@ -1,9 +1,7 @@
-import { LinkPreview as Primitive } from 'bits-ui';
-
 export { default as HoverCard } from './HoverCard.svelte';
-export const Arrow = Primitive.Arrow;
-export const Root = Primitive.Root;
-export const Content = Primitive.Content;
-export const Trigger = Primitive.Trigger;
-export const Portal = Primitive.Portal;
-export const ContentStatic = Primitive.ContentStatic;
+export { default as Arrow } from './HoverCardArrow.svelte';
+export { default as Root } from './HoverCardRoot.svelte';
+export { default as Content } from './HoverCardContent.svelte';
+export { default as Trigger } from './HoverCardTrigger.svelte';
+export { default as Portal } from './HoverCardPortal.svelte';
+export { default as ContentStatic } from './HoverCardContentStatic.svelte';

@@ -1,7 +1,5 @@
-import { TimeRangeField as Primitive } from 'bits-ui';
-
 export { default as TimeRangeField } from './TimeRangeField.svelte';
-export const Root = Primitive.Root;
-export const Label = Primitive.Label;
-export const Input = Primitive.Input;
-export const Segment = Primitive.Segment;
+export { default as Root } from './TimeRangeFieldRoot.svelte';
+export { default as Label } from './TimeRangeFieldLabel.svelte';
+export { default as Input } from './TimeRangeFieldInput.svelte';
+export { default as Segment } from './TimeRangeFieldSegment.svelte';

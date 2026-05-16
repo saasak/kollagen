@@ -1,5 +1,3 @@
-import { RadioGroup as Primitive } from 'bits-ui';
-
 export { default as RadioGroup } from './RadioGroup.svelte';
-export const Root = Primitive.Root;
-export const Item = Primitive.Item;
+export { default as Root } from './RadioGroupRoot.svelte';
+export { default as Item } from './RadioGroupItem.svelte';

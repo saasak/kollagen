@@ -1,12 +1,10 @@
-import { AlertDialog as Primitive } from 'bits-ui';
-
 export { default as AlertDialog } from './AlertDialog.svelte';
-export const Root = Primitive.Root;
-export const Trigger = Primitive.Trigger;
-export const Portal = Primitive.Portal;
-export const Overlay = Primitive.Overlay;
-export const Content = Primitive.Content;
-export const Title = Primitive.Title;
-export const Description = Primitive.Description;
-export const Action = Primitive.Action;
-export const Cancel = Primitive.Cancel;
+export { default as Root } from './AlertDialogRoot.svelte';
+export { default as Trigger } from './AlertDialogTrigger.svelte';
+export { default as Portal } from './AlertDialogPortal.svelte';
+export { default as Overlay } from './AlertDialogOverlay.svelte';
+export { default as Content } from './AlertDialogContent.svelte';
+export { default as Title } from './AlertDialogTitle.svelte';
+export { default as Description } from './AlertDialogDescription.svelte';
+export { default as Action } from './AlertDialogAction.svelte';
+export { default as Cancel } from './AlertDialogCancel.svelte';

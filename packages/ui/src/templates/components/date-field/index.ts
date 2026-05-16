@@ -1,7 +1,5 @@
-import { DateField as Primitive } from 'bits-ui';
-
 export { default as DateField } from './DateField.svelte';
-export const Root = Primitive.Root;
-export const Label = Primitive.Label;
-export const Input = Primitive.Input;
-export const Segment = Primitive.Segment;
+export { default as Root } from './DateFieldRoot.svelte';
+export { default as Label } from './DateFieldLabel.svelte';
+export { default as Input } from './DateFieldInput.svelte';
+export { default as Segment } from './DateFieldSegment.svelte';

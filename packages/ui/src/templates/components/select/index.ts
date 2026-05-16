@@ -1,5 +1,3 @@
-import { Select as Primitive } from 'bits-ui';
-
 export { default as Select } from './Select.svelte';
 export { default as Root } from './SelectRoot.svelte';
 export { default as Trigger } from './SelectTrigger.svelte';
@@ -19,6 +17,6 @@ export { default as SelectViewport } from './SelectViewport.svelte';
 export { default as SelectItem } from './SelectItem.svelte';
 export { default as SelectGroup } from './SelectGroup.svelte';
 export { default as SelectGroupHeading } from './SelectGroupHeading.svelte';
-export const ContentStatic = Primitive.ContentStatic;
-export const ScrollUpButton = Primitive.ScrollUpButton;
-export const ScrollDownButton = Primitive.ScrollDownButton;
+export { default as ContentStatic } from './SelectContentStatic.svelte';
+export { default as ScrollUpButton } from './SelectScrollUpButton.svelte';
+export { default as ScrollDownButton } from './SelectScrollDownButton.svelte';

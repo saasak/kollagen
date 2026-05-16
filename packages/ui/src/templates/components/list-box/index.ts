@@ -1,15 +1,13 @@
-import { Select as Primitive } from 'bits-ui';
-
 export { default as ListBox } from './ListBox.svelte';
-export const Root = Primitive.Root;
-export const Value = Primitive.Value;
-export const Content = Primitive.Content;
-export const ContentStatic = Primitive.ContentStatic;
-export const Item = Primitive.Item;
-export const Group = Primitive.Group;
-export const GroupHeading = Primitive.GroupHeading;
-export const Trigger = Primitive.Trigger;
-export const Portal = Primitive.Portal;
-export const Viewport = Primitive.Viewport;
-export const ScrollUpButton = Primitive.ScrollUpButton;
-export const ScrollDownButton = Primitive.ScrollDownButton;
+export { default as Root } from './ListBoxRoot.svelte';
+export { default as Value } from './ListBoxValue.svelte';
+export { default as Content } from './ListBoxContent.svelte';
+export { default as ContentStatic } from './ListBoxContentStatic.svelte';
+export { default as Item } from './ListBoxItem.svelte';
+export { default as Group } from './ListBoxGroup.svelte';
+export { default as GroupHeading } from './ListBoxGroupHeading.svelte';
+export { default as Trigger } from './ListBoxTrigger.svelte';
+export { default as Portal } from './ListBoxPortal.svelte';
+export { default as Viewport } from './ListBoxViewport.svelte';
+export { default as ScrollUpButton } from './ListBoxScrollUpButton.svelte';
+export { default as ScrollDownButton } from './ListBoxScrollDownButton.svelte';
