@@ -620,6 +620,18 @@
 	<span class="font-mono tabular-nums">{currency(Number(value))}</span>
 {/snippet}
 
+{#snippet savePreviewAction()}
+	Save preview
+{/snippet}
+
+{#snippet discardAction()}
+	Discard
+{/snippet}
+
+{#snippet exportAction()}
+	Export
+{/snippet}
+
 <div class="min-h-full">
 	<div class="grid gap-6 xl:grid-cols-[20rem_minmax(0,1fr)]">
 		<aside class="xl:sticky xl:top-20 xl:max-h-[calc(100vh-5rem)] xl:self-start xl:overflow-y-auto">
@@ -1120,11 +1132,15 @@
 								errorText="This token is not part of the current theme."
 							/>
 							<Checkbox bind:checked={checkedTerms} label="Sync this configuration to staging" />
-							<ButtonGroup ariaLabel="Checkout actions">
-								<Button color="primary">Save preview</Button>
-								<Button variant="outline">Discard</Button>
-								<Button variant="ghost">Export</Button>
-							</ButtonGroup>
+							<ButtonGroup
+								ariaLabel="Checkout actions"
+								variant="outline"
+								items={[
+									{ type: 'button', children: savePreviewAction },
+									{ type: 'button', children: discardAction },
+									{ type: 'button', children: exportAction }
+								]}
+							/>
 						</div>
 					</Card>
 				</div>

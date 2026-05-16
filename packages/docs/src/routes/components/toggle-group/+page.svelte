@@ -1,47 +1,20 @@
 <script lang="ts">
-	import { Item as ToggleGroupItem, Root as ToggleGroupRoot, ToggleGroup } from '$ui/toggle-group';
+	import { ToggleGroup } from '$ui/toggle-group';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import { AlignCenter, AlignLeft, AlignRight } from 'lucide-svelte';
 
-	const items = [
-		{ label: 'Day', value: 'day' },
-		{ label: 'Week', value: 'week' },
-		{ label: 'Month', value: 'month' }
-	];
-	const densityItems = [
-		{ label: 'Compact', value: 'compact' },
-		{ label: 'Comfortable', value: 'comfortable' },
-		{ label: 'Spacious', value: 'spacious', disabled: true }
-	];
-	const stringItems = ['Draft', 'Published', 'Archived'];
 	let value = $state('week');
 	let multipleValue = $state(['day', 'month']);
 	let density = $state('comfortable');
-	let status = $state('published');
 	let alignment = $state('left');
-
-	const iconItemClass =
-		'rounded-kl-selector text-kl-base-content data-[state=on]:bg-kl-primary data-[state=on]:text-kl-primary-content hover:bg-kl-base-200 flex size-9 cursor-pointer items-center justify-center outline-none transition-colors data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50';
 
 	const propsData = [
 		{
 			name: 'items',
-			type: 'T[]',
-			default: '-',
+			type: 'ToggleGroupItem[]',
+			default: 'required',
 			description: 'Toggle item definitions.'
-		},
-		{
-			name: 'itemToLabel',
-			type: '(item: T) => string',
-			default: 'item.label ?? String(item)',
-			description: 'Maps each item to a visible label.'
-		},
-		{
-			name: 'itemToValue',
-			type: '(item: T) => string',
-			default: 'item.value ?? String(item)',
-			description: 'Maps each item to the selected value.'
 		},
 		{
 			name: 'value',
@@ -56,151 +29,260 @@
 			description: 'Selection mode.'
 		},
 		{
+			name: 'variant',
+			type: "'solid' | 'outline' | 'dash' | 'soft' | 'ghost' | 'link'",
+			default: "'solid'",
+			description: 'Visual style passed to every item.'
+		},
+		{
+			name: 'color',
+			type: "'base' | 'neutral' | 'primary' | status color",
+			default: "'base'",
+			description: 'Semantic color passed to every item.'
+		},
+		{
+			name: 'size',
+			type: "'xs' | 'sm' | 'md' | 'lg'",
+			default: "'md'",
+			description: 'Item size.'
+		},
+		{
+			name: 'content',
+			type: "'normal' | 'icon'",
+			default: "'normal'",
+			description: 'Default item content layout.'
+		},
+		{
+			name: 'orientation',
+			type: "'horizontal' | 'vertical'",
+			default: "'horizontal'",
+			description: 'Layout and keyboard orientation.'
+		},
+		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
 			description: 'Disable the group.'
 		},
 		{
-			name: 'orientation',
-			type: "'horizontal' | 'vertical'",
-			default: "'horizontal'",
-			description: 'Keyboard orientation.'
-		},
-		{
 			name: 'onValueChange',
 			type: '(value: string | string[]) => void',
-			default: '-',
+			default: 'none',
 			description: 'Called when value changes.'
+		}
+	];
+
+	const itemPropsData = [
+		{ name: 'value', type: 'string', default: 'required', description: 'Selected value.' },
+		{ name: 'children', type: 'Snippet', default: 'required', description: 'Visible content.' },
+		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the item.' },
+		{
+			name: 'content',
+			type: "'normal' | 'icon'",
+			default: 'group content',
+			description: 'Per-item content layout.'
 		},
 		{
-			name: 'class',
+			name: 'ariaLabel',
 			type: 'string',
-			default: '-',
-			description: 'Additional root classes.'
+			default: 'none',
+			description: 'Accessible label for icon-only items.'
 		}
 	];
 </script>
+
+{#snippet dayContent()}
+	Day
+{/snippet}
+
+{#snippet weekContent()}
+	Week
+{/snippet}
+
+{#snippet monthContent()}
+	Month
+{/snippet}
+
+{#snippet compactContent()}
+	Compact
+{/snippet}
+
+{#snippet comfortableContent()}
+	Comfortable
+{/snippet}
+
+{#snippet spaciousContent()}
+	Spacious
+{/snippet}
+
+{#snippet leftContent()}
+	<AlignLeft />
+{/snippet}
+
+{#snippet centerContent()}
+	<AlignCenter />
+{/snippet}
+
+{#snippet rightContent()}
+	<AlignRight />
+{/snippet}
 
 <div class="space-y-8">
 	<div>
 		<h1 class="text-3xl font-bold">ToggleGroup</h1>
 		<p class="text-kl-muted-content mt-2">A grouped set of toggle buttons.</p>
 	</div>
-	<DemoCard
-		title="Single"
-		description="Single selected value."
-		code={`<ToggleGroup
-  items={[
-    { label: "Day", value: "day" },
-    { label: "Week", value: "week" },
-    { label: "Month", value: "month" }
-  ]}
-  bind:value
-/>`}
-	>
-		<ToggleGroup {items} bind:value />
-	</DemoCard>
 
-	<DemoCard
-		title="Multiple"
-		description="Multiple selected values."
-		code={`<ToggleGroup
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Examples</h2>
+
+		<DemoCard
+			title="Single"
+			description="Single selected value with snippet items."
+			code={`{#snippet dayContent()}Day{/snippet}
+{#snippet weekContent()}Week{/snippet}
+
+<ToggleGroup
+  bind:value
+  variant="outline"
   items={[
-    { label: "Day", value: "day" },
-    { label: "Week", value: "week" },
-    { label: "Month", value: "month" }
+    { value: "day", children: dayContent },
+    { value: "week", children: weekContent },
+    { value: "month", children: monthContent }
   ]}
+/>`}
+		>
+			<ToggleGroup
+				bind:value
+				variant="outline"
+				items={[
+					{ value: 'day', children: dayContent },
+					{ value: 'week', children: weekContent },
+					{ value: 'month', children: monthContent }
+				]}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Multiple"
+			description="Multiple selected values."
+			code={`<ToggleGroup
   multiple
   bind:value={multipleValue}
-/>`}
-	>
-		<div class="space-y-2">
-			<ToggleGroup {items} multiple bind:value={multipleValue} />
-			<p class="text-kl-muted-content text-sm">
-				Selected: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
-					>{multipleValue.join(', ')}</code
-				>
-			</p>
-		</div>
-	</DemoCard>
-
-	<DemoCard
-		title="Disabled item"
-		description="Disable individual items from the source data."
-		code={`<ToggleGroup
   items={[
-    { label: "Compact", value: "compact" },
-    { label: "Comfortable", value: "comfortable" },
-    { label: "Spacious", value: "spacious", disabled: true }
+    { value: "day", children: dayContent },
+    { value: "week", children: weekContent },
+    { value: "month", children: monthContent }
   ]}
-  bind:value={density}
 />`}
-	>
-		<div class="space-y-2">
-			<ToggleGroup items={densityItems} bind:value={density} />
-			<p class="text-kl-muted-content text-sm">Density: {density}</p>
-		</div>
-	</DemoCard>
-
-	<DemoCard
-		title="String items"
-		description="Use custom mapping when items are plain values."
-		code={`<ToggleGroup
-  items={["Draft", "Published", "Archived"]}
-  itemToLabel={(item) => item}
-  itemToValue={(item) => item.toLowerCase()}
-/>`}
-	>
-		<ToggleGroup
-			items={stringItems}
-			bind:value={status}
-			itemToLabel={(item) => item}
-			itemToValue={(item) => item.toLowerCase()}
-		/>
-	</DemoCard>
-
-	<DemoCard
-		title="Icons only"
-		description="Use the exposed primitives when items need custom content."
-		code={`<script lang="ts">
-  import { Item, Root } from "$ui/toggle-group";
-  import { AlignCenter, AlignLeft, AlignRight } from "lucide-svelte";
-
-  let alignment = $state("left");
-</${'script'}>
-
-<Root type="single" bind:value={alignment}>
-  <Item value="left" aria-label="Align left">
-    <AlignLeft size={16} />
-  </Item>
-  <Item value="center" aria-label="Align center">
-    <AlignCenter size={16} />
-  </Item>
-  <Item value="right" aria-label="Align right">
-    <AlignRight size={16} />
-  </Item>
-</Root>`}
-	>
-		<ToggleGroupRoot
-			type="single"
-			bind:value={alignment}
-			class="rounded-kl-field border-kl-base-300 bg-kl-base-100 inline-flex items-center gap-1 border"
 		>
-			<ToggleGroupItem value="left" aria-label="Align left" class={iconItemClass}>
-				<AlignLeft size={16} aria-hidden="true" />
-			</ToggleGroupItem>
-			<ToggleGroupItem value="center" aria-label="Align center" class={iconItemClass}>
-				<AlignCenter size={16} aria-hidden="true" />
-			</ToggleGroupItem>
-			<ToggleGroupItem value="right" aria-label="Align right" class={iconItemClass}>
-				<AlignRight size={16} aria-hidden="true" />
-			</ToggleGroupItem>
-		</ToggleGroupRoot>
-	</DemoCard>
+			<div class="space-y-2">
+				<ToggleGroup
+					multiple
+					bind:value={multipleValue}
+					items={[
+						{ value: 'day', children: dayContent },
+						{ value: 'week', children: weekContent },
+						{ value: 'month', children: monthContent }
+					]}
+				/>
+				<p class="text-kl-muted-content text-sm">
+					Selected: <code class="bg-kl-base-200 rounded px-1.5 py-0.5 font-mono text-xs"
+						>{multipleValue.join(', ')}</code
+					>
+				</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Disabled item"
+			description="Disable individual items from the source data."
+			code={`<ToggleGroup
+  bind:value={density}
+  color="secondary"
+  variant="soft"
+  items={[
+    { value: "compact", children: compactContent },
+    { value: "comfortable", children: comfortableContent },
+    { value: "spacious", children: spaciousContent, disabled: true }
+  ]}
+/>`}
+		>
+			<div class="space-y-2">
+				<ToggleGroup
+					bind:value={density}
+					color="secondary"
+					variant="soft"
+					items={[
+						{ value: 'compact', children: compactContent },
+						{ value: 'comfortable', children: comfortableContent },
+						{ value: 'spacious', children: spaciousContent, disabled: true }
+					]}
+				/>
+				<p class="text-kl-muted-content text-sm">Density: {density}</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Icons"
+			description="Use item snippets for icon-only content."
+			code={`<ToggleGroup
+  bind:value={alignment}
+  content="icon"
+  ariaLabel="Text alignment"
+  items={[
+    { value: "left", ariaLabel: "Align left", children: leftContent },
+    { value: "center", ariaLabel: "Align center", children: centerContent },
+    { value: "right", ariaLabel: "Align right", children: rightContent }
+  ]}
+/>`}
+		>
+			<ToggleGroup
+				bind:value={alignment}
+				content="icon"
+				ariaLabel="Text alignment"
+				items={[
+					{ value: 'left', ariaLabel: 'Align left', children: leftContent },
+					{ value: 'center', ariaLabel: 'Align center', children: centerContent },
+					{ value: 'right', ariaLabel: 'Align right', children: rightContent }
+				]}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Vertical"
+			description="Vertical orientation changes layout and keyboard direction."
+			code={`<ToggleGroup
+  orientation="vertical"
+  bind:value={density}
+  variant="outline"
+  items={[
+    { value: "compact", children: compactContent },
+    { value: "comfortable", children: comfortableContent },
+    { value: "spacious", children: spaciousContent }
+  ]}
+/>`}
+		>
+			<ToggleGroup
+				orientation="vertical"
+				bind:value={density}
+				variant="outline"
+				items={[
+					{ value: 'compact', children: compactContent },
+					{ value: 'comfortable', children: comfortableContent },
+					{ value: 'spacious', children: spaciousContent }
+				]}
+			/>
+		</DemoCard>
+	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>
 		<PropsTable items={propsData} />
+	</section>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Item props</h2>
+		<PropsTable items={itemPropsData} />
 	</section>
 </div>

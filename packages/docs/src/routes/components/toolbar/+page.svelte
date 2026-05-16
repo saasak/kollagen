@@ -1,10 +1,34 @@
 <script lang="ts">
-	import { Toolbar, Button as ToolbarButton, Link as ToolbarLink } from '$ui/toolbar';
+	import { Toolbar } from '$ui/toolbar';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { Bold, Italic, List, Save, Underline } from 'lucide-svelte';
+	import { Bold, Italic, Link2, List, Save, Underline } from 'lucide-svelte';
 
 	const propsData = [
+		{
+			name: 'items',
+			type: 'ToolbarItem[]',
+			default: 'required',
+			description: 'Toolbar controls to render.'
+		},
+		{
+			name: 'variant',
+			type: "'solid' | 'outline' | 'dash' | 'soft' | 'ghost' | 'link'",
+			default: "'solid'",
+			description: 'Visual style passed to each item.'
+		},
+		{
+			name: 'color',
+			type: "'base' | 'neutral' | 'primary' | 'secondary' | 'accent' | status color",
+			default: "'base'",
+			description: 'Semantic color passed to each item.'
+		},
+		{
+			name: 'size',
+			type: "'xs' | 'sm' | 'md' | 'lg'",
+			default: "'md'",
+			description: 'Control size driven by --kl-size-field.'
+		},
 		{
 			name: 'orientation',
 			type: "'horizontal' | 'vertical'",
@@ -12,113 +36,206 @@
 			description: 'Toolbar direction.'
 		},
 		{
-			name: 'children',
-			type: 'Snippet',
-			default: '-',
-			description: 'Toolbar controls.'
+			name: 'ariaLabel',
+			type: 'string',
+			default: 'none',
+			description: 'Accessible toolbar label.'
 		},
 		{
 			name: 'class',
 			type: 'string',
-			default: '-',
+			default: 'none',
 			description: 'Additional root classes.'
+		}
+	];
+
+	const itemPropsData = [
+		{
+			name: 'type',
+			type: "'button' | 'link' | 'group'",
+			default: 'required',
+			description: 'Item renderer.'
+		},
+		{
+			name: 'children',
+			type: 'Snippet',
+			default: 'required',
+			description: 'Visible item content.'
+		},
+		{
+			name: 'content',
+			type: "'normal' | 'icon'",
+			default: "'normal'",
+			description: 'Button content layout.'
+		},
+		{
+			name: 'items',
+			type: 'ToolbarGroupItem[]',
+			default: 'required for group',
+			description: 'Group controls.'
+		},
+		{
+			name: 'value',
+			type: 'string | string[]',
+			default: 'none',
+			description: 'Selected group value.'
 		}
 	];
 </script>
 
+{#snippet boldContent()}
+	<Bold />
+{/snippet}
+
+{#snippet italicContent()}
+	<Italic />
+{/snippet}
+
+{#snippet underlineContent()}
+	<Underline />
+{/snippet}
+
+{#snippet listContent()}
+	<List />
+{/snippet}
+
+{#snippet saveContent()}
+	<Save />
+	Save
+{/snippet}
+
+{#snippet docsContent()}
+	<Link2 />
+	Docs
+{/snippet}
+
 <div class="space-y-8">
 	<div>
 		<h1 class="text-3xl font-bold">Toolbar</h1>
-		<p class="text-kl-muted-content mt-2">Keyboard-aware toolbar primitive.</p>
+		<p class="text-kl-muted-content mt-2">Keyboard-aware item toolbar.</p>
 	</div>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Examples</h2>
 
 		<DemoCard
-			title="Formatting"
-			description="Use exported internals for commands."
-			code="<Toolbar><ToolbarButton /></Toolbar>"
+			title="Actions"
+			description="Render toolbar buttons from an item array."
+			code={`{#snippet boldContent()}<Bold />{/snippet}
+{#snippet italicContent()}<Italic />{/snippet}
+
+<Toolbar
+  ariaLabel="Formatting"
+  variant="outline"
+  size="sm"
+  items={[
+    { type: 'button', content: 'icon', ariaLabel: 'Bold', children: boldContent },
+    { type: 'button', content: 'icon', ariaLabel: 'Italic', children: italicContent }
+  ]}
+/>`}
 		>
-			<Toolbar>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Bold size={16} />
-				</ToolbarButton>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Italic size={16} />
-				</ToolbarButton>
-			</Toolbar>
+			<Toolbar
+				ariaLabel="Formatting"
+				variant="outline"
+				size="sm"
+				items={[
+					{ type: 'button', content: 'icon', ariaLabel: 'Bold', children: boldContent },
+					{ type: 'button', content: 'icon', ariaLabel: 'Italic', children: italicContent }
+				]}
+			/>
 		</DemoCard>
 
 		<DemoCard
-			title="Full editor toolbar"
-			description="Group common editor actions in one keyboard-aware row."
-			code={`<Toolbar>
-  <ToolbarButton><Bold /></ToolbarButton>
-  <ToolbarButton><Italic /></ToolbarButton>
-  <ToolbarButton><Underline /></ToolbarButton>
-</Toolbar>`}
+			title="Group"
+			description="Toolbar group items share the same size token as buttons."
+			code={`<Toolbar
+  ariaLabel="Text style"
+  variant="ghost"
+  items={[
+    {
+      type: 'group',
+      groupType: 'multiple',
+      items: [
+        { value: 'bold', content: 'icon', ariaLabel: 'Bold', children: boldContent },
+        { value: 'italic', content: 'icon', ariaLabel: 'Italic', children: italicContent },
+        { value: 'underline', content: 'icon', ariaLabel: 'Underline', children: underlineContent }
+      ]
+    }
+  ]}
+/>`}
 		>
-			<Toolbar>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Bold size={16} />
-				</ToolbarButton>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Italic size={16} />
-				</ToolbarButton>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Underline size={16} />
-				</ToolbarButton>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<List size={16} />
-				</ToolbarButton>
-			</Toolbar>
-		</DemoCard>
-
-		<DemoCard
-			title="Vertical tools"
-			description="Switch orientation for side tool palettes."
-			code={`<Toolbar orientation="vertical">
-  <ToolbarButton><Bold /></ToolbarButton>
-</Toolbar>`}
-		>
-			<Toolbar orientation="vertical">
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Bold size={16} />
-				</ToolbarButton>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Italic size={16} />
-				</ToolbarButton>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 p-2">
-					<Save size={16} />
-				</ToolbarButton>
-			</Toolbar>
+			<Toolbar
+				ariaLabel="Text style"
+				variant="ghost"
+				items={[
+					{
+						type: 'group',
+						groupType: 'multiple',
+						items: [
+							{ value: 'bold', content: 'icon', ariaLabel: 'Bold', children: boldContent },
+							{ value: 'italic', content: 'icon', ariaLabel: 'Italic', children: italicContent },
+							{
+								value: 'underline',
+								content: 'icon',
+								ariaLabel: 'Underline',
+								children: underlineContent
+							}
+						]
+					}
+				]}
+			/>
 		</DemoCard>
 
 		<DemoCard
 			title="Links and buttons"
-			description="Mix toolbar links with command buttons when both share focus behavior."
-			code={`<Toolbar>
-  <ToolbarLink href="/components/toolbar">Docs</ToolbarLink>
-  <ToolbarButton>Save</ToolbarButton>
-</Toolbar>`}
+			description="Mix navigation and commands in one toolbar."
+			code={`<Toolbar
+  ariaLabel="Document"
+  items={[
+    { type: 'link', href: '/components/toolbar', children: docsContent },
+    { type: 'button', children: saveContent }
+  ]}
+/>`}
 		>
-			<Toolbar>
-				<ToolbarLink
-					href="/components/toolbar"
-					class="rounded-kl-selector hover:bg-kl-base-200 px-3 py-2 text-sm"
-				>
-					Docs
-				</ToolbarLink>
-				<ToolbarButton class="rounded-kl-selector hover:bg-kl-base-200 px-3 py-2 text-sm">
-					Save
-				</ToolbarButton>
-			</Toolbar>
+			<Toolbar
+				ariaLabel="Document"
+				items={[
+					{ type: 'link', href: '/components/toolbar', children: docsContent },
+					{ type: 'button', children: saveContent }
+				]}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Vertical"
+			description="Use vertical orientation for side tool palettes."
+			code={`<Toolbar
+  orientation="vertical"
+  variant="outline"
+  items={[
+    { type: 'button', content: 'icon', ariaLabel: 'Bold', children: boldContent },
+    { type: 'button', content: 'icon', ariaLabel: 'List', children: listContent }
+  ]}
+/>`}
+		>
+			<Toolbar
+				orientation="vertical"
+				variant="outline"
+				items={[
+					{ type: 'button', content: 'icon', ariaLabel: 'Bold', children: boldContent },
+					{ type: 'button', content: 'icon', ariaLabel: 'List', children: listContent }
+				]}
+			/>
 		</DemoCard>
 	</section>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Props</h2>
 		<PropsTable items={propsData} />
+	</section>
+
+	<section class="space-y-4">
+		<h2 class="text-xl font-semibold">Item props</h2>
+		<PropsTable items={itemPropsData} />
 	</section>
 </div>

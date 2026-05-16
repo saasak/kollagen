@@ -11,12 +11,36 @@
 ${scriptClose}
 
 <div class="flex gap-2">
-  <Toggle><Bold size={16} /> Bold</Toggle>
-  <Toggle><Italic size={16} /> Italic</Toggle>
-  <Toggle><Underline size={16} /> Underline</Toggle>
+  <Toggle variant="outline"><Bold size={16} /> Bold</Toggle>
+  <Toggle variant="outline"><Italic size={16} /> Italic</Toggle>
+  <Toggle variant="outline"><Underline size={16} /> Underline</Toggle>
 </div>`;
 
 	const propsData = [
+		{
+			name: 'variant',
+			type: "'solid' | 'outline' | 'dash' | 'soft' | 'ghost' | 'link'",
+			default: "'solid'",
+			description: 'Visual style'
+		},
+		{
+			name: 'color',
+			type: "'base' | 'neutral' | 'primary' | status color",
+			default: "'base'",
+			description: 'Semantic color'
+		},
+		{
+			name: 'size',
+			type: "'xs' | 'sm' | 'md' | 'lg'",
+			default: "'md'",
+			description: 'Toggle size'
+		},
+		{
+			name: 'content',
+			type: "'normal' | 'icon'",
+			default: "'normal'",
+			description: 'Toggle content layout'
+		},
 		{
 			name: 'pressed',
 			type: 'boolean',
@@ -24,6 +48,12 @@ ${scriptClose}
 			description: 'Controlled pressed state. Supports bind:pressed'
 		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the toggle' },
+		{
+			name: 'ariaLabel',
+			type: 'string',
+			default: '—',
+			description: 'Accessible label for icon-only toggles'
+		},
 		{
 			name: 'onPressedChange',
 			type: '(pressed: boolean) => void',
@@ -72,9 +102,25 @@ ${scriptClose}
 			code={withIconsCode}
 		>
 			<div class="flex gap-2">
-				<Toggle><Bold size={16} /> Bold</Toggle>
-				<Toggle><Italic size={16} /> Italic</Toggle>
-				<Toggle><Underline size={16} /> Underline</Toggle>
+				<Toggle variant="outline"><Bold size={16} /> Bold</Toggle>
+				<Toggle variant="outline"><Italic size={16} /> Italic</Toggle>
+				<Toggle variant="outline"><Underline size={16} /> Underline</Toggle>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Variants"
+			description="Match Button and Trigger styling props."
+			code={`<div class="flex gap-2">
+  <Toggle variant="outline" color="primary">Outline</Toggle>
+  <Toggle variant="soft" color="secondary">Soft</Toggle>
+  <Toggle content="icon" ariaLabel="Bold"><Bold /></Toggle>
+</div>`}
+		>
+			<div class="flex gap-2">
+				<Toggle variant="outline" color="primary">Outline</Toggle>
+				<Toggle variant="soft" color="secondary">Soft</Toggle>
+				<Toggle content="icon" ariaLabel="Bold"><Bold /></Toggle>
 			</div>
 		</DemoCard>
 
