@@ -255,6 +255,11 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/label' }]
 			},
 			{
+				name: 'list',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/list' }]
+			},
+			{
 				name: 'list-box',
 				type: 'component',
 				files: [{ path: 'packages/ui/src/templates/components/list-box' }]

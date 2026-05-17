@@ -38,6 +38,7 @@ export const componentNav = [
 	{ label: 'Item', href: '/components/item' },
 	{ label: 'Kbd', href: '/components/kbd' },
 	{ label: 'Label', href: '/components/label' },
+	{ label: 'List', href: '/components/list' },
 	{ label: 'ListBox', href: '/components/list-box' },
 	{ label: 'Marquee', href: '/components/marquee' },
 	{ label: 'Menubar', href: '/components/menubar' },
