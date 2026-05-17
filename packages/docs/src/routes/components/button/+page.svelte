@@ -4,7 +4,24 @@
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import { ArrowRight, Download, Mail, Plus, Save, Trash2 } from 'lucide-svelte';
 
-	let loading = $state(false);
+	let saving = $state(false);
+
+	const loadingCode = [
+		'<script lang="ts">',
+		'  let saving = $state(false);',
+		'</' + 'script>',
+		'',
+		'<div class="flex flex-wrap items-center gap-2">',
+		'  <Button loading>Saving</Button>',
+		'  <Button loading variant="outline" color="primary">Publishing</Button>',
+		'  <Button loading={saving} onclick={() => (saving = true)}>',
+		'    Save changes',
+		'  </Button>',
+		'  <Button variant="ghost" size="sm" onclick={() => (saving = false)}>',
+		'    Reset',
+		'  </Button>',
+		'</div>'
+	].join('\n');
 
 	const propsData = [
 		{
@@ -231,14 +248,14 @@
 
 		<DemoCard
 			title="Loading"
-			description="Loading disables the action and adds a spinner."
-			code={`<Button loading={loading} onclick={() => (loading = true)}>
-  Save changes
-</Button>`}
+			description="Loading disables the action, exposes aria-busy, and adds a spinner."
+			code={loadingCode}
 		>
-			<div class="flex items-center gap-2">
-				<Button {loading} onclick={() => (loading = true)}>Save changes</Button>
-				<Button variant="ghost" size="sm" onclick={() => (loading = false)}>Reset</Button>
+			<div class="flex flex-wrap items-center gap-2">
+				<Button loading>Saving</Button>
+				<Button loading variant="outline" color="primary">Publishing</Button>
+				<Button loading={saving} onclick={() => (saving = true)}>Save changes</Button>
+				<Button variant="ghost" size="sm" onclick={() => (saving = false)}>Reset</Button>
 			</div>
 		</DemoCard>
 
