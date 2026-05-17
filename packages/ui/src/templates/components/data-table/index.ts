@@ -1,6 +1,13 @@
 export { default as DataTable } from './DataTable.svelte';
 export { FiltersInput } from '../filters-input';
 export { SearchInput } from '../search-input';
+export { SortsInput } from '../sorts-input';
+export type {
+	SortsInputColumn,
+	SortsInputDirection,
+	SortsInputRule,
+	SortsInputValue
+} from '../sorts-input';
 export {
 	createDataTableQuery,
 	createDataTableSelection,

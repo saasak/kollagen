@@ -7,35 +7,35 @@
 	import { Multibar, type MultibarItem } from '../multibar';
 	import { Pagination } from '../pagination';
 	import { SearchInput } from '../search-input';
+	import { SortsInput } from '../sorts-input';
 	import { Trigger } from '../trigger';
-	import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, MoreHorizontal, X } from 'lucide-svelte';
+	import { Loader2, MoreHorizontal, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 	import {
-		areDataTableQueriesEqual,
-		createDataTableQueryFromUrl,
-		normalizeDataTableQuery,
-		type DataTableUrlStateConfig,
-		writeDataTableQuerySearchParams
+		areDataListQueriesEqual,
+		createDataListQueryFromUrl,
+		normalizeDataListQuery,
+		type DataListUrlStateConfig,
+		writeDataListQuerySearchParams
 	} from './url-state';
 	import {
-		createDataTableQuery,
-		createDataTableSelection,
-		type DataTableBatchAction,
-		type DataTableBatchActionPayload,
-		type DataTableColumn,
-		type DataTableFilter,
-		type DataTableQuery,
-		type DataTableRowAction,
-		type DataTableRowActionMenu,
-		type DataTableRowActionMenuEntry,
-		type DataTableRowActionsSize,
-		type DataTableRowActionsVariant,
-		type DataTableRowKey,
-		type DataTableRowUpdatePayload,
-		type DataTableSelection,
-		type DataTableSortRule,
-		type DataTableUrlStateHistory
+		createDataListQuery,
+		createDataListSelection,
+		type DataListBatchAction,
+		type DataListBatchActionPayload,
+		type DataListColumn,
+		type DataListFilter,
+		type DataListQuery,
+		type DataListRowAction,
+		type DataListRowActionMenu,
+		type DataListRowActionMenuEntry,
+		type DataListRowActionsSize,
+		type DataListRowActionsVariant,
+		type DataListRowKey,
+		type DataListRowUpdatePayload,
+		type DataListSelection,
+		type DataListUrlStateHistory
 	} from './types';
 
 	type QueryChangeIntent =
@@ -49,25 +49,25 @@
 
 	type RowActionMultibarContext = {
 		row: T;
-		action: DataTableRowAction<T>;
+		action: DataListRowAction<T>;
 	};
 
 	interface Props {
 		data: T[];
-		columns: DataTableColumn<T>[];
+		columns: DataListColumn<T>[];
 		totalCount: number;
-		filters?: DataTableFilter[];
-		query?: DataTableQuery;
-		onQueryChange?: (query: DataTableQuery) => void;
-		urlState?: DataTableUrlStateConfig<T>;
+		filters?: DataListFilter[];
+		query?: DataListQuery;
+		onQueryChange?: (query: DataListQuery) => void;
+		urlState?: DataListUrlStateConfig<T>;
 		rowKey?: keyof T | ((row: T) => string | number);
-		selection?: DataTableSelection;
-		onSelectionChange?: (selection: DataTableSelection) => void;
-		onRowUpdate?: (payload: DataTableRowUpdatePayload<T>) => void | Promise<void>;
-		rowActions?: DataTableRowAction<T>[];
-		rowActionsVariant?: DataTableRowActionsVariant;
-		rowActionsSize?: DataTableRowActionsSize;
-		batchActions?: DataTableBatchAction<T>[];
+		selection?: DataListSelection;
+		onSelectionChange?: (selection: DataListSelection) => void;
+		onRowUpdate?: (payload: DataListRowUpdatePayload<T>) => void | Promise<void>;
+		rowActions?: DataListRowAction<T>[];
+		rowActionsVariant?: DataListRowActionsVariant;
+		rowActionsSize?: DataListRowActionsSize;
+		batchActions?: DataListBatchAction<T>[];
 		loading?: boolean;
 		searchPlaceholder?: string;
 		showSearch?: boolean;
@@ -82,11 +82,11 @@
 		columns,
 		totalCount,
 		filters = [],
-		query = $bindable(createDataTableQuery()),
+		query = $bindable(createDataListQuery()),
 		onQueryChange,
 		urlState,
 		rowKey,
-		selection = $bindable(createDataTableSelection()),
+		selection = $bindable(createDataListSelection()),
 		onSelectionChange,
 		onRowUpdate,
 		rowActions = [],
@@ -103,24 +103,33 @@
 	}: Props = $props();
 
 	const searchId = $props.id();
-	const initialQueryDefaults = createDataTableQuery(query);
-	const selectedRowsByKey = new SvelteMap<DataTableRowKey, T>();
+	const initialQueryDefaults = createDataListQuery(query);
+	const selectedRowsByKey = new SvelteMap<DataListRowKey, T>();
 
 	const hasFilters = $derived(filters.length > 0);
 	const activeFilterCount = $derived(countActiveFiltersInputValues(query.filters));
 	const defaultQuery = $derived(
-		normalizeDataTableQuery(createDataTableQuery(urlState?.defaults ?? initialQueryDefaults), {
+		normalizeDataListQuery(createDataListQuery(urlState?.defaults ?? initialQueryDefaults), {
 			defaults: urlState?.defaults ?? initialQueryDefaults,
 			columns,
 			filters,
 			pageSizeOptions
 		})
 	);
-	const hasQuery = $derived(!areDataTableQueriesEqual(query, defaultQuery));
+	const hasQuery = $derived(!areDataListQueriesEqual(query, defaultQuery));
 	const hasRowActions = $derived(rowActions.length > 0);
 	const hasRowActionColumn = $derived(hasRowActions && rowActionsVariant !== 'floating-bar');
 	const hasFloatingRowActions = $derived(hasRowActions && rowActionsVariant === 'floating-bar');
 	const hasBatchActions = $derived(batchActions.length > 0);
+	const visibleColumns = $derived(columns.filter((column) => !column.wrap));
+	const wrapColumn = $derived(columns.find((column) => column.wrap));
+	const resolvedGrowColumnId = $derived(
+		visibleColumns.find((column) => column.grow)?.id ??
+			visibleColumns[1]?.id ??
+			visibleColumns[0]?.id
+	);
+	const hasSortableColumns = $derived(columns.some((column) => column.sortable));
+	const showToolbar = $derived(showSearch || hasFilters || hasSortableColumns || hasQuery);
 	const pageRowKeys = $derived(data.map((row, index) => getSelectionKey(row, index)));
 	const visibleSelectedCount = $derived.by(() => {
 		return pageRowKeys.filter((key) => isRowSelected(key)).length;
@@ -134,14 +143,9 @@
 		return selection.keys.length;
 	});
 	const allRowsSelected = $derived(selection.mode === 'all' && selection.excludedKeys.length === 0);
-	const colSpan = $derived(
-		Math.max(columns.length + (hasBatchActions ? 1 : 0) + (hasRowActionColumn ? 1 : 0), 1)
-	);
-	const showToolbar = $derived(showSearch || hasFilters || hasQuery);
-
 	let urlStateReady = $state(false);
 	let openFloatingRowActionMenu = $state<{
-		rowKey: DataTableRowKey;
+		rowKey: DataListRowKey;
 		actionId: string;
 	} | null>(null);
 
@@ -158,9 +162,9 @@
 		return () => window.removeEventListener('popstate', handlePopState);
 	});
 
-	function emitQuery(next: DataTableQuery, intent: QueryChangeIntent = 'external', syncUrl = true) {
+	function emitQuery(next: DataListQuery, intent: QueryChangeIntent = 'external', syncUrl = true) {
 		const normalizedQuery = normalizeQuery(next);
-		if (areDataTableQueriesEqual(query, normalizedQuery)) {
+		if (areDataListQueriesEqual(query, normalizedQuery)) {
 			if (syncUrl) syncUrlQuery(normalizedQuery, intent);
 			return;
 		}
@@ -170,8 +174,8 @@
 		onQueryChange?.(normalizedQuery);
 	}
 
-	function normalizeQuery(nextQuery: Partial<DataTableQuery>) {
-		return normalizeDataTableQuery(nextQuery, {
+	function normalizeQuery(nextQuery: Partial<DataListQuery>) {
+		return normalizeDataListQuery(nextQuery, {
 			defaults: urlState?.defaults ?? initialQueryDefaults,
 			columns,
 			filters,
@@ -180,7 +184,7 @@
 	}
 
 	function parseUrlQuery() {
-		return createDataTableQueryFromUrl(new URLSearchParams(window.location.search), {
+		return createDataListQueryFromUrl(new URLSearchParams(window.location.search), {
 			prefix: urlState!.prefix,
 			defaults: urlState?.defaults ?? initialQueryDefaults,
 			history: urlState?.history,
@@ -190,10 +194,10 @@
 		});
 	}
 
-	function syncUrlQuery(nextQuery: DataTableQuery, intent: QueryChangeIntent) {
+	function syncUrlQuery(nextQuery: DataListQuery, intent: QueryChangeIntent) {
 		if (!urlState || !urlStateReady || typeof window === 'undefined') return;
 
-		const nextSearchParams = writeDataTableQuerySearchParams(
+		const nextSearchParams = writeDataListQuerySearchParams(
 			new URLSearchParams(window.location.search),
 			nextQuery,
 			{
@@ -219,18 +223,18 @@
 		);
 	}
 
-	function getHistoryMode(history: DataTableUrlStateHistory, intent: QueryChangeIntent) {
+	function getHistoryMode(history: DataListUrlStateHistory, intent: QueryChangeIntent) {
 		if (history !== 'auto') return history;
 		return intent === 'page' || intent === 'perPage' || intent === 'sort' ? 'push' : 'replace';
 	}
 
-	function emitSelection(next: DataTableSelection) {
+	function emitSelection(next: DataListSelection) {
 		selection = next;
 		onSelectionChange?.(next);
 	}
 
 	function updateQuery(
-		patch: Partial<DataTableQuery>,
+		patch: Partial<DataListQuery>,
 		resetPage = false,
 		intent: QueryChangeIntent = 'external'
 	) {
@@ -249,46 +253,7 @@
 		emitQuery(defaultQuery, 'reset');
 	}
 
-	function toggleSort(column: DataTableColumn<T>, additive = false) {
-		if (!column.sortable) return;
-
-		const currentIndex = query.sort.findIndex((sort) => sort.id === column.id);
-		const currentRule = currentIndex === -1 ? undefined : query.sort[currentIndex];
-		const nextRule = getNextSortRule(column.id, currentRule);
-
-		if (!additive) {
-			updateQuery({ sort: nextRule ? [nextRule] : [] }, true, 'sort');
-			return;
-		}
-
-		const nextSort = [...query.sort];
-		if (currentIndex === -1) {
-			nextSort.push({ id: column.id, direction: 'asc' });
-		} else if (nextRule) {
-			nextSort[currentIndex] = nextRule;
-		} else {
-			nextSort.splice(currentIndex, 1);
-		}
-
-		updateQuery({ sort: nextSort }, true, 'sort');
-	}
-
-	function getNextSortRule(id: string, currentRule: DataTableSortRule | undefined) {
-		if (!currentRule) return { id, direction: 'asc' } satisfies DataTableSortRule;
-		if (currentRule.direction === 'asc')
-			return { id, direction: 'desc' } satisfies DataTableSortRule;
-		return null;
-	}
-
-	function getSortRule(columnId: string) {
-		return query.sort.find((sort) => sort.id === columnId);
-	}
-
-	function getSortIndex(columnId: string) {
-		return query.sort.findIndex((sort) => sort.id === columnId);
-	}
-
-	function rememberRow(key: DataTableRowKey, row: T) {
+	function rememberRow(key: DataListRowKey, row: T) {
 		selectedRowsByKey.set(key, row);
 	}
 
@@ -298,11 +263,11 @@
 		});
 	}
 
-	function forgetRows(keys: DataTableRowKey[]) {
+	function forgetRows(keys: DataListRowKey[]) {
 		keys.forEach((key) => selectedRowsByKey.delete(key));
 	}
 
-	function getCellValue(row: T, column: DataTableColumn<T>) {
+	function getCellValue(row: T, column: DataListColumn<T>) {
 		if (typeof column.accessor === 'function') return column.accessor(row);
 		if (column.accessor) return row[column.accessor];
 		return row[column.id];
@@ -314,17 +279,17 @@
 		return index;
 	}
 
-	function getSelectionKey(row: T, index: number): DataTableRowKey {
+	function getSelectionKey(row: T, index: number): DataListRowKey {
 		const key = getRowKey(row, index);
 		return typeof key === 'number' || typeof key === 'string' ? key : String(key);
 	}
 
-	function isRowSelected(key: DataTableRowKey) {
+	function isRowSelected(key: DataListRowKey) {
 		if (selection.mode === 'all') return !selection.excludedKeys.includes(key);
 		return selection.keys.includes(key);
 	}
 
-	function uniqueKeys(keys: DataTableRowKey[]) {
+	function uniqueKeys(keys: DataListRowKey[]) {
 		return Array.from(new Set(keys));
 	}
 
@@ -368,7 +333,7 @@
 		clearPageRows();
 	}
 
-	function toggleRowSelection(row: T, key: DataTableRowKey, checked: boolean) {
+	function toggleRowSelection(row: T, key: DataListRowKey, checked: boolean) {
 		if (checked) {
 			rememberRow(key, row);
 		} else {
@@ -400,15 +365,15 @@
 
 	function clearSelection() {
 		selectedRowsByKey.clear();
-		emitSelection(createDataTableSelection());
+		emitSelection(createDataListSelection());
 	}
 
-	function isRowActionDisabled(action: DataTableRowAction<T>, row: T) {
+	function isRowActionDisabled(action: DataListRowAction<T>, row: T) {
 		if (typeof action.disabled === 'function') return action.disabled(row);
 		return action.disabled ?? false;
 	}
 
-	function isRowActionMenu(action: DataTableRowAction<T>): action is DataTableRowActionMenu<T> {
+	function isRowActionMenu(action: DataListRowAction<T>): action is DataListRowActionMenu<T> {
 		return action.type === 'menu';
 	}
 
@@ -416,15 +381,15 @@
 		return `${actionId}:${value}`;
 	}
 
-	function isRowActionMenuEntryDisabled(entry: DataTableRowActionMenuEntry<T>, row: T): boolean {
+	function isRowActionMenuEntryDisabled(entry: DataListRowActionMenuEntry<T>, row: T): boolean {
 		if (!('disabled' in entry)) return false;
 		if (typeof entry.disabled === 'function') return entry.disabled(row);
 		return entry.disabled ?? false;
 	}
 
 	function getRowActionMenuEntries(
-		action: DataTableRowActionMenu<T>,
-		entries: DataTableRowActionMenuEntry<T>[],
+		action: DataListRowActionMenu<T>,
+		entries: DataListRowActionMenuEntry<T>[],
 		row: T
 	): MenuEntry[] {
 		return entries.map((entry) => {
@@ -477,9 +442,9 @@
 	}
 
 	function findRowActionMenuEntry(
-		entries: DataTableRowActionMenuEntry<T>[],
+		entries: DataListRowActionMenuEntry<T>[],
 		value: string
-	): DataTableRowActionMenuEntry<T> | undefined {
+	): DataListRowActionMenuEntry<T> | undefined {
 		for (const entry of entries) {
 			if (!('type' in entry) && entry.value === value) return entry;
 			if ('type' in entry && (entry.type === 'group' || entry.type === 'submenu')) {
@@ -505,7 +470,7 @@
 		action.onSelect?.(row, menuValue);
 	}
 
-	function handleRowActionMenuOpenChange(rowKey: DataTableRowKey, actionId: string, open: boolean) {
+	function handleRowActionMenuOpenChange(rowKey: DataListRowKey, actionId: string, open: boolean) {
 		if (rowActionsVariant !== 'floating-bar') return;
 
 		if (open) {
@@ -521,11 +486,11 @@
 		}
 	}
 
-	function isFloatingRowActionMenuOpen(rowKey: DataTableRowKey) {
+	function isFloatingRowActionMenuOpen(rowKey: DataListRowKey) {
 		return openFloatingRowActionMenu?.rowKey === rowKey;
 	}
 
-	function getRowActionMultibarItems(row: T, rowKey: DataTableRowKey): MultibarItem[] {
+	function getRowActionMultibarItems(row: T, rowKey: DataListRowKey): MultibarItem[] {
 		return [
 			{
 				id: 'row-actions',
@@ -564,15 +529,7 @@
 		];
 	}
 
-	function getRowActionsHeaderClass() {
-		return 'border-kl-base-300 w-px border-b px-4 py-3';
-	}
-
-	function getRowActionsCellClass() {
-		return 'px-4 py-3 text-right align-middle';
-	}
-
-	function getRowActionMultibarClass(rowKey: DataTableRowKey) {
+	function getRowActionMultibarClass(rowKey: DataListRowKey) {
 		const base = 'gap-1';
 
 		if (rowActionsVariant !== 'floating-bar') return base;
@@ -586,7 +543,7 @@
 		);
 	}
 
-	function getBatchActionPayload(): DataTableBatchActionPayload<T> {
+	function getBatchActionPayload(): DataListBatchActionPayload<T> {
 		if (selection.mode === 'all') {
 			return {
 				mode: 'all',
@@ -608,7 +565,7 @@
 		};
 	}
 
-	function isBatchActionDisabled(action: DataTableBatchAction<T>) {
+	function isBatchActionDisabled(action: DataListBatchAction<T>) {
 		const payload = getBatchActionPayload();
 		if (typeof action.disabled === 'function') return action.disabled(payload);
 		return action.disabled ?? false;
@@ -628,24 +585,45 @@
 		action.onSelect(getBatchActionPayload());
 	}
 
-	function getAlignClass(align: DataTableColumn<T>['align']) {
+	function getAlignClass(align: DataListColumn<T>['align']) {
 		if (align === 'center') return 'text-center';
 		if (align === 'right') return 'text-right';
 		return 'text-left';
 	}
 
-	function getHeaderAriaSort(column: DataTableColumn<T>) {
-		const sortRule = getSortRule(column.id);
-		if (!column.sortable || !sortRule) return undefined;
-		return sortRule.direction === 'asc' ? 'ascending' : 'descending';
+	function getRowGridTemplate() {
+		const tracks: string[] = [];
+		if (hasBatchActions) tracks.push('minmax(1.75rem,auto)');
+		for (const column of visibleColumns) {
+			if (column.id === resolvedGrowColumnId) {
+				tracks.push(column.width ?? 'minmax(10rem,1fr)');
+				continue;
+			}
+			tracks.push(column.width ?? 'max-content');
+		}
+		if (hasRowActionColumn) tracks.push('max-content');
+		return tracks.join(' ');
 	}
 
-	function updateRow(
-		row: T,
-		rowKey: DataTableRowKey,
-		column: DataTableColumn<T>,
-		patch: Partial<T>
-	) {
+	function getColumnClass(column: DataListColumn<T>) {
+		return cn(
+			'min-w-0',
+			column.id === resolvedGrowColumnId ? 'w-full' : 'shrink-0',
+			getAlignClass(column.align),
+			column.class
+		);
+	}
+
+	function getValueClass(column: DataListColumn<T>) {
+		return cn(
+			'text-kl-base-content min-w-0 text-sm',
+			column.id === resolvedGrowColumnId ? 'font-medium' : 'font-normal',
+			column.align === 'right' && 'tabular-nums',
+			column.valueClass
+		);
+	}
+
+	function updateRow(row: T, rowKey: DataListRowKey, column: DataListColumn<T>, patch: Partial<T>) {
 		return onRowUpdate?.({
 			row,
 			rowKey,
@@ -666,7 +644,7 @@
 	{/if}
 {/snippet}
 
-{#snippet rowActionMultibar(row: T, rowKey: DataTableRowKey)}
+{#snippet rowActionMultibar(row: T, rowKey: DataListRowKey)}
 	<Multibar
 		items={getRowActionMultibarItems(row, rowKey)}
 		variant="ghost"
@@ -692,6 +670,15 @@
 			{/if}
 
 			<div class="flex flex-wrap items-center justify-between gap-2 lg:justify-end">
+				{#if hasSortableColumns}
+					<SortsInput
+						{columns}
+						value={query.sort}
+						activeCount={query.sort.length}
+						onUpdate={(sort) => updateQuery({ sort }, true, 'sort')}
+					/>
+				{/if}
+
 				{#if hasFilters}
 					<FiltersInput
 						{filters}
@@ -717,212 +704,178 @@
 	{/if}
 
 	<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 relative overflow-hidden border">
-		<div class="overflow-x-auto">
-			<table class="w-full min-w-full text-left text-sm">
-				<thead class="bg-kl-base-200 text-kl-muted-content">
-					{#if hasBatchActions && selectedCount > 0}
-						<tr>
-							<th
-								colspan={colSpan}
-								scope="colgroup"
-								class="border-kl-base-300 border-b px-4 py-2 text-left font-normal"
-							>
-								<div
-									class="min-h-kl-field-sm flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-								>
-									<div class="flex min-w-0 items-center gap-3">
-										<Checkbox
-											label="Select page rows"
-											class="[&>span]:sr-only"
-											checked={allVisibleRowsSelected}
-											indeterminate={someVisibleRowsSelected}
-											onCheckedChange={togglePageSelection}
-										/>
+		{#if hasBatchActions}
+			<div class="border-kl-base-300 bg-kl-base-200 border-b px-4 py-2">
+				<div
+					class="min-h-kl-field-sm flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+				>
+					<div class="flex min-w-0 items-center gap-3">
+						<Checkbox
+							label="Select page rows"
+							class="[&>span]:sr-only"
+							checked={allVisibleRowsSelected}
+							indeterminate={someVisibleRowsSelected}
+							onCheckedChange={togglePageSelection}
+						/>
 
-										<div class="text-kl-base-content truncate text-sm font-medium">
-											{#if allRowsSelected}
-												All {totalCount} rows selected
+						<div class="text-kl-base-content truncate text-sm font-medium">
+							{#if allRowsSelected}
+								All {totalCount} rows selected
+							{:else}
+								{selectedCount} selected
+							{/if}
+						</div>
+					</div>
+
+					<div class="flex flex-wrap items-center gap-2">
+						{#if allVisibleRowsSelected && !allRowsSelected && totalCount > pageRowKeys.length}
+							<button
+								type="button"
+								onclick={selectAllRows}
+								class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+							>
+								Select all {totalCount}
+							</button>
+						{/if}
+
+						{#if hasBatchActions}
+							<Menu
+								items={getBatchActionItems()}
+								disabled={selectedCount === 0}
+								onSelect={selectBatchAction}
+								class="min-w-40"
+							>
+								<Trigger variant="outline" size="sm" disabled={selectedCount === 0}>
+									<MoreHorizontal size={16} />
+									Actions
+								</Trigger>
+							</Menu>
+						{/if}
+
+						<button
+							type="button"
+							disabled={selectedCount === 0}
+							onclick={clearSelection}
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							<X size={16} />
+							Clear
+						</button>
+					</div>
+				</div>
+			</div>
+		{/if}
+
+		<ul role="list" class="divide-kl-base-300 divide-y">
+			{#each data as row, index (getRowKey(row, index))}
+				{@const selectionKey = getSelectionKey(row, index)}
+				<li
+					class="group/row hover:bg-kl-base-200/60 relative transition-colors duration-[var(--kl-transition-fast)]"
+				>
+					<div
+						class="grid min-w-full items-center gap-x-4 gap-y-2 px-4 py-3"
+						style:grid-template-columns={getRowGridTemplate()}
+					>
+						{#if hasBatchActions}
+							<div class="flex items-center">
+								<Checkbox
+									label="Select row"
+									class="[&>span]:sr-only"
+									checked={isRowSelected(selectionKey)}
+									onCheckedChange={(checked) => toggleRowSelection(row, selectionKey, checked)}
+								/>
+							</div>
+						{/if}
+
+						{#each visibleColumns as column (column.id)}
+							{@const value = getCellValue(row, column)}
+							{@const cell = column.cell}
+							{@const media = column.media}
+							<div class={getColumnClass(column)}>
+								<div class="flex min-w-0 items-center gap-3">
+									{#if media}
+										<div class="shrink-0">
+											{@render media(row, value, {
+												column,
+												rowKey: selectionKey,
+												updateRow: (patch) => updateRow(row, selectionKey, column, patch)
+											})}
+										</div>
+									{/if}
+
+									<div class="min-w-0 flex-1">
+										<div class={getValueClass(column)}>
+											{#if cell}
+												{@render cell(row, value, {
+													column,
+													rowKey: selectionKey,
+													updateRow: (patch) => updateRow(row, selectionKey, column, patch)
+												})}
+											{:else if column.format}
+												{column.format(value, row)}
 											{:else}
-												{selectedCount} selected
+												{value}
 											{/if}
 										</div>
 									</div>
-
-									<div class="flex flex-wrap items-center gap-2">
-										{#if allVisibleRowsSelected && !allRowsSelected && totalCount > pageRowKeys.length}
-											<button
-												type="button"
-												onclick={selectAllRows}
-												class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
-											>
-												Select all {totalCount}
-											</button>
-										{/if}
-
-										{#if hasBatchActions}
-											<Menu
-												items={getBatchActionItems()}
-												onSelect={selectBatchAction}
-												class="min-w-40"
-											>
-												<Trigger variant="outline" size="sm">
-													<MoreHorizontal size={16} />
-													Actions
-												</Trigger>
-											</Menu>
-										{/if}
-
-										<button
-											type="button"
-											onclick={clearSelection}
-											class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
-										>
-											<X size={16} />
-											Clear
-										</button>
-									</div>
 								</div>
-							</th>
-						</tr>
-					{:else}
-						<tr>
-							{#if hasBatchActions}
-								<th scope="col" class="border-kl-base-300 w-12 border-b px-4 py-3">
-									<Checkbox
-										label="Select page rows"
-										class="[&>span]:sr-only"
-										checked={allVisibleRowsSelected}
-										indeterminate={someVisibleRowsSelected}
-										onCheckedChange={togglePageSelection}
-									/>
-								</th>
-							{/if}
+							</div>
+						{/each}
 
-							{#each columns as column (column.id)}
-								<th
-									scope="col"
-									aria-sort={getHeaderAriaSort(column)}
-									style:width={column.width}
-									class="border-kl-base-300 border-b px-4 py-3 text-xs font-semibold tracking-normal whitespace-nowrap uppercase {getAlignClass(
-										column.align
-									)}"
-								>
-									{#if column.sortable}
-										{@const sortRule = getSortRule(column.id)}
-										{@const sortIndex = getSortIndex(column.id)}
-										<button
-											type="button"
-											onclick={(event) => toggleSort(column, event.shiftKey)}
-											class="text-kl-muted-content hover:text-kl-base-content inline-flex cursor-pointer items-center gap-1.5 transition-colors duration-[var(--kl-transition-fast)] {column.align ===
-											'right'
-												? 'justify-end'
-												: column.align === 'center'
-													? 'justify-center'
-													: 'justify-start'}"
-										>
-											<span>{column.label}</span>
-											{#if sortRule?.direction === 'asc'}
-												<ArrowUp size={14} />
-											{:else if sortRule?.direction === 'desc'}
-												<ArrowDown size={14} />
-											{:else}
-												<ArrowUpDown size={14} />
-											{/if}
-											{#if query.sort.length > 1 && sortIndex !== -1}
-												<span
-													class="bg-kl-muted text-kl-muted-content rounded-kl-selector inline-flex size-4 items-center justify-center text-[0.625rem] font-semibold"
-												>
-													{sortIndex + 1}
-												</span>
-											{/if}
-										</button>
-									{:else}
-										<span>{column.label}</span>
-									{/if}
-								</th>
-							{/each}
+						{#if hasRowActionColumn}
+							<div class="flex items-center justify-end">
+								{#if rowActionsVariant === 'menu'}
+									<Menu
+										items={getRowActionItems(row)}
+										onSelect={(value) => selectRowActionValue(row, value)}
+										class="min-w-36"
+									>
+										<Trigger variant="ghost" size="sm" content="icon" ariaLabel="Row actions">
+											<MoreHorizontal size={16} />
+										</Trigger>
+									</Menu>
+								{:else if rowActionsVariant === 'bar'}
+									{@render rowActionMultibar(row, selectionKey)}
+								{/if}
+							</div>
+						{/if}
+					</div>
 
-							{#if hasRowActionColumn}
-								<th scope="col" class={getRowActionsHeaderClass()}>
-									<span class="sr-only">Actions</span>
-								</th>
-							{/if}
-						</tr>
-					{/if}
-				</thead>
-				<tbody>
-					{#each data as row, index (getRowKey(row, index))}
-						{@const selectionKey = getSelectionKey(row, index)}
-						<tr
-							class="group/row border-kl-base-300 hover:bg-kl-base-200/60 relative border-b last:border-b-0"
-						>
-							{#if hasBatchActions}
-								<td class="px-4 py-3 align-middle">
-									<Checkbox
-										label="Select row"
-										class="[&>span]:sr-only"
-										checked={isRowSelected(selectionKey)}
-										onCheckedChange={(checked) => toggleRowSelection(row, selectionKey, checked)}
-									/>
-								</td>
-							{/if}
-
-							{#each columns as column, columnIndex (column.id)}
-								{@const value = getCellValue(row, column)}
-								{@const cell = column.cell}
-								<td
-									class={cn(
-										'text-kl-base-content px-4 py-3 align-middle',
-										getAlignClass(column.align),
-										hasFloatingRowActions && columnIndex === columns.length - 1 && 'relative'
-									)}
-								>
+					{#if wrapColumn}
+						{@const value = getCellValue(row, wrapColumn)}
+						{@const cell = wrapColumn.cell}
+						<div class="px-4 pb-4">
+							<div
+								class={cn(
+									'text-kl-muted-content rounded-kl-field bg-kl-base-200/70 px-3 py-2 text-sm leading-6',
+									wrapColumn.class
+								)}
+							>
+								<div class={cn('min-w-0', getAlignClass(wrapColumn.align), wrapColumn.valueClass)}>
 									{#if cell}
 										{@render cell(row, value, {
-											column,
+											column: wrapColumn,
 											rowKey: selectionKey,
-											updateRow: (patch) => updateRow(row, selectionKey, column, patch)
+											updateRow: (patch) => updateRow(row, selectionKey, wrapColumn, patch)
 										})}
-									{:else if column.format}
-										{column.format(value, row)}
+									{:else if wrapColumn.format}
+										{wrapColumn.format(value, row)}
 									{:else}
 										{value}
 									{/if}
+								</div>
+							</div>
+						</div>
+					{/if}
 
-									{#if hasFloatingRowActions && columnIndex === columns.length - 1}
-										{@render rowActionMultibar(row, selectionKey)}
-									{/if}
-								</td>
-							{/each}
-
-							{#if hasRowActionColumn}
-								<td class={getRowActionsCellClass()}>
-									{#if rowActionsVariant === 'menu'}
-										<Menu
-											items={getRowActionItems(row)}
-											onSelect={(value) => selectRowActionValue(row, value)}
-											class="min-w-36"
-										>
-											<Trigger variant="ghost" size="sm" content="icon" ariaLabel="Row actions">
-												<MoreHorizontal size={16} />
-											</Trigger>
-										</Menu>
-									{:else if rowActionsVariant === 'bar'}
-										{@render rowActionMultibar(row, selectionKey)}
-									{/if}
-								</td>
-							{/if}
-						</tr>
-					{:else}
-						<tr>
-							<td colspan={colSpan} class="text-kl-muted-content px-4 py-12 text-center text-sm">
-								{emptyText}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+					{#if hasFloatingRowActions}
+						{@render rowActionMultibar(row, selectionKey)}
+					{/if}
+				</li>
+			{:else}
+				<li class="text-kl-muted-content px-4 py-12 text-center text-sm">{emptyText}</li>
+			{/each}
+		</ul>
 
 		{#if loading}
 			<div

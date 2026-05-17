@@ -150,6 +150,12 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/search-input' }]
 			},
 			{
+				name: 'sorts-input',
+				type: 'component',
+				registryDependencies: ['popover', 'trigger'],
+				files: [{ path: 'packages/ui/src/templates/components/sorts-input' }]
+			},
+			{
 				name: 'data-table',
 				type: 'component',
 				registryDependencies: [
@@ -159,9 +165,25 @@ export default defineConfig({
 					'multibar',
 					'pagination',
 					'search-input',
+					'sorts-input',
 					'trigger'
 				],
 				files: [{ path: 'packages/ui/src/templates/components/data-table' }]
+			},
+			{
+				name: 'data-list',
+				type: 'component',
+				registryDependencies: [
+					'checkbox',
+					'filters-input',
+					'menu',
+					'multibar',
+					'pagination',
+					'search-input',
+					'sorts-input',
+					'trigger'
+				],
+				files: [{ path: 'packages/ui/src/templates/components/data-list' }]
 			},
 			{
 				name: 'dialog',

@@ -20,6 +20,7 @@
 	import { Editable } from '$ui/editable';
 	import { FiltersInput, type FiltersInputValues } from '$ui/filters-input';
 	import { SearchInput } from '$ui/search-input';
+	import { SortsInput, type SortsInputValue } from '$ui/sorts-input';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import { Eye, Mail, MoreHorizontal } from 'lucide-svelte';
@@ -257,12 +258,14 @@
 	let selection: DataTableSelection = $state(createDataTableSelection());
 	let standaloneSearch = $state('');
 	let standaloneFilters: FiltersInputValues = $state({});
+	let standaloneSort: SortsInputValue = $state([]);
 	let loading = $state(false);
 	let lastQuery = $state(JSON.stringify(initialQuery, null, 2));
 	let lastSelection = $state('No rows selected');
 	let lastAction = $state('No action called');
 	let loadingTimer: ReturnType<typeof setTimeout> | undefined;
 	const standaloneFiltersJson = $derived(JSON.stringify(standaloneFilters, null, 2));
+	const standaloneSortJson = $derived(JSON.stringify(standaloneSort, null, 2));
 
 	const rowActions: DataTableRowAction<Customer>[] = [
 		{
@@ -383,7 +386,6 @@ const rowActions = [
   data={rows}
   columns={getColumns(ownerCell)}
   filters={filters}
-  selectable
   batchActions={batchActions}
   totalCount={total}
   bind:query
@@ -420,6 +422,11 @@ const rowActions = [
 <FiltersInput
   filters={filters}
   bind:value={activeFilters}
+/>
+
+<SortsInput
+  columns={columns}
+  bind:value={sort}
 />`;
 
 	const urlStateCode = `// shared table-state.ts
@@ -559,12 +566,6 @@ export const load = async ({ url }) => {
 			description: 'Stable key for each rendered row. Required for cross-page selection'
 		},
 		{
-			name: 'selectable',
-			type: 'boolean',
-			default: 'false',
-			description: 'Adds row checkboxes, page selection, and all-results selection'
-		},
-		{
 			name: 'selection',
 			type: 'DataTableSelection',
 			default: 'empty selection',
@@ -593,7 +594,20 @@ export const load = async ({ url }) => {
 			name: 'batchActions',
 			type: 'DataTableBatchAction<T>[]',
 			default: '[]',
-			description: 'Selection menu actions. Receives selected rows or all + current query'
+			description:
+				'Enables row selection and renders actions for selected rows or all + current query'
+		},
+		{
+			name: 'showSearch',
+			type: 'boolean',
+			default: 'true',
+			description: 'Shows or hides the SearchInput toolbar control'
+		},
+		{
+			name: 'showPagination',
+			type: 'boolean',
+			default: 'true',
+			description: 'Shows or hides the pagination footer'
 		},
 		{
 			name: 'loading',
@@ -786,7 +800,6 @@ export const load = async ({ url }) => {
 					bind:query
 					bind:selection
 					urlState={tableUrlState}
-					selectable
 					rowActions={getRowActionsWithIcons(openActionIcon, emailActionIcon, moreActionIcon)}
 					{batchActions}
 					{loading}
@@ -857,16 +870,22 @@ export const load = async ({ url }) => {
 
 		<DemoCard
 			title="Standalone inputs"
-			description="SearchInput and FiltersInput can be composed without DataTable."
+			description="SearchInput, FiltersInput, and SortsInput can be composed without DataTable."
 			code={standaloneInputsCode}
 		>
 			<div class="space-y-4">
 				<div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
 					<SearchInput bind:value={standaloneSearch} placeholder="Search customers..." />
-					<FiltersInput filters={filters.slice(0, 4)} bind:value={standaloneFilters} />
+					<div class="flex flex-wrap items-center gap-2">
+						<SortsInput
+							columns={getMainColumns(customerCell, statusCell, ownerCell, mrrCell)}
+							bind:value={standaloneSort}
+						/>
+						<FiltersInput filters={filters.slice(0, 4)} bind:value={standaloneFilters} />
+					</div>
 				</div>
 
-				<div class="grid gap-4 md:grid-cols-2">
+				<div class="grid gap-4 md:grid-cols-3">
 					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
 						<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">
 							Search value
@@ -874,6 +893,12 @@ export const load = async ({ url }) => {
 						<pre
 							class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{standaloneSearch ||
 								'No search'}</pre>
+					</div>
+
+					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
+						<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">Sort JSON</div>
+						<pre
+							class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{standaloneSortJson}</pre>
 					</div>
 
 					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
