@@ -137,6 +137,10 @@
 	);
 
 	let urlStateReady = $state(false);
+	let openFloatingRowActionMenu = $state<{
+		rowKey: DataTableRowKey;
+		actionId: string;
+	} | null>(null);
 
 	onMount(() => {
 		if (!urlState || typeof window === 'undefined') return;
@@ -498,7 +502,27 @@
 		action.onSelect?.(row, menuValue);
 	}
 
-	function getRowActionMultibarItems(row: T): MultibarItem[] {
+	function handleRowActionMenuOpenChange(rowKey: DataTableRowKey, actionId: string, open: boolean) {
+		if (rowActionsVariant !== 'floating-bar') return;
+
+		if (open) {
+			openFloatingRowActionMenu = { rowKey, actionId };
+			return;
+		}
+
+		if (
+			openFloatingRowActionMenu?.rowKey === rowKey &&
+			openFloatingRowActionMenu.actionId === actionId
+		) {
+			openFloatingRowActionMenu = null;
+		}
+	}
+
+	function isFloatingRowActionMenuOpen(rowKey: DataTableRowKey) {
+		return openFloatingRowActionMenu?.rowKey === rowKey;
+	}
+
+	function getRowActionMultibarItems(row: T, rowKey: DataTableRowKey): MultibarItem[] {
 		return [
 			{
 				id: 'row-actions',
@@ -521,7 +545,8 @@
 							...item,
 							type: 'menu',
 							params: getRowActionMenuEntries(action, action.items, row),
-							onSelect: (value) => selectRowActionValue(row, value)
+							onSelect: (value) => selectRowActionValue(row, value),
+							onOpenChange: (open) => handleRowActionMenuOpenChange(rowKey, action.id, open)
 						};
 					}
 
@@ -544,7 +569,7 @@
 		return 'px-4 py-3 text-right align-middle';
 	}
 
-	function getRowActionMultibarClass() {
+	function getRowActionMultibarClass(rowKey: DataTableRowKey) {
 		const base = 'gap-1';
 
 		if (rowActionsVariant !== 'floating-bar') return base;
@@ -553,7 +578,8 @@
 			base,
 			'border-kl-base-300 bg-kl-base-100/85 absolute top-1/2 right-2 z-[var(--kl-z-dropdown)] -translate-y-1/2 rounded-kl-field border shadow-[var(--kl-shadow-md)] backdrop-blur-md',
 			'pointer-events-none opacity-0 transition-opacity duration-[var(--kl-transition-fast)] group-hover/row:pointer-events-auto group-hover/row:opacity-100 group-focus-within/row:pointer-events-auto group-focus-within/row:opacity-100',
-			'[@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100'
+			'[@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100',
+			isFloatingRowActionMenuOpen(rowKey) && 'pointer-events-auto opacity-100'
 		);
 	}
 
@@ -637,14 +663,14 @@
 	{/if}
 {/snippet}
 
-{#snippet rowActionMultibar(row: T)}
+{#snippet rowActionMultibar(row: T, rowKey: DataTableRowKey)}
 	<Multibar
-		items={getRowActionMultibarItems(row)}
+		items={getRowActionMultibarItems(row, rowKey)}
 		variant="ghost"
 		color="base"
 		size={rowActionsSize}
 		ariaLabel="Row actions"
-		class={getRowActionMultibarClass()}
+		class={getRowActionMultibarClass(rowKey)}
 	/>
 {/snippet}
 
@@ -834,7 +860,7 @@
 									{/if}
 
 									{#if hasFloatingRowActions && columnIndex === columns.length - 1}
-										{@render rowActionMultibar(row)}
+										{@render rowActionMultibar(row, selectionKey)}
 									{/if}
 								</td>
 							{/each}
@@ -852,7 +878,7 @@
 											</Trigger>
 										</Menu>
 									{:else if rowActionsVariant === 'bar'}
-										{@render rowActionMultibar(row)}
+										{@render rowActionMultibar(row, selectionKey)}
 									{/if}
 								</td>
 							{/if}
