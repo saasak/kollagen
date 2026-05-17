@@ -62,8 +62,6 @@ export type DataTableOption = FiltersInputOption;
 
 export type DataTableFilter = FiltersInputConfig;
 
-export type DataTableCellSnippet<T> = Snippet<[row: T, value: unknown]>;
-
 export type DataTableColumn<T> = {
 	id: string;
 	label: string;
@@ -73,6 +71,25 @@ export type DataTableColumn<T> = {
 	width?: string;
 	format?: (value: unknown, row: T) => string | number;
 	cell?: DataTableCellSnippet<T>;
+};
+
+export type DataTableCellContext<T> = {
+	column: DataTableColumn<T>;
+	rowKey: DataTableRowKey;
+	updateRow: (patch: Partial<T>) => void | Promise<void>;
+};
+
+export type DataTableCellSnippet<T> = Snippet<
+	[row: T, value: unknown, context: DataTableCellContext<T>]
+>;
+
+export type DataTableRowUpdatePayload<T> = {
+	row: T;
+	rowKey: DataTableRowKey;
+	column: DataTableColumn<T>;
+	columnId: string;
+	value: unknown;
+	patch: Partial<T>;
 };
 
 export type DataTableRowAction<T> = {

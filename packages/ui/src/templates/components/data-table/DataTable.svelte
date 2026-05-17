@@ -27,6 +27,7 @@
 		type DataTableQuery,
 		type DataTableRowAction,
 		type DataTableRowKey,
+		type DataTableRowUpdatePayload,
 		type DataTableSelection,
 		type DataTableSortRule,
 		type DataTableUrlStateHistory
@@ -53,6 +54,7 @@
 		selectable?: boolean;
 		selection?: DataTableSelection;
 		onSelectionChange?: (selection: DataTableSelection) => void;
+		onRowUpdate?: (payload: DataTableRowUpdatePayload<T>) => void | Promise<void>;
 		rowActions?: DataTableRowAction<T>[];
 		batchActions?: DataTableBatchAction<T>[];
 		loading?: boolean;
@@ -75,6 +77,7 @@
 		selectable = false,
 		selection = $bindable(createDataTableSelection()),
 		onSelectionChange,
+		onRowUpdate,
 		rowActions = [],
 		batchActions = [],
 		loading = false,
@@ -449,6 +452,22 @@
 		if (!column.sortable || !sortRule) return undefined;
 		return sortRule.direction === 'asc' ? 'ascending' : 'descending';
 	}
+
+	function updateRow(
+		row: T,
+		rowKey: DataTableRowKey,
+		column: DataTableColumn<T>,
+		patch: Partial<T>
+	) {
+		return onRowUpdate?.({
+			row,
+			rowKey,
+			column,
+			columnId: column.id,
+			value: getCellValue(row, column),
+			patch
+		});
+	}
 </script>
 
 <div class={cn('space-y-4', className)}>
@@ -619,7 +638,11 @@
 									class="text-kl-base-content px-4 py-3 align-middle {getAlignClass(column.align)}"
 								>
 									{#if cell}
-										{@render cell(row, value)}
+										{@render cell(row, value, {
+											column,
+											rowKey: selectionKey,
+											updateRow: (patch) => updateRow(row, selectionKey, column, patch)
+										})}
 									{:else if column.format}
 										{column.format(value, row)}
 									{:else}

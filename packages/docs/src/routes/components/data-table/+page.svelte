@@ -6,6 +6,7 @@
 		createDataTableSelection,
 		type DataTableBatchAction,
 		type DataTableBatchActionPayload,
+		type DataTableCellContext,
 		type DataTableColumn,
 		type DataTableDateRangeValue,
 		type DataTableFilter,
@@ -13,9 +14,11 @@
 		type DataTableQuery,
 		type DataTableRowAction,
 		type DataTableSelection,
+		type DataTableRowUpdatePayload,
 		type DataTableTimeRangeValue,
 		type DataTableUrlStateConfig
 	} from '$ui/data-table';
+	import { Editable } from '$ui/editable';
 	import { page } from '$app/state';
 	import { FiltersInput, type FiltersInputValues } from '$ui/filters-input';
 	import { SearchInput } from '$ui/search-input';
@@ -37,7 +40,7 @@
 		supportWindow: string;
 	};
 
-	const customers: Customer[] = [
+	let customers: Customer[] = $state([
 		{
 			id: 'cus_101',
 			customer: 'Northstar Labs',
@@ -155,7 +158,7 @@
 			lastContactTime: '18:25',
 			supportWindow: '16:00-23:00'
 		}
-	];
+	]);
 
 	const columns: DataTableColumn<Customer>[] = [
 		{ id: 'customer', label: 'Customer', sortable: true },
@@ -275,6 +278,14 @@ const tableState = {
 
 let query = $state(createDataTableQueryFromUrl(page.url, tableState));
 
+{#snippet ownerCell(_row, value, { updateRow })}
+  <Editable
+    value={String(value)}
+    submitMode="blur"
+    onValueChange={({ value }) => updateRow({ owner: value })}
+  />
+{/snippet}
+
 <DataTable
   data={rows}
   columns={columns}
@@ -287,6 +298,8 @@ let query = $state(createDataTableQueryFromUrl(page.url, tableState));
   bind:selection
   urlState={tableState}
   onQueryChange={fetchRows}
+  onRowUpdate={({ rowKey, patch }) => updateCustomer(rowKey, patch)}
+  cellSnippets={{ owner: ownerCell }}
 />`;
 
 	const standaloneInputsCode = `<SearchInput
@@ -468,7 +481,14 @@ export const load = async ({ url }) => {
 			name: 'cellSnippets',
 			type: 'Record<string, Snippet>',
 			default: '{}',
-			description: 'Custom cell snippets by column id'
+			description:
+				'Custom cell snippets by column id. Snippets receive row, value, and a cell context with updateRow'
+		},
+		{
+			name: 'onRowUpdate',
+			type: '(payload) => void',
+			default: '-',
+			description: 'Called when a cell snippet submits a row patch through updateRow'
 		}
 	];
 
@@ -508,6 +528,13 @@ export const load = async ({ url }) => {
 
 		return `${label}: ${payload.rows.map((row) => row.customer).join(', ') || 'no loaded row'}`;
 	}
+
+	function handleRowUpdate(payload: DataTableRowUpdatePayload<Customer>) {
+		customers = customers.map((customer) =>
+			customer.id === payload.rowKey ? { ...customer, ...payload.patch } : customer
+		);
+		lastAction = `Updated ${payload.column.label} for ${payload.row.customer}`;
+	}
 </script>
 
 {#snippet customerCell(row: Customer, value: unknown)}
@@ -532,6 +559,15 @@ export const load = async ({ url }) => {
 
 {#snippet mrrCell(_row: Customer, value: unknown)}
 	<span class="font-mono tabular-nums">${Number(value).toLocaleString()}</span>
+{/snippet}
+
+{#snippet ownerCell(_row: Customer, value: unknown, { updateRow }: DataTableCellContext<Customer>)}
+	<Editable
+		value={String(value)}
+		submitMode="blur"
+		class="min-w-32"
+		onValueChange={({ value }) => updateRow({ owner: value })}
+	/>
 {/snippet}
 
 <div class="space-y-8">
@@ -609,11 +645,13 @@ export const load = async ({ url }) => {
 					{loading}
 					onQueryChange={handleQueryChange}
 					onSelectionChange={handleSelectionChange}
+					onRowUpdate={handleRowUpdate}
 					searchPlaceholder="Search customers..."
 					pageSizeOptions={tablePageSizeOptions}
 					cellSnippets={{
 						customer: customerCell,
 						status: statusCell,
+						owner: ownerCell,
 						mrr: mrrCell
 					}}
 				/>
