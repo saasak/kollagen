@@ -159,9 +159,9 @@
 	--spacing: 0.25rem;
 	--spacing-kl-field-xs: calc(var(--kl-size-field) * 7);
 	--spacing-kl-field-sm: calc(var(--kl-size-field) * 8);
-	--spacing-kl-field-md: calc(var(--kl-size-field) * 10);
-	--spacing-kl-field-lg: calc(var(--kl-size-field) * 12);
-	--spacing-kl-field-xl: calc(var(--kl-size-field) * 14);
+	--spacing-kl-field-md: calc(var(--kl-size-field) * 9);
+	--spacing-kl-field-lg: calc(var(--kl-size-field) * 11);
+	--spacing-kl-field-xl: calc(var(--kl-size-field) * 13);
 	--spacing-kl-selector-xs: calc(var(--kl-size-selector) * 4);
 	--spacing-kl-selector-sm: calc(var(--kl-size-selector) * 5);
 	--spacing-kl-selector-md: calc(var(--kl-size-selector) * 6);

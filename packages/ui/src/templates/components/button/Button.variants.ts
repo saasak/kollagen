@@ -26,6 +26,8 @@ export const buttonVariants = tv({
 			error: '[--kl-btn-color:var(--kl-error)] [--kl-btn-content:var(--kl-error-content)]'
 		},
 		size: {
+			// Actual size classes live in compoundVariants because normal buttons and icon-only
+			// buttons need different geometry for the same size token.
 			xs: '',
 			sm: '',
 			md: '',

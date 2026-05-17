@@ -8,7 +8,7 @@
 <Primitive.Thumb
 	{...rest}
 	class={cn(
-		'bg-kl-base-100 pointer-events-none block size-[calc(var(--kl-size-selector)*5)] rounded-full [box-shadow:var(--kl-shadow-sm)] transition-transform duration-150 data-[state=checked]:translate-x-[calc(var(--kl-size-selector)*5)] data-[state=unchecked]:translate-x-0',
+		'bg-kl-base-100 size-kl-selector-sm pointer-events-none block rounded-full [box-shadow:var(--kl-shadow-sm)] transition-transform duration-150 data-[state=checked]:translate-x-[calc(var(--spacing-kl-selector-sm)] data-[state=unchecked]:translate-x-0',
 		className as string | undefined
 	)}
 />
