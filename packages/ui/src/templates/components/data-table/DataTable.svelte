@@ -1,8 +1,9 @@
 <script lang="ts" generics="T extends Record<string, any>">
 	import { cn } from '$lib/utils/cn';
+	import type { ButtonGroupItem } from '../button-group';
 	import { Checkbox } from '../checkbox';
 	import { FiltersInput, countActiveFiltersInputValues } from '../filters-input';
-	import { Menu } from '../menu';
+	import { Menu, type MenuEntry } from '../menu';
 	import { Multibar, type MultibarItem } from '../multibar';
 	import { Pagination } from '../pagination';
 	import { SearchInput } from '../search-input';
@@ -22,11 +23,12 @@
 		createDataTableSelection,
 		type DataTableBatchAction,
 		type DataTableBatchActionPayload,
-		type DataTableCellSnippet,
 		type DataTableColumn,
 		type DataTableFilter,
 		type DataTableQuery,
 		type DataTableRowAction,
+		type DataTableRowActionMenu,
+		type DataTableRowActionMenuEntry,
 		type DataTableRowActionsSize,
 		type DataTableRowActionsVariant,
 		type DataTableRowKey,
@@ -71,7 +73,6 @@
 		searchPlaceholder?: string;
 		pageSizeOptions?: number[];
 		emptyText?: string;
-		cellSnippets?: Record<string, DataTableCellSnippet<T>>;
 		class?: string;
 	}
 
@@ -96,7 +97,6 @@
 		searchPlaceholder = 'Search...',
 		pageSizeOptions = [10, 20, 50],
 		emptyText = 'No results found',
-		cellSnippets = {},
 		class: className
 	}: Props = $props();
 
@@ -401,16 +401,101 @@
 		return action.disabled ?? false;
 	}
 
+	function isRowActionMenu(action: DataTableRowAction<T>): action is DataTableRowActionMenu<T> {
+		return action.type === 'menu';
+	}
+
+	function getRowActionMenuValue(actionId: string, value: string) {
+		return `${actionId}:${value}`;
+	}
+
+	function isRowActionMenuEntryDisabled(entry: DataTableRowActionMenuEntry<T>, row: T): boolean {
+		if (!('disabled' in entry)) return false;
+		if (typeof entry.disabled === 'function') return entry.disabled(row);
+		return entry.disabled ?? false;
+	}
+
+	function getRowActionMenuEntries(
+		action: DataTableRowActionMenu<T>,
+		entries: DataTableRowActionMenuEntry<T>[],
+		row: T
+	): MenuEntry[] {
+		return entries.map((entry) => {
+			if ('type' in entry && entry.type === 'separator') return entry;
+			if ('type' in entry && entry.type === 'group') {
+				return {
+					type: 'group',
+					label: entry.label,
+					items: entry.items ? getRowActionMenuEntries(action, entry.items, row) : undefined
+				};
+			}
+			if ('type' in entry && entry.type === 'submenu') {
+				return {
+					type: 'submenu',
+					label: entry.label,
+					disabled: isRowActionMenuEntryDisabled(entry, row),
+					items: getRowActionMenuEntries(action, entry.items, row)
+				};
+			}
+			return {
+				label: entry.label,
+				value: getRowActionMenuValue(action.id, entry.value),
+				disabled: isRowActionMenuEntryDisabled(entry, row)
+			};
+		});
+	}
+
 	function getRowActionItems(row: T) {
-		return rowActions.map((action) => ({
-			label: action.label,
-			value: action.id,
-			disabled: isRowActionDisabled(action, row)
-		}));
+		return rowActions.map((action) => {
+			if (isRowActionMenu(action)) {
+				return {
+					type: 'submenu',
+					label: action.label,
+					disabled: isRowActionDisabled(action, row),
+					items: getRowActionMenuEntries(action, action.items, row)
+				} satisfies MenuEntry;
+			}
+
+			return {
+				label: action.label,
+				value: action.id,
+				disabled: isRowActionDisabled(action, row)
+			} satisfies MenuEntry;
+		});
 	}
 
 	function selectRowAction(row: T, actionId: string) {
-		rowActions.find((action) => action.id === actionId)?.onSelect(row);
+		const action = rowActions.find((action) => action.id === actionId);
+		if (action && !isRowActionMenu(action)) action.onSelect(row);
+	}
+
+	function findRowActionMenuEntry(
+		entries: DataTableRowActionMenuEntry<T>[],
+		value: string
+	): DataTableRowActionMenuEntry<T> | undefined {
+		for (const entry of entries) {
+			if (!('type' in entry) && entry.value === value) return entry;
+			if ('type' in entry && (entry.type === 'group' || entry.type === 'submenu')) {
+				const nestedEntry = findRowActionMenuEntry(entry.items ?? [], value);
+				if (nestedEntry) return nestedEntry;
+			}
+		}
+	}
+
+	function selectRowActionValue(row: T, value: string) {
+		const [actionId, menuValue] = value.split(':', 2);
+		const action = rowActions.find((action) => action.id === actionId);
+		if (!action) return;
+
+		if (!isRowActionMenu(action)) {
+			action.onSelect(row);
+			return;
+		}
+
+		if (!menuValue) return;
+		const menuEntry = findRowActionMenuEntry(action.items, menuValue);
+		if (menuEntry && !('type' in menuEntry)) menuEntry.onSelect?.(row);
+		action.onSelect?.(row, menuValue);
 	}
 
 	function getRowActionMultibarItems(row: T): MultibarItem[] {
@@ -419,18 +504,34 @@
 				id: 'row-actions',
 				type: 'buttonGroup',
 				ariaLabel: 'Row actions',
-				items: rowActions.map((action) => ({
-					id: action.id,
-					type: 'button',
-					content: action.icon ? 'icon' : 'normal',
-					disabled: isRowActionDisabled(action, row),
-					ariaLabel: action.label,
-					title: action.label,
-					children: rowActionContent,
-					childrenContext: { row, action } satisfies RowActionMultibarContext,
-					onclick: () => selectRowAction(row, action.id),
-					class: action.icon ? undefined : 'max-w-28'
-				}))
+				items: rowActions.map((action): ButtonGroupItem => {
+					const content = action.icon ? ('icon' as const) : ('normal' as const);
+					const item = {
+						id: action.id,
+						content,
+						disabled: isRowActionDisabled(action, row),
+						ariaLabel: action.label,
+						children: rowActionContent,
+						childrenContext: { row, action } satisfies RowActionMultibarContext,
+						class: action.icon ? undefined : 'max-w-28'
+					};
+
+					if (isRowActionMenu(action)) {
+						return {
+							...item,
+							type: 'menu',
+							params: getRowActionMenuEntries(action, action.items, row),
+							onSelect: (value) => selectRowActionValue(row, value)
+						};
+					}
+
+					return {
+						...item,
+						type: 'button',
+						title: action.label,
+						onclick: () => selectRowAction(row, action.id)
+					};
+				})
 			}
 		];
 	}
@@ -444,14 +545,13 @@
 	}
 
 	function getRowActionMultibarClass() {
-		const base =
-			'gap-1 rounded-kl-field border border-kl-base-300 bg-kl-base-100 p-1 shadow-[var(--kl-shadow-sm)]';
+		const base = 'gap-1';
 
 		if (rowActionsVariant !== 'floating-bar') return base;
 
 		return cn(
 			base,
-			'absolute top-1/2 right-2 z-[var(--kl-z-dropdown)] -translate-y-1/2 bg-kl-base-100/85 shadow-[var(--kl-shadow-md)] backdrop-blur-md',
+			'border-kl-base-300 bg-kl-base-100/85 absolute top-1/2 right-2 z-[var(--kl-z-dropdown)] -translate-y-1/2 rounded-kl-field border shadow-[var(--kl-shadow-md)] backdrop-blur-md',
 			'pointer-events-none opacity-0 transition-opacity duration-[var(--kl-transition-fast)] group-hover/row:pointer-events-auto group-hover/row:opacity-100 group-focus-within/row:pointer-events-auto group-focus-within/row:opacity-100',
 			'[@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100'
 		);
@@ -713,7 +813,7 @@
 
 							{#each columns as column, columnIndex (column.id)}
 								{@const value = getCellValue(row, column)}
-								{@const cell = cellSnippets[column.id] ?? column.cell}
+								{@const cell = column.cell}
 								<td
 									class={cn(
 										'text-kl-base-content px-4 py-3 align-middle',
@@ -744,7 +844,7 @@
 									{#if rowActionsVariant === 'menu'}
 										<Menu
 											items={getRowActionItems(row)}
-											onSelect={(value) => selectRowAction(row, value)}
+											onSelect={(value) => selectRowActionValue(row, value)}
 											class="min-w-36"
 										>
 											<Trigger variant="ghost" size="sm" content="icon" ariaLabel="Row actions">

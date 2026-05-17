@@ -2,7 +2,6 @@
 	import {
 		DataTable,
 		createDataTableQuery,
-		createDataTableQueryFromUrl,
 		createDataTableSelection,
 		type DataTableBatchAction,
 		type DataTableBatchActionPayload,
@@ -19,12 +18,11 @@
 		type DataTableUrlStateConfig
 	} from '$ui/data-table';
 	import { Editable } from '$ui/editable';
-	import { page } from '$app/state';
 	import { FiltersInput, type FiltersInputValues } from '$ui/filters-input';
 	import { SearchInput } from '$ui/search-input';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { Eye, PauseCircle } from 'lucide-svelte';
+	import { Eye, Mail, MoreHorizontal } from 'lucide-svelte';
 	import { onDestroy } from 'svelte';
 
 	type Customer = {
@@ -40,6 +38,8 @@
 		lastContactTime: string;
 		supportWindow: string;
 	};
+
+	type CustomerCellSnippet = NonNullable<DataTableColumn<Customer>['cell']>;
 
 	let customers: Customer[] = $state([
 		{
@@ -177,6 +177,37 @@
 		{ id: 'lastContactTime', label: 'Contacted', sortable: true },
 		{ id: 'supportWindow', label: 'Support', sortable: true }
 	];
+	const rowActionsDemoColumns = columns.filter((column) =>
+		['customer', 'plan', 'status', 'mrr'].includes(column.id)
+	);
+
+	function getMainColumns(
+		customerCell: CustomerCellSnippet,
+		statusCell: CustomerCellSnippet,
+		ownerCell: CustomerCellSnippet,
+		mrrCell: CustomerCellSnippet
+	): DataTableColumn<Customer>[] {
+		return columns.map((column) => {
+			if (column.id === 'customer') return { ...column, cell: customerCell };
+			if (column.id === 'status') return { ...column, cell: statusCell };
+			if (column.id === 'owner') return { ...column, cell: ownerCell };
+			if (column.id === 'mrr') return { ...column, cell: mrrCell };
+			return column;
+		});
+	}
+
+	function getRowActionsDemoColumns(
+		customerCell: CustomerCellSnippet,
+		statusCell: CustomerCellSnippet,
+		mrrCell: CustomerCellSnippet
+	): DataTableColumn<Customer>[] {
+		return rowActionsDemoColumns.map((column) => {
+			if (column.id === 'customer') return { ...column, cell: customerCell };
+			if (column.id === 'status') return { ...column, cell: statusCell };
+			if (column.id === 'mrr') return { ...column, cell: mrrCell };
+			return column;
+		});
+	}
 
 	const filters: DataTableFilter[] = [
 		{
@@ -216,7 +247,7 @@
 		filters,
 		pageSizeOptions: tablePageSizeOptions
 	} satisfies DataTableUrlStateConfig<Customer>;
-	const initialQuery = createDataTableQueryFromUrl(page.url, tableUrlState);
+	const initialQuery = createDataTableQuery(tableUrlState.defaults);
 	let query: DataTableQuery = $state(initialQuery);
 	let simpleQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let actionBarQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
@@ -242,12 +273,44 @@
 			}
 		},
 		{
-			id: 'pause',
-			label: 'Pause account',
-			disabled: (row) => row.status !== 'Active',
+			id: 'email',
+			label: 'Email customer',
+			disabled: (row) => row.status === 'Churned',
 			onSelect: (row) => {
-				lastAction = `Pause ${row.customer}`;
+				lastAction = `Email ${row.customer}`;
 			}
+		},
+		{
+			id: 'more',
+			type: 'menu',
+			label: 'More actions',
+			items: [
+				{
+					label: 'Create invoice',
+					value: 'invoice',
+					disabled: (row) => row.trial || row.status === 'Churned',
+					onSelect: (row) => {
+						lastAction = `Create invoice for ${row.customer}`;
+					}
+				},
+				{
+					label: 'Pause account',
+					value: 'pause',
+					disabled: (row) => row.status !== 'Active',
+					onSelect: (row) => {
+						lastAction = `Pause ${row.customer}`;
+					}
+				},
+				{ type: 'separator' },
+				{
+					label: 'Delete customer',
+					value: 'delete',
+					disabled: (row) => row.status === 'Active',
+					onSelect: (row) => {
+						lastAction = `Delete ${row.customer}`;
+					}
+				}
+			]
 		}
 	];
 
@@ -289,12 +352,36 @@ let query = $state(createDataTableQueryFromUrl(page.url, tableState));
   />
 {/snippet}
 
+function getColumns(ownerCell) {
+  return columns.map((column) =>
+    column.id === 'owner' ? { ...column, cell: ownerCell } : column
+  );
+}
+
+const rowActions = [
+  { id: 'open', label: 'Open customer', icon: openIcon, onSelect: openCustomer },
+  { id: 'email', label: 'Email customer', icon: emailIcon, onSelect: emailCustomer },
+  {
+    id: 'more',
+    type: 'menu',
+    label: 'More actions',
+    icon: moreIcon,
+    items: [
+      { label: 'Create invoice', value: 'invoice', onSelect: createInvoice },
+      { label: 'Pause account', value: 'pause', onSelect: pauseCustomer },
+      { type: 'separator' },
+      { label: 'Delete customer', value: 'delete', onSelect: deleteCustomer }
+    ]
+  }
+];
+
 {#snippet openIcon(_row)}<Eye />{/snippet}
-{#snippet pauseIcon(_row)}<PauseCircle />{/snippet}
+{#snippet emailIcon(_row)}<Mail />{/snippet}
+{#snippet moreIcon(_row)}<MoreHorizontal />{/snippet}
 
 <DataTable
   data={rows}
-  columns={columns}
+  columns={getColumns(ownerCell)}
   filters={filters}
   selectable
   batchActions={batchActions}
@@ -302,15 +389,14 @@ let query = $state(createDataTableQueryFromUrl(page.url, tableState));
   bind:query
   bind:selection
   urlState={tableState}
-  rowActions={getRowActionsWithIcons(openIcon, pauseIcon)}
+  rowActions={getRowActionsWithIcons(openIcon, emailIcon, moreIcon)}
   onQueryChange={fetchRows}
   onRowUpdate={({ rowKey, patch }) => updateCustomer(rowKey, patch)}
-  cellSnippets={{ owner: ownerCell }}
 />`;
 
 	const actionBarCode = `<DataTable
   data={rows}
-  {columns}
+  columns={getRowActionsDemoColumns(customerCell, statusCell, mrrCell)}
   totalCount={total}
   rowActions={rowActions}
   rowActionsVariant="bar"
@@ -319,7 +405,7 @@ let query = $state(createDataTableQueryFromUrl(page.url, tableState));
 
 	const floatingActionsCode = `<DataTable
   data={rows}
-  {columns}
+  columns={getRowActionsDemoColumns(customerCell, statusCell, mrrCell)}
   totalCount={total}
   rowActions={rowActions}
   rowActionsVariant="floating-bar"
@@ -432,7 +518,8 @@ export const load = async ({ url }) => {
 			name: 'columns',
 			type: 'DataTableColumn<T>[]',
 			default: '-',
-			description: 'Declarative column definitions. Each column can define a cell snippet'
+			description:
+				'Declarative column definitions. Each column can define cell: Snippet<[row, value, context]>'
 		},
 		{
 			name: 'totalCount',
@@ -515,13 +602,6 @@ export const load = async ({ url }) => {
 			description: 'Shows a loading overlay'
 		},
 		{
-			name: 'cellSnippets',
-			type: 'Record<string, Snippet>',
-			default: '{}',
-			description:
-				'Custom cell snippets by column id. Snippets receive row, value, and a cell context with updateRow'
-		},
-		{
 			name: 'onRowUpdate',
 			type: '(payload) => void',
 			default: '-',
@@ -575,11 +655,19 @@ export const load = async ({ url }) => {
 
 	function getRowActionsWithIcons(
 		openIcon: DataTableRowAction<Customer>['icon'],
-		pauseIcon: DataTableRowAction<Customer>['icon']
+		emailIcon: DataTableRowAction<Customer>['icon'],
+		moreIcon: DataTableRowAction<Customer>['icon']
 	) {
 		return rowActions.map((action) => ({
 			...action,
-			icon: action.id === 'open' ? openIcon : action.id === 'pause' ? pauseIcon : action.icon
+			icon:
+				action.id === 'open'
+					? openIcon
+					: action.id === 'email'
+						? emailIcon
+						: action.id === 'more'
+							? moreIcon
+							: action.icon
 		}));
 	}
 </script>
@@ -621,8 +709,12 @@ export const load = async ({ url }) => {
 	<Eye size={14} />
 {/snippet}
 
-{#snippet pauseActionIcon(_row: Customer)}
-	<PauseCircle size={14} />
+{#snippet emailActionIcon(_row: Customer)}
+	<Mail size={14} />
+{/snippet}
+
+{#snippet moreActionIcon(_row: Customer)}
+	<MoreHorizontal size={14} />
 {/snippet}
 
 <div class="space-y-8">
@@ -687,7 +779,7 @@ export const load = async ({ url }) => {
 			<div class="space-y-4">
 				<DataTable
 					data={pageRows}
-					{columns}
+					columns={getMainColumns(customerCell, statusCell, ownerCell, mrrCell)}
 					{filters}
 					totalCount={filteredRows.length}
 					rowKey="id"
@@ -695,7 +787,7 @@ export const load = async ({ url }) => {
 					bind:selection
 					urlState={tableUrlState}
 					selectable
-					rowActions={getRowActionsWithIcons(openActionIcon, pauseActionIcon)}
+					rowActions={getRowActionsWithIcons(openActionIcon, emailActionIcon, moreActionIcon)}
 					{batchActions}
 					{loading}
 					onQueryChange={handleQueryChange}
@@ -703,12 +795,6 @@ export const load = async ({ url }) => {
 					onRowUpdate={handleRowUpdate}
 					searchPlaceholder="Search customers..."
 					pageSizeOptions={tablePageSizeOptions}
-					cellSnippets={{
-						customer: customerCell,
-						status: statusCell,
-						owner: ownerCell,
-						mrr: mrrCell
-					}}
 				/>
 
 				<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
@@ -736,16 +822,16 @@ export const load = async ({ url }) => {
 
 		<DemoCard
 			title="Always-on row actions"
-			description="Render row actions as a compact multibar in the final column."
+			description="Render direct actions and a menu action as a compact multibar in the final column."
 			code={actionBarCode}
 		>
 			<DataTable
 				data={customers.slice(0, 3)}
-				columns={columns.slice(0, 4)}
+				columns={getRowActionsDemoColumns(customerCell, statusCell, mrrCell)}
 				totalCount={3}
 				bind:query={actionBarQuery}
 				rowKey="id"
-				rowActions={getRowActionsWithIcons(openActionIcon, pauseActionIcon)}
+				rowActions={getRowActionsWithIcons(openActionIcon, emailActionIcon, moreActionIcon)}
 				rowActionsVariant="bar"
 				rowActionsSize="sm"
 				pageSizeOptions={[3]}
@@ -754,16 +840,16 @@ export const load = async ({ url }) => {
 
 		<DemoCard
 			title="Floating row actions"
-			description="Reveal row actions as an overlay on hover or keyboard focus."
+			description="Reveal the same multibar as an overlay on hover or keyboard focus."
 			code={floatingActionsCode}
 		>
 			<DataTable
 				data={customers.slice(0, 3)}
-				columns={columns.slice(0, 4)}
+				columns={getRowActionsDemoColumns(customerCell, statusCell, mrrCell)}
 				totalCount={3}
 				bind:query={floatingActionsQuery}
 				rowKey="id"
-				rowActions={getRowActionsWithIcons(openActionIcon, pauseActionIcon)}
+				rowActions={getRowActionsWithIcons(openActionIcon, emailActionIcon, moreActionIcon)}
 				rowActionsVariant="floating-bar"
 				pageSizeOptions={[3]}
 			/>

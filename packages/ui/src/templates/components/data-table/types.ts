@@ -96,13 +96,45 @@ export type DataTableRowUpdatePayload<T> = {
 	patch: Partial<T>;
 };
 
-export type DataTableRowAction<T> = {
+export type DataTableRowActionMenuEntry<T> =
+	| {
+			label: string;
+			value: string;
+			disabled?: boolean | ((row: T) => boolean);
+			onSelect?: (row: T) => void;
+	  }
+	| { type: 'separator' }
+	| {
+			type: 'group';
+			label: string;
+			items?: DataTableRowActionMenuEntry<T>[];
+	  }
+	| {
+			type: 'submenu';
+			label: string;
+			disabled?: boolean | ((row: T) => boolean);
+			items: DataTableRowActionMenuEntry<T>[];
+	  };
+
+type DataTableRowActionBase<T> = {
 	id: string;
 	label: string;
 	icon?: Snippet<[row: T]>;
 	disabled?: boolean | ((row: T) => boolean);
+};
+
+export type DataTableRowActionButton<T> = DataTableRowActionBase<T> & {
+	type?: 'button';
 	onSelect: (row: T) => void;
 };
+
+export type DataTableRowActionMenu<T> = DataTableRowActionBase<T> & {
+	type: 'menu';
+	items: DataTableRowActionMenuEntry<T>[];
+	onSelect?: (row: T, value: string) => void;
+};
+
+export type DataTableRowAction<T> = DataTableRowActionButton<T> | DataTableRowActionMenu<T>;
 
 export type DataTableBatchActionPayload<T> =
 	| {

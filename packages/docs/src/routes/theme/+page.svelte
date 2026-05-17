@@ -389,6 +389,17 @@
 		{ id: 'date', label: 'Date' }
 	];
 
+	function getOrderColumns(
+		statusCell: NonNullable<DataTableColumn<Order>['cell']>,
+		totalCell: NonNullable<DataTableColumn<Order>['cell']>
+	): DataTableColumn<Order>[] {
+		return orderColumns.map((column) => {
+			if (column.id === 'status') return { ...column, cell: statusCell };
+			if (column.id === 'total') return { ...column, cell: totalCell };
+			return column;
+		});
+	}
+
 	let themeRevision = $state(0);
 	let reportEnabled = $state(true);
 	let emailEnabled = $state(false);
@@ -1225,13 +1236,12 @@
 					>
 						<DataTable
 							data={visibleOrders}
-							columns={orderColumns}
+							columns={getOrderColumns(statusCell, totalCell)}
 							totalCount={visibleOrders.length}
 							rowKey="id"
 							bind:query
 							searchPlaceholder="Search orders..."
 							pageSizeOptions={[5, 10]}
-							cellSnippets={{ status: statusCell, total: totalCell }}
 						/>
 					</Card>
 
