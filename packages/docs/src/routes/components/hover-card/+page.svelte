@@ -67,9 +67,9 @@
 		},
 		{
 			name: 'body',
-			type: 'Snippet',
+			type: 'Snippet<[{ close: () => void }]>',
 			default: '—',
-			description: 'Content rendered inside the hover card popover'
+			description: 'Content rendered inside the hover card popover. Receives a close function.'
 		},
 		{
 			name: 'arrow',
@@ -213,15 +213,24 @@
 			description="Set openDelay to 0 for immediate display."
 			code={`<HoverCard openDelay={0}>
   <Trigger variant="link">Instant</Trigger>
-  {#snippet body()}
+  {#snippet body({ close })}
     <p>Opens immediately on hover.</p>
+    <button onclick={close}>Close</button>
   {/snippet}
 </HoverCard>`}
 		>
 			<HoverCard openDelay={0}>
 				<Trigger variant="link" color="primary">Instant hover</Trigger>
-				{#snippet body()}
-					<p>This card opens immediately on hover.</p>
+				{#snippet body({ close })}
+					<div class="space-y-3">
+						<p>This card opens immediately on hover.</p>
+						<button
+							onclick={close}
+							class="rounded-kl-field bg-kl-primary text-kl-primary-content px-3 py-1.5 text-xs font-medium"
+						>
+							Close
+						</button>
+					</div>
 				{/snippet}
 			</HoverCard>
 		</DemoCard>

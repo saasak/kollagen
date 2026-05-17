@@ -5,6 +5,10 @@
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
+	type OverlaySnippetContext = {
+		close: () => void;
+	};
+
 	interface Props {
 		open?: boolean;
 		title?: string;
@@ -15,8 +19,8 @@
 		onAction?: () => void;
 		onCancel?: () => void;
 		onOpenChange?: (open: boolean) => void;
-		body?: Snippet;
-		footer?: Snippet;
+		body?: Snippet<[OverlaySnippetContext]>;
+		footer?: Snippet<[OverlaySnippetContext]>;
 		children?: Snippet;
 		class?: string;
 	}
@@ -36,6 +40,10 @@
 		children,
 		class: className
 	}: Props = $props();
+
+	function close() {
+		open = false;
+	}
 </script>
 
 <AlertDialog.Root bind:open {onOpenChange}>
@@ -77,12 +85,12 @@
 			{/if}
 			{#if body}
 				<div class="text-kl-base-content mt-4 text-sm">
-					{@render body()}
+					{@render body({ close })}
 				</div>
 			{/if}
 			<div class="mt-6 flex items-center justify-end gap-2">
 				{#if footer}
-					{@render footer()}
+					{@render footer({ close })}
 				{:else}
 					<AlertDialog.Cancel
 						onclick={onCancel}

@@ -54,7 +54,12 @@
 			default: '—',
 			description: 'Implicit trigger content, usually a Trigger component'
 		},
-		{ name: 'body', type: 'Snippet', default: '—', description: 'Popover body content' },
+		{
+			name: 'body',
+			type: 'Snippet<[{ close: () => void }]>',
+			default: '—',
+			description: 'Popover body content. Receives a close function.'
+		},
 		{
 			name: 'class',
 			type: 'string',
@@ -142,17 +147,17 @@
 			description="Popovers can contain interactive form elements."
 			code={`<Popover title="Feedback" description="How are we doing?">
   <Trigger color="secondary">Give feedback</Trigger>
-  {#snippet body()}
+  {#snippet body({ close })}
     <div class="grid gap-3">
       <textarea rows="3" placeholder="Your feedback..." class="..." />
-      <button class="...">Submit</button>
+      <button onclick={close} class="...">Submit</button>
     </div>
   {/snippet}
 </Popover>`}
 		>
 			<Popover title="Feedback" description="How are we doing?">
 				<Trigger color="secondary">Give feedback</Trigger>
-				{#snippet body()}
+				{#snippet body({ close })}
 					<div class="grid gap-3">
 						<textarea
 							rows={3}
@@ -160,6 +165,7 @@
 							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 border px-3 py-1.5 text-sm"
 						></textarea>
 						<button
+							onclick={close}
 							class="rounded-kl-field bg-kl-primary text-kl-primary-content px-3 py-1.5 text-sm font-medium"
 						>
 							Submit

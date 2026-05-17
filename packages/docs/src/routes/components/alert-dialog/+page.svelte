@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		Action as AlertDialogAction,
-		AlertDialog,
-		Cancel as AlertDialogCancel
-	} from '$ui/alert-dialog';
+	import { Action as AlertDialogAction, AlertDialog } from '$ui/alert-dialog';
 	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -75,15 +71,15 @@
 		},
 		{
 			name: 'body',
-			type: 'Snippet',
+			type: 'Snippet<[{ close: () => void }]>',
 			default: '-',
-			description: 'Dialog body content.'
+			description: 'Dialog body content. Receives a close function.'
 		},
 		{
 			name: 'footer',
-			type: 'Snippet',
+			type: 'Snippet<[{ close: () => void }]>',
 			default: '-',
-			description: 'Custom footer actions.'
+			description: 'Custom footer actions. Receives a close function.'
 		},
 		{
 			name: 'class',
@@ -193,8 +189,8 @@
   {#snippet body()}
     <p>The workspace remains searchable and can be restored by an admin.</p>
   {/snippet}
-  {#snippet footer()}
-    <AlertDialogCancel>Cancel</AlertDialogCancel>
+  {#snippet footer({ close })}
+    <button onclick={close}>Cancel</button>
     <AlertDialogAction>Archive</AlertDialogAction>
   {/snippet}
 </AlertDialog>`}
@@ -204,12 +200,13 @@
 				{#snippet body()}
 					<p>The workspace remains searchable and can be restored by an admin.</p>
 				{/snippet}
-				{#snippet footer()}
-					<AlertDialogCancel
+				{#snippet footer({ close })}
+					<button
+						onclick={close}
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md cursor-pointer border px-3 text-sm font-medium transition-colors duration-150"
 					>
 						Cancel
-					</AlertDialogCancel>
+					</button>
 					<AlertDialogAction
 						class="rounded-kl-field bg-kl-primary text-kl-primary-content h-kl-field-md cursor-pointer border border-transparent px-3 text-sm font-medium transition-colors duration-150 hover:brightness-95"
 					>

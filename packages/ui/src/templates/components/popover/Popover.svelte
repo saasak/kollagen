@@ -5,6 +5,10 @@
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
+	type OverlaySnippetContext = {
+		close: () => void;
+	};
+
 	interface Props {
 		open?: boolean;
 		title?: string;
@@ -14,7 +18,7 @@
 		align?: 'start' | 'center' | 'end';
 		alignOffset?: number;
 		onOpenChange?: (open: boolean) => void;
-		body?: Snippet;
+		body?: Snippet<[OverlaySnippetContext]>;
 		children?: Snippet;
 		class?: string;
 	}
@@ -32,6 +36,10 @@
 		children,
 		class: className
 	}: Props = $props();
+
+	function close() {
+		open = false;
+	}
 </script>
 
 <Popover.Root bind:open {onOpenChange}>
@@ -81,7 +89,7 @@
 
 			{#if body}
 				<div class="mt-3">
-					{@render body()}
+					{@render body({ close })}
 				</div>
 			{/if}
 		</Popover.Content>

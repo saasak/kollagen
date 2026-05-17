@@ -76,11 +76,16 @@
 		},
 		{
 			name: 'footer',
-			type: 'Snippet',
+			type: 'Snippet<[{ close: () => void }]>',
 			default: '—',
-			description: 'Footer content, e.g. action buttons (Svelte 5 snippet)'
+			description: 'Footer content. Receives a close function.'
 		},
-		{ name: 'body', type: 'Snippet', default: '—', description: 'Action sheet body content' },
+		{
+			name: 'body',
+			type: 'Snippet<[{ close: () => void }]>',
+			default: '—',
+			description: 'Action sheet body content. Receives a close function.'
+		},
 		{
 			name: 'class',
 			type: 'string',
@@ -242,13 +247,15 @@ ${'<'}/script>
     <p class="text-kl-base-content text-sm">This action cannot be undone.</p>
   {/snippet}
 
-  {#snippet footer()}
+  {#snippet footer({ close })}
     <button
+      onclick={close}
       class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-muted border px-4 py-2 text-sm font-medium transition-colors"
     >
       Cancel
     </button>
     <button
+      onclick={close}
       class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
     >
       Confirm
@@ -261,13 +268,15 @@ ${'<'}/script>
 				{#snippet body()}
 					<p class="text-kl-base-content text-sm">This action cannot be undone.</p>
 				{/snippet}
-				{#snippet footer()}
+				{#snippet footer({ close })}
 					<button
+						onclick={close}
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-muted border px-4 py-2 text-sm font-medium transition-colors"
 					>
 						Cancel
 					</button>
 					<button
+						onclick={close}
 						class="rounded-kl-field bg-kl-primary text-kl-primary-content px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
 					>
 						Confirm

@@ -5,6 +5,10 @@
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
+	type OverlaySnippetContext = {
+		close: () => void;
+	};
+
 	interface Props {
 		open?: boolean;
 		title?: string;
@@ -13,8 +17,8 @@
 		closeOnInteractOutside?: boolean;
 		disabled?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		footer?: Snippet;
-		body?: Snippet;
+		footer?: Snippet<[OverlaySnippetContext]>;
+		body?: Snippet<[OverlaySnippetContext]>;
 		children?: Snippet;
 		class?: string;
 	}
@@ -32,6 +36,10 @@
 		children,
 		class: className
 	}: Props = $props();
+
+	function close() {
+		open = false;
+	}
 </script>
 
 <Dialog.Root bind:open {onOpenChange}>
@@ -77,13 +85,13 @@
 
 			{#if body}
 				<div class="mt-4">
-					{@render body()}
+					{@render body({ close })}
 				</div>
 			{/if}
 
 			{#if footer}
 				<div class="mt-6 flex items-center justify-end gap-2">
-					{@render footer()}
+					{@render footer({ close })}
 				</div>
 			{/if}
 		</Dialog.Content>

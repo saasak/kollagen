@@ -4,6 +4,10 @@
 	import { LinkPreview } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 
+	type OverlaySnippetContext = {
+		close: () => void;
+	};
+
 	interface Props {
 		open?: boolean;
 		openDelay?: number;
@@ -14,7 +18,7 @@
 		alignOffset?: number;
 		arrow?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		body: Snippet;
+		body: Snippet<[OverlaySnippetContext]>;
 		children: Snippet;
 		class?: string;
 	}
@@ -33,6 +37,10 @@
 		children,
 		class: className
 	}: Props = $props();
+
+	function close() {
+		open = false;
+	}
 </script>
 
 <LinkPreview.Root bind:open {openDelay} {closeDelay} {onOpenChange}>
@@ -54,7 +62,7 @@
 			className
 		)}
 	>
-		{@render body()}
+		{@render body({ close })}
 		{#if arrow}
 			<LinkPreview.Arrow class="fill-kl-base-100 stroke-kl-base-300" />
 		{/if}

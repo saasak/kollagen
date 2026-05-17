@@ -6,6 +6,10 @@
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
+	type OverlaySnippetContext = {
+		close: () => void;
+	};
+
 	interface Props {
 		open?: boolean;
 		title?: string;
@@ -16,8 +20,8 @@
 		snapPoints?: (number | string)[];
 		disabled?: boolean;
 		onOpenChange?: (open: boolean) => void;
-		footer?: Snippet;
-		body?: Snippet;
+		footer?: Snippet<[OverlaySnippetContext]>;
+		body?: Snippet<[OverlaySnippetContext]>;
 		children?: Snippet;
 		class?: string;
 	}
@@ -54,6 +58,10 @@
 			activeSnapPoint = snapPoints[0];
 		}
 		onOpenChange?.(nextOpen);
+	}
+
+	function close() {
+		open = false;
 	}
 </script>
 
@@ -109,13 +117,13 @@
 
 					{#if body}
 						<div class="mt-4">
-							{@render body()}
+							{@render body({ close })}
 						</div>
 					{/if}
 
 					{#if footer}
 						<div class="mt-6 flex items-center justify-end gap-2">
-							{@render footer()}
+							{@render footer({ close })}
 						</div>
 					{/if}
 				</div>
@@ -165,13 +173,13 @@
 
 				{#if body}
 					<div class="mt-4">
-						{@render body()}
+						{@render body({ close })}
 					</div>
 				{/if}
 
 				{#if footer}
 					<div class="mt-6 flex items-center justify-end gap-2">
-						{@render footer()}
+						{@render footer({ close })}
 					</div>
 				{/if}
 			</Dialog.Content>
