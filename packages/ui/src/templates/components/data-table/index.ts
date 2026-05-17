@@ -1,4 +1,6 @@
 export { default as DataTable } from './DataTable.svelte';
+export { FiltersInput } from '../filters-input';
+export { SearchInput } from '../search-input';
 export {
 	createDataTableQuery,
 	createDataTableSelection,

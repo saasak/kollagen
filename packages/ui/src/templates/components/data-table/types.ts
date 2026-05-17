@@ -1,5 +1,13 @@
 import type { Snippet } from 'svelte';
-import type { TimeValue } from 'bits-ui';
+import type {
+	FiltersInputConfig,
+	FiltersInputDateRangeValue,
+	FiltersInputNumberRangeValue,
+	FiltersInputOption,
+	FiltersInputTimeGranularity,
+	FiltersInputTimeRangeValue,
+	FiltersInputValue
+} from '../filters-input';
 
 export type DataTableSortDirection = 'asc' | 'desc';
 
@@ -20,33 +28,17 @@ export type DataTableSelection =
 			excludedKeys: DataTableRowKey[];
 	  };
 
-export type DataTableDateRangeValue = {
-	from?: string;
-	to?: string;
-};
+export type DataTableDateRangeValue = FiltersInputDateRangeValue;
 
-export type DataTableNumberRangeValue = {
-	min?: number;
-	max?: number;
-};
+export type DataTableNumberRangeValue = FiltersInputNumberRangeValue;
 
 export type DataTableTimeValue = string;
 
-export type DataTableTimeRangeValue = {
-	from?: string;
-	to?: string;
-};
+export type DataTableTimeRangeValue = FiltersInputTimeRangeValue;
 
-export type DataTableTimeGranularity = 'hour' | 'minute' | 'second';
+export type DataTableTimeGranularity = FiltersInputTimeGranularity;
 
-export type DataTableFilterValue =
-	| string
-	| string[]
-	| boolean
-	| DataTableDateRangeValue
-	| DataTableNumberRangeValue
-	| DataTableTimeRangeValue
-	| null;
+export type DataTableFilterValue = FiltersInputValue;
 
 export type DataTableQuery = {
 	page: number;
@@ -56,71 +48,9 @@ export type DataTableQuery = {
 	sort: DataTableSort;
 };
 
-export type DataTableOption = {
-	label: string;
-	value: string;
-};
+export type DataTableOption = FiltersInputOption;
 
-export type DataTableFilter =
-	| {
-			id: string;
-			label: string;
-			type: 'text';
-			placeholder?: string;
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'select';
-			values: DataTableOption[];
-			placeholder?: string;
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'multi-select';
-			values: DataTableOption[];
-			placeholder?: string;
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'boolean';
-			trueLabel?: string;
-			falseLabel?: string;
-			placeholder?: string;
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'date-range';
-			numberOfMonths?: number;
-			weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-			locale?: string;
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'number-range';
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'time';
-			placeholder?: TimeValue;
-			hourCycle?: 12 | 24;
-			granularity?: DataTableTimeGranularity;
-			locale?: string;
-	  }
-	| {
-			id: string;
-			label: string;
-			type: 'time-range';
-			placeholder?: TimeValue;
-			hourCycle?: 12 | 24;
-			granularity?: DataTableTimeGranularity;
-			locale?: string;
-	  };
+export type DataTableFilter = FiltersInputConfig;
 
 export type DataTableCellSnippet<T> = Snippet<[row: T, value: unknown]>;
 

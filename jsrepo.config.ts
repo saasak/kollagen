@@ -132,17 +132,32 @@ export default defineConfig({
 				files: [{ path: 'packages/ui/src/templates/components/date-range-picker' }]
 			},
 			{
-				name: 'data-table',
+				name: 'filters-input',
 				type: 'component',
 				registryDependencies: [
-					'checkbox',
 					'date-range-picker',
-					'menu',
-					'pagination',
 					'popover',
 					'select',
 					'time-field',
 					'time-range-field',
+					'trigger'
+				],
+				files: [{ path: 'packages/ui/src/templates/components/filters-input' }]
+			},
+			{
+				name: 'search-input',
+				type: 'component',
+				files: [{ path: 'packages/ui/src/templates/components/search-input' }]
+			},
+			{
+				name: 'data-table',
+				type: 'component',
+				registryDependencies: [
+					'checkbox',
+					'filters-input',
+					'menu',
+					'pagination',
+					'search-input',
 					'trigger'
 				],
 				files: [{ path: 'packages/ui/src/templates/components/data-table' }]

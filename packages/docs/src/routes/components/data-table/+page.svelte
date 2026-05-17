@@ -14,6 +14,8 @@
 		type DataTableSelection,
 		type DataTableTimeRangeValue
 	} from '$ui/data-table';
+	import { FiltersInput, type FiltersInputValues } from '$ui/filters-input';
+	import { SearchInput } from '$ui/search-input';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import { onDestroy } from 'svelte';
@@ -205,11 +207,14 @@
 	let loadingQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let emptyQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let selection: DataTableSelection = $state(createDataTableSelection());
+	let standaloneSearch = $state('');
+	let standaloneFilters: FiltersInputValues = $state({});
 	let loading = $state(false);
 	let lastQuery = $state(JSON.stringify(initialQuery, null, 2));
 	let lastSelection = $state('No rows selected');
 	let lastAction = $state('No action called');
 	let loadingTimer: ReturnType<typeof setTimeout> | undefined;
+	const standaloneFiltersJson = $derived(JSON.stringify(standaloneFilters, null, 2));
 
 	const rowActions: DataTableRowAction<Customer>[] = [
 		{
@@ -258,6 +263,19 @@
   bind:selection
   onQueryChange={fetchRows}
 />`;
+
+	const standaloneInputsCode = `<SearchInput
+  bind:value={search}
+  placeholder="Search customers..."
+/>
+
+<form id="filters-form">
+  <FiltersInput
+    filters={filters}
+    bind:value={activeFilters}
+    form="filters-form"
+  />
+</form>`;
 
 	onDestroy(() => {
 		if (loadingTimer) clearTimeout(loadingTimer);
@@ -523,6 +541,45 @@
 						<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">Last action</div>
 						<pre
 							class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{lastAction}</pre>
+					</div>
+				</div>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Standalone inputs"
+			description="SearchInput and FiltersInput can be composed without DataTable."
+			code={standaloneInputsCode}
+		>
+			<div class="space-y-4">
+				<form
+					id="filters-form"
+					class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between"
+				>
+					<SearchInput bind:value={standaloneSearch} placeholder="Search customers..." />
+					<FiltersInput
+						filters={filters.slice(0, 4)}
+						bind:value={standaloneFilters}
+						form="filters-form"
+					/>
+				</form>
+
+				<div class="grid gap-4 md:grid-cols-2">
+					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
+						<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">
+							Search value
+						</div>
+						<pre
+							class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{standaloneSearch ||
+								'No search'}</pre>
+					</div>
+
+					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
+						<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">
+							Filters JSON
+						</div>
+						<pre
+							class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{standaloneFiltersJson}</pre>
 					</div>
 				</div>
 			</div>

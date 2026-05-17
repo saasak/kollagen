@@ -1,27 +1,12 @@
 <script lang="ts" generics="T extends Record<string, any>">
 	import { cn } from '$lib/utils/cn';
 	import { Checkbox } from '../checkbox';
-	import { DateRangePicker } from '../date-range-picker';
+	import { FiltersInput, countActiveFiltersInputValues } from '../filters-input';
 	import { Menu } from '../menu';
 	import { Pagination } from '../pagination';
-	import { Popover } from '../popover';
-	import { Select } from '../select';
-	import { TimeField } from '../time-field';
-	import { TimeRangeField } from '../time-range-field';
+	import { SearchInput } from '../search-input';
 	import { Trigger } from '../trigger';
-	import { parseDate, parseTime, type DateValue } from '@internationalized/date';
-	import type { DateRange, TimeRange, TimeValue } from 'bits-ui';
-	import {
-		ArrowDown,
-		ArrowUp,
-		ArrowUpDown,
-		Loader2,
-		MoreHorizontal,
-		Search,
-		SlidersHorizontal,
-		X
-	} from 'lucide-svelte';
-	import { onDestroy } from 'svelte';
+	import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, MoreHorizontal, X } from 'lucide-svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 	import {
 		createDataTableQuery,
@@ -30,17 +15,12 @@
 		type DataTableBatchActionPayload,
 		type DataTableCellSnippet,
 		type DataTableColumn,
-		type DataTableDateRangeValue,
 		type DataTableFilter,
-		type DataTableFilterValue,
-		type DataTableNumberRangeValue,
 		type DataTableQuery,
 		type DataTableRowAction,
 		type DataTableRowKey,
 		type DataTableSelection,
-		type DataTableSort,
-		type DataTableTimeGranularity,
-		type DataTableTimeRangeValue
+		type DataTableSort
 	} from './types';
 
 	interface Props {
@@ -86,18 +66,10 @@
 	}: Props = $props();
 
 	const searchId = $props.id();
-	let searchValue = $derived(query.search);
 	const selectedRowsByKey = new SvelteMap<DataTableRowKey, T>();
-	let searchTimer: ReturnType<typeof setTimeout> | undefined;
-
-	onDestroy(() => {
-		if (searchTimer) clearTimeout(searchTimer);
-	});
 
 	const hasFilters = $derived(filters.length > 0);
-	const activeFilterCount = $derived.by(() => {
-		return Object.values(query.filters).filter((value) => !isEmptyFilterValue(value)).length;
-	});
+	const activeFilterCount = $derived(countActiveFiltersInputValues(query.filters));
 	const hasQuery = $derived(
 		query.search !== '' || activeFilterCount > 0 || query.sort !== null || query.page !== 1
 	);
@@ -151,30 +123,6 @@
 			page: resetPage ? 1 : (patch.page ?? query.page),
 			filters: patch.filters ?? query.filters
 		});
-	}
-
-	function updateSearch(value: string) {
-		searchValue = value;
-		if (searchTimer) clearTimeout(searchTimer);
-		searchTimer = setTimeout(() => {
-			updateQuery({ search: value }, true);
-		}, 300);
-	}
-
-	function clearSearch() {
-		if (searchTimer) clearTimeout(searchTimer);
-		searchValue = '';
-		updateQuery({ search: '' }, true);
-	}
-
-	function updateFilter(id: string, value: DataTableFilterValue) {
-		const nextFilters = { ...query.filters };
-		if (isEmptyFilterValue(value)) {
-			delete nextFilters[id];
-		} else {
-			nextFilters[id] = value;
-		}
-		updateQuery({ filters: nextFilters }, true);
 	}
 
 	function resetQuery() {
@@ -362,342 +310,28 @@
 		if (!column.sortable || query.sort?.id !== column.id) return undefined;
 		return query.sort.direction === 'asc' ? 'ascending' : 'descending';
 	}
-
-	function getStringFilterValue(id: string) {
-		const value = query.filters[id];
-		return typeof value === 'string' ? value : '';
-	}
-
-	function getStringArrayFilterValue(id: string) {
-		const value = query.filters[id];
-		return Array.isArray(value) ? value : [];
-	}
-
-	function getDateRangeFilterValue(id: string): DataTableDateRangeValue {
-		const value = query.filters[id];
-		if (!isRangeObject(value)) return {};
-		const range = value as DataTableDateRangeValue;
-		return {
-			from: typeof range.from === 'string' ? range.from : undefined,
-			to: typeof range.to === 'string' ? range.to : undefined
-		};
-	}
-
-	function getDateFilterValue(id: string, key: keyof DataTableDateRangeValue) {
-		const value = getDateRangeFilterValue(id)[key];
-		if (!value) return undefined;
-
-		try {
-			return parseDate(value);
-		} catch {
-			return undefined;
-		}
-	}
-
-	function getDateRangePickerValue(id: string): DateRange {
-		return {
-			start: getDateFilterValue(id, 'from'),
-			end: getDateFilterValue(id, 'to')
-		};
-	}
-
-	function formatDateFilterValue(value: DateValue | undefined) {
-		if (!value) return undefined;
-		const month = String(value.month).padStart(2, '0');
-		const day = String(value.day).padStart(2, '0');
-		return `${value.year}-${month}-${day}`;
-	}
-
-	function updateDateRangeFilter(id: string, value: DateRange | undefined) {
-		updateFilter(id, {
-			from: formatDateFilterValue(value?.start),
-			to: formatDateFilterValue(value?.end)
-		});
-	}
-
-	function getNumberRangeFilterValue(id: string): DataTableNumberRangeValue {
-		const value = query.filters[id];
-		if (!isRangeObject(value)) return {};
-		const range = value as DataTableNumberRangeValue;
-		return {
-			min: typeof range.min === 'number' ? range.min : undefined,
-			max: typeof range.max === 'number' ? range.max : undefined
-		};
-	}
-
-	function getBooleanFilterValue(id: string) {
-		const value = query.filters[id];
-		if (typeof value !== 'boolean') return '';
-		return value ? 'true' : 'false';
-	}
-
-	function updateBooleanFilter(id: string, value: string | string[]) {
-		if (Array.isArray(value) || value === '') {
-			updateFilter(id, null);
-			return;
-		}
-		updateFilter(id, value === 'true');
-	}
-
-	function getTimeFilterValue(id: string): TimeValue | undefined {
-		const value = query.filters[id];
-		if (typeof value !== 'string' || !value) return undefined;
-
-		try {
-			return parseTime(value);
-		} catch {
-			return undefined;
-		}
-	}
-
-	function formatTimeFilterValue(
-		value: TimeValue | undefined,
-		granularity: DataTableTimeGranularity = 'minute'
-	) {
-		if (!value) return undefined;
-		const hour = String(value.hour).padStart(2, '0');
-		const minute = String(value.minute).padStart(2, '0');
-		if (granularity === 'second') {
-			const second = String(value.second).padStart(2, '0');
-			return `${hour}:${minute}:${second}`;
-		}
-		return `${hour}:${minute}`;
-	}
-
-	function updateTimeFilter(
-		id: string,
-		value: TimeValue | undefined,
-		granularity: DataTableTimeGranularity = 'minute'
-	) {
-		updateFilter(id, formatTimeFilterValue(value, granularity) ?? null);
-	}
-
-	function getTimeRangeFilterValue(id: string): DataTableTimeRangeValue {
-		const value = query.filters[id];
-		if (!isRangeObject(value)) return {};
-		const range = value as DataTableTimeRangeValue;
-		return {
-			from: typeof range.from === 'string' ? range.from : undefined,
-			to: typeof range.to === 'string' ? range.to : undefined
-		};
-	}
-
-	function getTimeRangeFieldValue(id: string): TimeRange {
-		const range = getTimeRangeFilterValue(id);
-		return {
-			start: parseTimeFilterValue(range.from),
-			end: parseTimeFilterValue(range.to)
-		};
-	}
-
-	function parseTimeFilterValue(value: string | undefined) {
-		if (!value) return undefined;
-		try {
-			return parseTime(value);
-		} catch {
-			return undefined;
-		}
-	}
-
-	function updateTimeRangeFilter(
-		id: string,
-		value: TimeRange | undefined,
-		granularity: DataTableTimeGranularity = 'minute'
-	) {
-		updateFilter(id, {
-			from: formatTimeFilterValue(value?.start, granularity),
-			to: formatTimeFilterValue(value?.end, granularity)
-		});
-	}
-
-	function isRangeObject(value: DataTableFilterValue): value is Record<string, string | number> {
-		return !!value && typeof value === 'object' && !Array.isArray(value);
-	}
-
-	function isEmptyFilterValue(value: DataTableFilterValue) {
-		if (value === null || value === undefined) return true;
-		if (typeof value === 'string') return value === '';
-		if (Array.isArray(value)) return value.length === 0;
-		if (typeof value === 'object')
-			return Object.values(value).every((entry) => entry === undefined || entry === '');
-		return false;
-	}
 </script>
 
 <div class={cn('space-y-4', className)}>
 	<div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
 		<div class="min-w-0 flex-1">
-			<div class="relative w-full max-w-md">
-				<label for="{searchId}-search" class="sr-only">{searchPlaceholder}</label>
-				<Search
-					size={16}
-					class="text-kl-muted-content pointer-events-none absolute top-1/2 left-3 -translate-y-1/2"
-				/>
-				<input
-					id="{searchId}-search"
-					type="search"
-					value={searchValue}
-					placeholder={searchPlaceholder}
-					oninput={(event) => updateSearch(event.currentTarget.value)}
-					class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border pr-10 pl-9 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-				/>
-				{#if searchValue}
-					<button
-						type="button"
-						onclick={clearSearch}
-						aria-label="Clear search"
-						class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-1/2 right-2 flex -translate-y-1/2 cursor-pointer items-center justify-center p-1 transition-colors duration-[var(--kl-transition-fast)]"
-					>
-						<X size={16} />
-					</button>
-				{/if}
-			</div>
+			<SearchInput
+				id="{searchId}-search"
+				value={query.search}
+				placeholder={searchPlaceholder}
+				onUpdate={(search) => updateQuery({ search }, true)}
+			/>
 		</div>
 
 		<div class="flex items-center justify-between gap-2 lg:justify-end">
 			{#if hasFilters}
-				<Popover title="Filters" side="bottom" align="end" class="w-[min(28rem,calc(100vw-2rem))]">
-					<Trigger variant="outline" class="relative">
-						<SlidersHorizontal size={16} />
-						<span>Filters</span>
-						{#if activeFilterCount > 0}
-							<span
-								class="bg-kl-primary text-kl-primary-content rounded-kl-selector h-kl-selector-sm min-w-kl-selector-sm inline-flex items-center justify-center px-1.5 text-xs font-semibold"
-							>
-								{activeFilterCount}
-							</span>
-						{/if}
-					</Trigger>
-
-					{#snippet body()}
-						<form class="space-y-4" onsubmit={(event) => event.preventDefault()}>
-							<div class="grid gap-3">
-								{#each filters as filter (filter.id)}
-									<div class="space-y-1.5">
-										<span class="text-kl-muted-content block text-xs font-medium">
-											{filter.label}
-										</span>
-
-										{#if filter.type === 'select'}
-											<Select
-												items={[
-													{ label: filter.placeholder ?? 'Any', value: '' },
-													...filter.values
-												]}
-												value={getStringFilterValue(filter.id)}
-												allowDeselect
-												onValueChange={(value) => updateFilter(filter.id, value)}
-											/>
-										{:else if filter.type === 'multi-select'}
-											<Select
-												items={filter.values}
-												multiple
-												value={getStringArrayFilterValue(filter.id)}
-												placeholder={filter.placeholder ?? 'Any'}
-												onValueChange={(value) => updateFilter(filter.id, value)}
-											/>
-										{:else if filter.type === 'boolean'}
-											<Select
-												items={[
-													{ label: filter.placeholder ?? 'Any', value: '' },
-													{ label: filter.trueLabel ?? 'True', value: 'true' },
-													{ label: filter.falseLabel ?? 'False', value: 'false' }
-												]}
-												value={getBooleanFilterValue(filter.id)}
-												allowDeselect
-												onValueChange={(value) => updateBooleanFilter(filter.id, value)}
-											/>
-										{:else if filter.type === 'text'}
-											<input
-												type="text"
-												aria-label={filter.label}
-												value={getStringFilterValue(filter.id)}
-												placeholder={filter.placeholder ?? filter.label}
-												oninput={(event) => updateFilter(filter.id, event.currentTarget.value)}
-												class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md w-full border px-3 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-											/>
-										{:else if filter.type === 'date-range'}
-											<DateRangePicker
-												ariaLabel={filter.label}
-												value={getDateRangePickerValue(filter.id)}
-												numberOfMonths={filter.numberOfMonths ?? 2}
-												weekStartsOn={filter.weekStartsOn}
-												locale={filter.locale ?? 'en'}
-												onValueChange={(value) => updateDateRangeFilter(filter.id, value)}
-											/>
-										{:else if filter.type === 'number-range'}
-											<div class="grid grid-cols-2 gap-2">
-												<input
-													type="number"
-													aria-label="{filter.label} minimum"
-													value={getNumberRangeFilterValue(filter.id).min ?? ''}
-													placeholder="Min"
-													oninput={(event) =>
-														updateFilter(filter.id, {
-															...getNumberRangeFilterValue(filter.id),
-															min:
-																event.currentTarget.value === ''
-																	? undefined
-																	: Number(event.currentTarget.value)
-														})}
-													class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-												/>
-												<input
-													type="number"
-													aria-label="{filter.label} maximum"
-													value={getNumberRangeFilterValue(filter.id).max ?? ''}
-													placeholder="Max"
-													oninput={(event) =>
-														updateFilter(filter.id, {
-															...getNumberRangeFilterValue(filter.id),
-															max:
-																event.currentTarget.value === ''
-																	? undefined
-																	: Number(event.currentTarget.value)
-														})}
-													class="border-kl-base-300 bg-kl-base-100 text-kl-base-content placeholder:text-kl-muted-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md min-w-0 border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
-												/>
-											</div>
-										{:else if filter.type === 'time'}
-											<TimeField
-												ariaLabel={filter.label}
-												value={getTimeFilterValue(filter.id)}
-												placeholder={filter.placeholder}
-												hourCycle={filter.hourCycle}
-												granularity={filter.granularity ?? 'minute'}
-												locale={filter.locale ?? 'en'}
-												onValueChange={(value) =>
-													updateTimeFilter(filter.id, value, filter.granularity ?? 'minute')}
-											/>
-										{:else if filter.type === 'time-range'}
-											<TimeRangeField
-												value={getTimeRangeFieldValue(filter.id)}
-												placeholder={filter.placeholder}
-												hourCycle={filter.hourCycle}
-												granularity={filter.granularity ?? 'minute'}
-												locale={filter.locale ?? 'en'}
-												onValueChange={(value) =>
-													updateTimeRangeFilter(filter.id, value, filter.granularity ?? 'minute')}
-											/>
-										{/if}
-									</div>
-								{/each}
-							</div>
-
-							<div class="border-kl-base-300 flex justify-end border-t pt-3">
-								<button
-									type="button"
-									disabled={activeFilterCount === 0}
-									onclick={() => updateQuery({ filters: {} }, true)}
-									class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
-								>
-									<X size={16} />
-									Clear filters
-								</button>
-							</div>
-						</form>
-					{/snippet}
-				</Popover>
+				<FiltersInput
+					{filters}
+					value={query.filters}
+					activeCount={activeFilterCount}
+					align="end"
+					onUpdate={(nextFilters) => updateQuery({ filters: nextFilters }, true)}
+				/>
 			{/if}
 
 			<button
