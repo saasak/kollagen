@@ -708,117 +708,139 @@
 		</div>
 	</div>
 
-	{#if selectable && selectedCount > 0}
-		<div
-			class="rounded-kl-box border-kl-base-300 bg-kl-base-200 flex flex-col gap-3 border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-		>
-			<div class="text-kl-base-content text-sm font-medium">
-				{#if allRowsSelected}
-					All {totalCount} rows selected
-				{:else}
-					{selectedCount} selected
-				{/if}
-			</div>
-
-			<div class="flex flex-wrap items-center gap-2">
-				{#if allVisibleRowsSelected && !allRowsSelected && totalCount > pageRowKeys.length}
-					<button
-						type="button"
-						onclick={selectAllRows}
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
-					>
-						Select all {totalCount}
-					</button>
-				{/if}
-
-				{#if hasBatchActions}
-					<Menu items={getBatchActionItems()} onSelect={selectBatchAction} class="min-w-40">
-						<Trigger variant="outline" size="sm">
-							<MoreHorizontal size={16} />
-							Actions
-						</Trigger>
-					</Menu>
-				{/if}
-
-				<button
-					type="button"
-					onclick={clearSelection}
-					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
-				>
-					<X size={16} />
-					Clear
-				</button>
-			</div>
-		</div>
-	{/if}
-
 	<div class="rounded-kl-box border-kl-base-300 bg-kl-base-100 relative overflow-hidden border">
 		<div class="overflow-x-auto">
 			<table class="w-full min-w-full text-left text-sm">
 				<thead class="bg-kl-base-200 text-kl-muted-content">
-					<tr>
-						{#if selectable}
-							<th scope="col" class="border-kl-base-300 w-12 border-b px-4 py-3">
-								<Checkbox
-									label="Select page rows"
-									class="[&>span]:sr-only"
-									checked={allVisibleRowsSelected}
-									indeterminate={someVisibleRowsSelected}
-									onCheckedChange={togglePageSelection}
-								/>
-							</th>
-						{/if}
-
-						{#each columns as column (column.id)}
+					{#if selectable && selectedCount > 0}
+						<tr>
 							<th
-								scope="col"
-								aria-sort={getHeaderAriaSort(column)}
-								style:width={column.width}
-								class="border-kl-base-300 border-b px-4 py-3 text-xs font-semibold tracking-normal whitespace-nowrap uppercase {getAlignClass(
-									column.align
-								)}"
+								colspan={colSpan}
+								scope="colgroup"
+								class="border-kl-base-300 border-b px-4 py-2 text-left font-normal"
 							>
-								{#if column.sortable}
-									{@const sortRule = getSortRule(column.id)}
-									{@const sortIndex = getSortIndex(column.id)}
-									<button
-										type="button"
-										onclick={(event) => toggleSort(column, event.shiftKey)}
-										class="text-kl-muted-content hover:text-kl-base-content inline-flex cursor-pointer items-center gap-1.5 transition-colors duration-[var(--kl-transition-fast)] {column.align ===
-										'right'
-											? 'justify-end'
-											: column.align === 'center'
-												? 'justify-center'
-												: 'justify-start'}"
-									>
-										<span>{column.label}</span>
-										{#if sortRule?.direction === 'asc'}
-											<ArrowUp size={14} />
-										{:else if sortRule?.direction === 'desc'}
-											<ArrowDown size={14} />
-										{:else}
-											<ArrowUpDown size={14} />
-										{/if}
-										{#if query.sort.length > 1 && sortIndex !== -1}
-											<span
-												class="bg-kl-muted text-kl-muted-content rounded-kl-selector inline-flex size-4 items-center justify-center text-[0.625rem] font-semibold"
-											>
-												{sortIndex + 1}
-											</span>
-										{/if}
-									</button>
-								{:else}
-									<span>{column.label}</span>
-								{/if}
-							</th>
-						{/each}
+								<div
+									class="min-h-kl-field-sm flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+								>
+									<div class="flex min-w-0 items-center gap-3">
+										<Checkbox
+											label="Select page rows"
+											class="[&>span]:sr-only"
+											checked={allVisibleRowsSelected}
+											indeterminate={someVisibleRowsSelected}
+											onCheckedChange={togglePageSelection}
+										/>
 
-						{#if hasRowActionColumn}
-							<th scope="col" class={getRowActionsHeaderClass()}>
-								<span class="sr-only">Actions</span>
+										<div class="text-kl-base-content truncate text-sm font-medium">
+											{#if allRowsSelected}
+												All {totalCount} rows selected
+											{:else}
+												{selectedCount} selected
+											{/if}
+										</div>
+									</div>
+
+									<div class="flex flex-wrap items-center gap-2">
+										{#if allVisibleRowsSelected && !allRowsSelected && totalCount > pageRowKeys.length}
+											<button
+												type="button"
+												onclick={selectAllRows}
+												class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+											>
+												Select all {totalCount}
+											</button>
+										{/if}
+
+										{#if hasBatchActions}
+											<Menu
+												items={getBatchActionItems()}
+												onSelect={selectBatchAction}
+												class="min-w-40"
+											>
+												<Trigger variant="outline" size="sm">
+													<MoreHorizontal size={16} />
+													Actions
+												</Trigger>
+											</Menu>
+										{/if}
+
+										<button
+											type="button"
+											onclick={clearSelection}
+											class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-sm inline-flex cursor-pointer items-center gap-2 border px-3 text-sm font-medium transition-colors duration-[var(--kl-transition-fast)]"
+										>
+											<X size={16} />
+											Clear
+										</button>
+									</div>
+								</div>
 							</th>
-						{/if}
-					</tr>
+						</tr>
+					{:else}
+						<tr>
+							{#if selectable}
+								<th scope="col" class="border-kl-base-300 w-12 border-b px-4 py-3">
+									<Checkbox
+										label="Select page rows"
+										class="[&>span]:sr-only"
+										checked={allVisibleRowsSelected}
+										indeterminate={someVisibleRowsSelected}
+										onCheckedChange={togglePageSelection}
+									/>
+								</th>
+							{/if}
+
+							{#each columns as column (column.id)}
+								<th
+									scope="col"
+									aria-sort={getHeaderAriaSort(column)}
+									style:width={column.width}
+									class="border-kl-base-300 border-b px-4 py-3 text-xs font-semibold tracking-normal whitespace-nowrap uppercase {getAlignClass(
+										column.align
+									)}"
+								>
+									{#if column.sortable}
+										{@const sortRule = getSortRule(column.id)}
+										{@const sortIndex = getSortIndex(column.id)}
+										<button
+											type="button"
+											onclick={(event) => toggleSort(column, event.shiftKey)}
+											class="text-kl-muted-content hover:text-kl-base-content inline-flex cursor-pointer items-center gap-1.5 transition-colors duration-[var(--kl-transition-fast)] {column.align ===
+											'right'
+												? 'justify-end'
+												: column.align === 'center'
+													? 'justify-center'
+													: 'justify-start'}"
+										>
+											<span>{column.label}</span>
+											{#if sortRule?.direction === 'asc'}
+												<ArrowUp size={14} />
+											{:else if sortRule?.direction === 'desc'}
+												<ArrowDown size={14} />
+											{:else}
+												<ArrowUpDown size={14} />
+											{/if}
+											{#if query.sort.length > 1 && sortIndex !== -1}
+												<span
+													class="bg-kl-muted text-kl-muted-content rounded-kl-selector inline-flex size-4 items-center justify-center text-[0.625rem] font-semibold"
+												>
+													{sortIndex + 1}
+												</span>
+											{/if}
+										</button>
+									{:else}
+										<span>{column.label}</span>
+									{/if}
+								</th>
+							{/each}
+
+							{#if hasRowActionColumn}
+								<th scope="col" class={getRowActionsHeaderClass()}>
+									<span class="sr-only">Actions</span>
+								</th>
+							{/if}
+						</tr>
+					{/if}
 				</thead>
 				<tbody>
 					{#each data as row, index (getRowKey(row, index))}
