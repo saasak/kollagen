@@ -45,7 +45,7 @@
 		filters,
 		value = $bindable({}),
 		onUpdate,
-		name = 'filters',
+		name,
 		form,
 		title = 'Filters',
 		clearLabel = 'Clear filters',
@@ -223,7 +223,9 @@
 	}
 </script>
 
-<input type="hidden" {name} {form} value={serializedValue} />
+{#if name}
+	<input type="hidden" {name} {form} value={serializedValue} />
+{/if}
 
 <Popover {title} {side} {align} class={cn('w-[min(28rem,calc(100vw-2rem))]', className)}>
 	{#if children}

@@ -18,8 +18,19 @@ export {
 	type DataTableRowKey,
 	type DataTableSelection,
 	type DataTableSort,
+	type DataTableSortRule,
 	type DataTableSortDirection,
 	type DataTableTimeGranularity,
 	type DataTableTimeRangeValue,
-	type DataTableTimeValue
+	type DataTableTimeValue,
+	type DataTableUrlState,
+	type DataTableUrlStateHistory
 } from './types';
+export {
+	areDataTableQueriesEqual,
+	createDataTableQueryFromUrl,
+	normalizeDataTableQuery,
+	parseDataTableQuerySearchParams,
+	type DataTableUrlStateConfig,
+	writeDataTableQuerySearchParams
+} from './url-state';

@@ -123,6 +123,26 @@ Recommended practice:
 - **Accessible** — inherits bits-ui's WAI-ARIA compliance; custom components include ARIA attributes
 - **Slots where it makes sense** — some components expose Svelte 5 snippets for custom rendering
 
+### DataTable state and URLs
+
+DataTable is controlled: your page owns the query, rows, and total count. The table emits a full query whenever search, filters, sort, page, or page size changes.
+
+For URL-backed tables, parse the URL before loading rows with `createDataTableQueryFromUrl`. Share the same config between `+page.server.ts` or `+page.ts`, the page component, and `<DataTable urlState={...}>`. Use a `prefix` when several tables live on the same page.
+
+```ts
+import { createDataTableQueryFromUrl } from '$lib/components/data-table/url-state';
+import { tableState } from './table-state';
+
+export const load = async ({ url }) => {
+	const query = createDataTableQueryFromUrl(url, tableState);
+	const { rows, total } = await getCustomers(query);
+
+	return { query, rows, total };
+};
+```
+
+The first render should already use rows matching the parsed query. DataTable does not emit a mount-time correction for URL state, so you avoid a duplicate initial fetch.
+
 ## Project structure
 
 pnpm monorepo:

@@ -11,10 +11,20 @@ import type {
 
 export type DataTableSortDirection = 'asc' | 'desc';
 
-export type DataTableSort = {
+export type DataTableSortRule = {
 	id: string;
 	direction: DataTableSortDirection;
-} | null;
+};
+
+export type DataTableSort = DataTableSortRule[];
+
+export type DataTableUrlStateHistory = 'auto' | 'replace' | 'push';
+
+export type DataTableUrlState = {
+	prefix: string;
+	defaults?: Partial<DataTableQuery>;
+	history?: DataTableUrlStateHistory;
+};
 
 export type DataTableRowKey = string | number;
 
@@ -100,7 +110,7 @@ export function createDataTableQuery(overrides: Partial<DataTableQuery> = {}): D
 		perPage: overrides.perPage ?? 10,
 		search: overrides.search ?? '',
 		filters: overrides.filters ?? {},
-		sort: overrides.sort ?? null
+		sort: overrides.sort ?? []
 	};
 }
 

@@ -4,6 +4,9 @@
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	let controlledPage = $state(3);
+	let formPage = $state(2);
+	let formPerPage = $state(10);
+	let submitted = $state('');
 
 	const propsData = [
 		{ name: 'count', type: 'number', default: '—', description: 'Total number of data items' },
@@ -42,6 +45,18 @@
 			type: 'number[]',
 			default: '[10, 20, 50]',
 			description: 'Options for the page size selector'
+		},
+		{
+			name: 'name',
+			type: 'string',
+			default: '—',
+			description: 'Hidden input name for the current page'
+		},
+		{
+			name: 'perPageName',
+			type: 'string',
+			default: '—',
+			description: 'Hidden input name for the current page size'
 		},
 		{
 			name: 'onPageChange',
@@ -144,6 +159,52 @@
 				showPageSizeControl
 				pageSizeOptions={[5, 10, 25, 50]}
 			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Form values"
+			description="Pass names to render hidden inputs for native form submission."
+			code={`<form>
+  <Pagination
+    count={100}
+    bind:page
+    bind:perPage
+    showPageSizeControl
+    name="page"
+    perPageName="per_page"
+  />
+</form>`}
+		>
+			<form
+				class="space-y-4"
+				onsubmit={(event) => {
+					event.preventDefault();
+					const data = new FormData(event.currentTarget);
+					submitted = JSON.stringify(Object.fromEntries(data), null, 2);
+				}}
+			>
+				<Pagination
+					count={100}
+					bind:page={formPage}
+					bind:perPage={formPerPage}
+					showPageSizeControl
+					name="page"
+					perPageName="per_page"
+				/>
+				<button
+					type="submit"
+					class="rounded-kl-field bg-kl-primary text-kl-primary-content h-kl-field-sm inline-flex cursor-pointer items-center px-3 text-sm font-medium transition-opacity hover:opacity-90"
+				>
+					Submit
+				</button>
+				<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
+					<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">
+						Submitted values
+					</div>
+					<pre class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{submitted ||
+							'{}'}</pre>
+				</div>
+			</form>
 		</DemoCard>
 
 		<DemoCard

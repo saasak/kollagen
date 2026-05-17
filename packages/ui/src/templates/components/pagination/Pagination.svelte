@@ -18,6 +18,10 @@
 		showPageSizeControl?: boolean;
 		/** Options for the page size selector @default [10, 20, 50] */
 		pageSizeOptions?: number[];
+		/** Hidden input name for the current page */
+		name?: string;
+		/** Hidden input name for the current page size */
+		perPageName?: string;
 		/** Callback when the current page changes */
 		onPageChange?: (page: number) => void;
 		/** Additional CSS classes on the root element */
@@ -32,12 +36,22 @@
 		showPageInfo = false,
 		showPageSizeControl = false,
 		pageSizeOptions = [10, 20, 50],
+		name,
+		perPageName,
 		onPageChange,
 		class: className
 	}: Props = $props();
 
 	const hasExtras = $derived(showPageInfo || showPageSizeControl);
 </script>
+
+{#if name}
+	<input type="hidden" {name} value={page} />
+{/if}
+
+{#if perPageName}
+	<input type="hidden" name={perPageName} value={perPage} />
+{/if}
 
 <Pagination.Root {count} bind:page {perPage} {siblingCount} {onPageChange}>
 	{#snippet children({ pages, range })}
@@ -72,6 +86,7 @@
 
 			<div class="flex items-center gap-1 {hasExtras ? 'ml-auto' : ''}">
 				<Pagination.PrevButton
+					type="button"
 					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 size-kl-field-sm inline-flex cursor-pointer items-center justify-center border transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					<ChevronLeft size={16} />
@@ -80,6 +95,7 @@
 				{#each pages as p (p.key)}
 					{#if p.type === 'page'}
 						<Pagination.Page
+							type="button"
 							page={p}
 							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 data-[selected]:border-kl-primary data-[selected]:bg-kl-primary data-[selected]:text-kl-primary-content focus-visible:outline-kl-primary size-kl-field-sm inline-flex cursor-pointer items-center justify-center border text-sm font-medium transition-colors duration-[var(--kl-transition-fast)] focus-visible:outline"
 						>
@@ -95,6 +111,7 @@
 				{/each}
 
 				<Pagination.NextButton
+					type="button"
 					class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 size-kl-field-sm inline-flex cursor-pointer items-center justify-center border transition-colors duration-[var(--kl-transition-fast)] disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					<ChevronRight size={16} />

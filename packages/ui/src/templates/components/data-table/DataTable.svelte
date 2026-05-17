@@ -7,7 +7,15 @@
 	import { SearchInput } from '../search-input';
 	import { Trigger } from '../trigger';
 	import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, MoreHorizontal, X } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 	import { SvelteMap } from 'svelte/reactivity';
+	import {
+		areDataTableQueriesEqual,
+		createDataTableQueryFromUrl,
+		normalizeDataTableQuery,
+		type DataTableUrlStateConfig,
+		writeDataTableQuerySearchParams
+	} from './url-state';
 	import {
 		createDataTableQuery,
 		createDataTableSelection,
@@ -20,8 +28,18 @@
 		type DataTableRowAction,
 		type DataTableRowKey,
 		type DataTableSelection,
-		type DataTableSort
+		type DataTableSortRule,
+		type DataTableUrlStateHistory
 	} from './types';
+
+	type QueryChangeIntent =
+		| 'search'
+		| 'filters'
+		| 'reset'
+		| 'page'
+		| 'perPage'
+		| 'sort'
+		| 'external';
 
 	interface Props {
 		data: T[];
@@ -30,6 +48,7 @@
 		filters?: DataTableFilter[];
 		query?: DataTableQuery;
 		onQueryChange?: (query: DataTableQuery) => void;
+		urlState?: DataTableUrlStateConfig<T>;
 		rowKey?: keyof T | ((row: T) => string | number);
 		selectable?: boolean;
 		selection?: DataTableSelection;
@@ -51,6 +70,7 @@
 		filters = [],
 		query = $bindable(createDataTableQuery()),
 		onQueryChange,
+		urlState,
 		rowKey,
 		selectable = false,
 		selection = $bindable(createDataTableSelection()),
@@ -66,13 +86,20 @@
 	}: Props = $props();
 
 	const searchId = $props.id();
+	const initialQueryDefaults = createDataTableQuery(query);
 	const selectedRowsByKey = new SvelteMap<DataTableRowKey, T>();
 
 	const hasFilters = $derived(filters.length > 0);
 	const activeFilterCount = $derived(countActiveFiltersInputValues(query.filters));
-	const hasQuery = $derived(
-		query.search !== '' || activeFilterCount > 0 || query.sort !== null || query.page !== 1
+	const defaultQuery = $derived(
+		normalizeDataTableQuery(createDataTableQuery(urlState?.defaults ?? initialQueryDefaults), {
+			defaults: urlState?.defaults ?? initialQueryDefaults,
+			columns,
+			filters,
+			pageSizeOptions
+		})
 	);
+	const hasQuery = $derived(!areDataTableQueriesEqual(query, defaultQuery));
 	const hasRowActions = $derived(rowActions.length > 0);
 	const hasBatchActions = $derived(batchActions.length > 0);
 	const pageRowKeys = $derived(data.map((row, index) => getSelectionKey(row, index)));
@@ -92,14 +119,149 @@
 		Math.max(columns.length + (selectable ? 1 : 0) + (hasRowActions ? 1 : 0), 1)
 	);
 
-	function emitQuery(next: DataTableQuery) {
-		query = next;
-		onQueryChange?.(next);
+	let urlStateReady = $state(false);
+
+	onMount(() => {
+		if (!urlState || typeof window === 'undefined') return;
+
+		urlStateReady = true;
+
+		function handlePopState() {
+			emitQuery(parseUrlQuery(), 'external', false);
+		}
+
+		window.addEventListener('popstate', handlePopState);
+		return () => window.removeEventListener('popstate', handlePopState);
+	});
+
+	function emitQuery(next: DataTableQuery, intent: QueryChangeIntent = 'external', syncUrl = true) {
+		const normalizedQuery = normalizeQuery(next);
+		if (areDataTableQueriesEqual(query, normalizedQuery)) {
+			if (syncUrl) syncUrlQuery(normalizedQuery, intent);
+			return;
+		}
+
+		if (syncUrl) syncUrlQuery(normalizedQuery, intent);
+		query = normalizedQuery;
+		onQueryChange?.(normalizedQuery);
+	}
+
+	function normalizeQuery(nextQuery: Partial<DataTableQuery>) {
+		return normalizeDataTableQuery(nextQuery, {
+			defaults: urlState?.defaults ?? initialQueryDefaults,
+			columns,
+			filters,
+			pageSizeOptions
+		});
+	}
+
+	function parseUrlQuery() {
+		return createDataTableQueryFromUrl(new URLSearchParams(window.location.search), {
+			prefix: urlState!.prefix,
+			defaults: urlState?.defaults ?? initialQueryDefaults,
+			history: urlState?.history,
+			columns,
+			filters,
+			pageSizeOptions
+		});
+	}
+
+	function syncUrlQuery(nextQuery: DataTableQuery, intent: QueryChangeIntent) {
+		if (!urlState || !urlStateReady || typeof window === 'undefined') return;
+
+		const nextSearchParams = writeDataTableQuerySearchParams(
+			new URLSearchParams(window.location.search),
+			nextQuery,
+			{
+				prefix: urlState.prefix,
+				defaults: urlState.defaults ?? initialQueryDefaults,
+				history: urlState.history,
+				columns,
+				filters,
+				pageSizeOptions
+			}
+		);
+		const nextSearch = nextSearchParams.toString();
+		const nextUrl = `${window.location.pathname}${nextSearch ? `?${nextSearch}` : ''}${window.location.hash}`;
+		const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+		if (nextUrl === currentUrl) return;
+
+		const historyMode = getHistoryMode(urlState.history ?? 'auto', intent);
+		window.history[historyMode === 'push' ? 'pushState' : 'replaceState'](
+			window.history.state,
+			'',
+			nextUrl
+		);
+	}
+
+	function getHistoryMode(history: DataTableUrlStateHistory, intent: QueryChangeIntent) {
+		if (history !== 'auto') return history;
+		return intent === 'page' || intent === 'perPage' || intent === 'sort' ? 'push' : 'replace';
 	}
 
 	function emitSelection(next: DataTableSelection) {
 		selection = next;
 		onSelectionChange?.(next);
+	}
+
+	function updateQuery(
+		patch: Partial<DataTableQuery>,
+		resetPage = false,
+		intent: QueryChangeIntent = 'external'
+	) {
+		emitQuery(
+			{
+				...query,
+				...patch,
+				page: resetPage ? defaultQuery.page : (patch.page ?? query.page),
+				filters: patch.filters ?? query.filters
+			},
+			intent
+		);
+	}
+
+	function resetQuery() {
+		emitQuery(defaultQuery, 'reset');
+	}
+
+	function toggleSort(column: DataTableColumn<T>, additive = false) {
+		if (!column.sortable) return;
+
+		const currentIndex = query.sort.findIndex((sort) => sort.id === column.id);
+		const currentRule = currentIndex === -1 ? undefined : query.sort[currentIndex];
+		const nextRule = getNextSortRule(column.id, currentRule);
+
+		if (!additive) {
+			updateQuery({ sort: nextRule ? [nextRule] : [] }, true, 'sort');
+			return;
+		}
+
+		const nextSort = [...query.sort];
+		if (currentIndex === -1) {
+			nextSort.push({ id: column.id, direction: 'asc' });
+		} else if (nextRule) {
+			nextSort[currentIndex] = nextRule;
+		} else {
+			nextSort.splice(currentIndex, 1);
+		}
+
+		updateQuery({ sort: nextSort }, true, 'sort');
+	}
+
+	function getNextSortRule(id: string, currentRule: DataTableSortRule | undefined) {
+		if (!currentRule) return { id, direction: 'asc' } satisfies DataTableSortRule;
+		if (currentRule.direction === 'asc')
+			return { id, direction: 'desc' } satisfies DataTableSortRule;
+		return null;
+	}
+
+	function getSortRule(columnId: string) {
+		return query.sort.find((sort) => sort.id === columnId);
+	}
+
+	function getSortIndex(columnId: string) {
+		return query.sort.findIndex((sort) => sort.id === columnId);
 	}
 
 	function rememberRow(key: DataTableRowKey, row: T) {
@@ -114,30 +276,6 @@
 
 	function forgetRows(keys: DataTableRowKey[]) {
 		keys.forEach((key) => selectedRowsByKey.delete(key));
-	}
-
-	function updateQuery(patch: Partial<DataTableQuery>, resetPage = false) {
-		emitQuery({
-			...query,
-			...patch,
-			page: resetPage ? 1 : (patch.page ?? query.page),
-			filters: patch.filters ?? query.filters
-		});
-	}
-
-	function resetQuery() {
-		emitQuery(createDataTableQuery({ perPage: query.perPage }));
-	}
-
-	function toggleSort(column: DataTableColumn<T>) {
-		if (!column.sortable) return;
-		let nextSort: DataTableSort = { id: column.id, direction: 'asc' };
-		if (query.sort?.id === column.id && query.sort.direction === 'asc') {
-			nextSort = { id: column.id, direction: 'desc' };
-		} else if (query.sort?.id === column.id && query.sort.direction === 'desc') {
-			nextSort = null;
-		}
-		updateQuery({ sort: nextSort }, true);
 	}
 
 	function getCellValue(row: T, column: DataTableColumn<T>) {
@@ -307,8 +445,9 @@
 	}
 
 	function getHeaderAriaSort(column: DataTableColumn<T>) {
-		if (!column.sortable || query.sort?.id !== column.id) return undefined;
-		return query.sort.direction === 'asc' ? 'ascending' : 'descending';
+		const sortRule = getSortRule(column.id);
+		if (!column.sortable || !sortRule) return undefined;
+		return sortRule.direction === 'asc' ? 'ascending' : 'descending';
 	}
 </script>
 
@@ -319,7 +458,7 @@
 				id="{searchId}-search"
 				value={query.search}
 				placeholder={searchPlaceholder}
-				onUpdate={(search) => updateQuery({ search }, true)}
+				onUpdate={(search) => updateQuery({ search }, true, 'search')}
 			/>
 		</div>
 
@@ -330,7 +469,7 @@
 					value={query.filters}
 					activeCount={activeFilterCount}
 					align="end"
-					onUpdate={(nextFilters) => updateQuery({ filters: nextFilters }, true)}
+					onUpdate={(nextFilters) => updateQuery({ filters: nextFilters }, true, 'filters')}
 				/>
 			{/if}
 
@@ -417,9 +556,11 @@
 								)}"
 							>
 								{#if column.sortable}
+									{@const sortRule = getSortRule(column.id)}
+									{@const sortIndex = getSortIndex(column.id)}
 									<button
 										type="button"
-										onclick={() => toggleSort(column)}
+										onclick={(event) => toggleSort(column, event.shiftKey)}
 										class="text-kl-muted-content hover:text-kl-base-content inline-flex cursor-pointer items-center gap-1.5 transition-colors duration-[var(--kl-transition-fast)] {column.align ===
 										'right'
 											? 'justify-end'
@@ -428,12 +569,19 @@
 												: 'justify-start'}"
 									>
 										<span>{column.label}</span>
-										{#if query.sort?.id === column.id && query.sort.direction === 'asc'}
+										{#if sortRule?.direction === 'asc'}
 											<ArrowUp size={14} />
-										{:else if query.sort?.id === column.id && query.sort.direction === 'desc'}
+										{:else if sortRule?.direction === 'desc'}
 											<ArrowDown size={14} />
 										{:else}
 											<ArrowUpDown size={14} />
+										{/if}
+										{#if query.sort.length > 1 && sortIndex !== -1}
+											<span
+												class="bg-kl-muted text-kl-muted-content rounded-kl-selector inline-flex size-4 items-center justify-center text-[0.625rem] font-semibold"
+											>
+												{sortIndex + 1}
+											</span>
 										{/if}
 									</button>
 								{:else}
@@ -530,7 +678,8 @@
 				<select
 					id="{searchId}-page-size"
 					value={query.perPage}
-					onchange={(event) => updateQuery({ perPage: Number(event.currentTarget.value) }, true)}
+					onchange={(event) =>
+						updateQuery({ perPage: Number(event.currentTarget.value) }, true, 'perPage')}
 					class="border-kl-base-300 bg-kl-base-100 text-kl-base-content focus:border-kl-primary focus:outline-kl-primary rounded-kl-field h-kl-field-md cursor-pointer border px-2 text-sm transition-colors duration-[var(--kl-transition-fast)] outline-none focus:outline"
 				>
 					{#each pageSizeOptions as size (size)}
@@ -542,7 +691,7 @@
 				count={totalCount}
 				page={query.page}
 				perPage={query.perPage}
-				onPageChange={(page) => updateQuery({ page })}
+				onPageChange={(page) => updateQuery({ page }, false, 'page')}
 			/>
 		</div>
 	</div>

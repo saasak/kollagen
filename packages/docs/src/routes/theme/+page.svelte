@@ -438,13 +438,15 @@
 	const selectedFont = $derived(getFontPreset(snapshot.fontId));
 	const visibleOrders = $derived.by(() => {
 		let rows = orders.filter((order) => matchesOrder(order, query.search));
-		if (query.sort) {
-			const direction = query.sort.direction === 'asc' ? 1 : -1;
+		if (query.sort.length > 0) {
 			rows = [...rows].sort((a, b) => {
-				const aValue = a[query.sort!.id as keyof Order];
-				const bValue = b[query.sort!.id as keyof Order];
-				if (aValue < bValue) return -1 * direction;
-				if (aValue > bValue) return 1 * direction;
+				for (const sort of query.sort) {
+					const direction = sort.direction === 'asc' ? 1 : -1;
+					const aValue = a[sort.id as keyof Order];
+					const bValue = b[sort.id as keyof Order];
+					if (aValue < bValue) return -1 * direction;
+					if (aValue > bValue) return 1 * direction;
+				}
 				return 0;
 			});
 		}

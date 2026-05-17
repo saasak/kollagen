@@ -65,8 +65,8 @@
 		{
 			name: 'name',
 			type: 'string',
-			default: "'filters'",
-			description: 'Hidden JSON input name.'
+			default: '-',
+			description: 'Hidden JSON input name. No hidden input is rendered when omitted.'
 		},
 		{
 			name: 'form',
@@ -118,7 +118,7 @@
 	<div>
 		<h1 class="text-3xl font-bold">FiltersInput</h1>
 		<p class="text-kl-muted-content mt-2">
-			A composable filter popover with bindable state and hidden JSON form output.
+			A composable filter popover with bindable state and optional hidden JSON form output.
 		</p>
 	</div>
 
@@ -145,7 +145,7 @@
 
 		<DemoCard
 			title="Custom trigger"
-			description="Override the trigger while keeping the filter popover and form state."
+			description="Override the trigger while keeping the filter popover state."
 			code={`<FiltersInput filters={filters} bind:value>
   {#snippet children({ activeCount })}
     <Trigger variant="ghost">
@@ -173,7 +173,7 @@
 
 		<DemoCard
 			title="Hidden JSON form value"
-			description="The hidden input serializes clean filter values for native submission."
+			description="Pass name to serialize clean filter values for native submission."
 			code={`<form id="filters-form">
   <FiltersInput
     filters={filters}

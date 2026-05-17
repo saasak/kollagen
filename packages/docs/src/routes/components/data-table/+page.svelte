@@ -2,6 +2,7 @@
 	import {
 		DataTable,
 		createDataTableQuery,
+		createDataTableQueryFromUrl,
 		createDataTableSelection,
 		type DataTableBatchAction,
 		type DataTableBatchActionPayload,
@@ -12,8 +13,10 @@
 		type DataTableQuery,
 		type DataTableRowAction,
 		type DataTableSelection,
-		type DataTableTimeRangeValue
+		type DataTableTimeRangeValue,
+		type DataTableUrlStateConfig
 	} from '$ui/data-table';
+	import { page } from '$app/state';
 	import { FiltersInput, type FiltersInputValues } from '$ui/filters-input';
 	import { SearchInput } from '$ui/search-input';
 	import DemoCard from '$lib/components/DemoCard.svelte';
@@ -201,7 +204,15 @@
 		{ id: 'supportWindow', label: 'Support window', type: 'time-range', hourCycle: 24 }
 	];
 
-	const initialQuery = createDataTableQuery({ perPage: 5 });
+	const tablePageSizeOptions = [5, 10, 20];
+	const tableUrlState = {
+		prefix: 'customers',
+		defaults: { perPage: 5 },
+		columns,
+		filters,
+		pageSizeOptions: tablePageSizeOptions
+	} satisfies DataTableUrlStateConfig<Customer>;
+	const initialQuery = createDataTableQueryFromUrl(page.url, tableUrlState);
 	let query: DataTableQuery = $state(initialQuery);
 	let simpleQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let loadingQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
@@ -251,7 +262,20 @@
 		}
 	];
 
-	const demoCode = `<DataTable
+	const demoCode = `import { page } from '$app/state';
+import { DataTable, createDataTableQueryFromUrl } from '$ui/data-table';
+
+const tableState = {
+  prefix: 'customers',
+  defaults: { perPage: 5 },
+  columns,
+  filters,
+  pageSizeOptions: [5, 10, 20]
+};
+
+let query = $state(createDataTableQueryFromUrl(page.url, tableState));
+
+<DataTable
   data={rows}
   columns={columns}
   filters={filters}
@@ -261,6 +285,7 @@
   totalCount={total}
   bind:query
   bind:selection
+  urlState={tableState}
   onQueryChange={fetchRows}
 />`;
 
@@ -269,13 +294,30 @@
   placeholder="Search customers..."
 />
 
-<form id="filters-form">
-  <FiltersInput
-    filters={filters}
-    bind:value={activeFilters}
-    form="filters-form"
-  />
-</form>`;
+<FiltersInput
+  filters={filters}
+  bind:value={activeFilters}
+/>`;
+
+	const urlStateCode = `// shared table-state.ts
+export const tableState = {
+  prefix: 'customers',
+  defaults: { perPage: 25 },
+  columns,
+  filters,
+  pageSizeOptions: [25, 50, 100]
+};
+
+// +page.server.ts or +page.ts
+import { createDataTableQueryFromUrl } from '$lib/components/data-table/url-state';
+import { tableState } from './table-state';
+
+export const load = async ({ url }) => {
+  const query = createDataTableQueryFromUrl(url, tableState);
+  const { rows, total } = await getCustomers(query);
+
+  return { query, rows, total };
+};`;
 
 	onDestroy(() => {
 		if (loadingTimer) clearTimeout(loadingTimer);
@@ -327,13 +369,15 @@
 			rows = rows.filter((customer) => getRangeEnd(customer.supportWindow) <= supportWindow.to!);
 		}
 
-		if (query.sort) {
-			const direction = query.sort.direction === 'asc' ? 1 : -1;
+		if (query.sort.length > 0) {
 			rows = [...rows].sort((a, b) => {
-				const aValue = a[query.sort!.id as keyof Customer];
-				const bValue = b[query.sort!.id as keyof Customer];
-				if (aValue < bValue) return -1 * direction;
-				if (aValue > bValue) return 1 * direction;
+				for (const sort of query.sort) {
+					const direction = sort.direction === 'asc' ? 1 : -1;
+					const aValue = a[sort.id as keyof Customer];
+					const bValue = b[sort.id as keyof Customer];
+					if (aValue < bValue) return -1 * direction;
+					if (aValue > bValue) return 1 * direction;
+				}
 				return 0;
 			});
 		}
@@ -376,6 +420,13 @@
 			type: '(query) => void',
 			default: '-',
 			description: 'Called with the full query after every change'
+		},
+		{
+			name: 'urlState',
+			type: 'DataTableUrlStateConfig',
+			default: '-',
+			description:
+				'Serializes query state into prefixed URL search params. Reuse it with createDataTableQueryFromUrl for initial data.'
 		},
 		{
 			name: 'rowKey',
@@ -492,6 +543,49 @@
 	</div>
 
 	<section class="space-y-4">
+		<div class="max-w-3xl space-y-3">
+			<h2 class="text-xl font-semibold">State, URL, and data loading</h2>
+			<p class="text-kl-muted-content text-sm leading-6">
+				DataTable is a controlled component. It renders the rows you pass in, exposes the current
+				query through <code class="font-mono">bind:query</code>, and emits
+				<code class="font-mono">onQueryChange</code> when search, filters, sort, page, or page size changes.
+			</p>
+			<p class="text-kl-muted-content text-sm leading-6">
+				When URL state is enabled, keep one shared config for the table and reuse it everywhere:
+				initial load, client rendering, and the DataTable itself. The helper reads prefixed search
+				params, applies defaults, validates filters and sort ids, and returns the exact query that
+				should be used to fetch or compute the first page of rows.
+			</p>
+		</div>
+
+		<div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
+			<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
+				<div class="border-kl-base-300 border-b px-4 py-2 text-sm font-medium">
+					Parse before loading rows
+				</div>
+				<pre
+					class="text-kl-muted-content overflow-x-auto p-4 font-mono text-xs">{urlStateCode}</pre>
+			</div>
+
+			<div class="space-y-3 text-sm leading-6">
+				<p class="text-kl-muted-content">
+					Use <code class="font-mono">prefix</code> when multiple tables share a page, for example
+					<code class="font-mono">customers_page</code> and
+					<code class="font-mono">invoices_page</code>.
+				</p>
+				<p class="text-kl-muted-content">
+					DataTable does not fetch by itself. <code class="font-mono">onQueryChange</code> can call your
+					API directly, invalidate a SvelteKit load, or update local derived rows.
+				</p>
+				<p class="text-kl-muted-content">
+					The initial rows should already match the parsed query. DataTable will not emit a
+					mount-time correction just to sync the URL, which avoids an unnecessary second query.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Examples</h2>
 
 		<DemoCard
@@ -508,6 +602,7 @@
 					rowKey="id"
 					bind:query
 					bind:selection
+					urlState={tableUrlState}
 					selectable
 					{rowActions}
 					{batchActions}
@@ -515,7 +610,7 @@
 					onQueryChange={handleQueryChange}
 					onSelectionChange={handleSelectionChange}
 					searchPlaceholder="Search customers..."
-					pageSizeOptions={[5, 10, 20]}
+					pageSizeOptions={tablePageSizeOptions}
 					cellSnippets={{
 						customer: customerCell,
 						status: statusCell,
@@ -552,17 +647,10 @@
 			code={standaloneInputsCode}
 		>
 			<div class="space-y-4">
-				<form
-					id="filters-form"
-					class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between"
-				>
+				<div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
 					<SearchInput bind:value={standaloneSearch} placeholder="Search customers..." />
-					<FiltersInput
-						filters={filters.slice(0, 4)}
-						bind:value={standaloneFilters}
-						form="filters-form"
-					/>
-				</form>
+					<FiltersInput filters={filters.slice(0, 4)} bind:value={standaloneFilters} />
+				</div>
 
 				<div class="grid gap-4 md:grid-cols-2">
 					<div class="rounded-kl-box border-kl-base-300 bg-kl-base-200 overflow-hidden border">
