@@ -15,7 +15,8 @@
 		content?: ButtonContent;
 		disabled?: boolean;
 		ariaLabel?: string;
-		children: Snippet;
+		children: Snippet<[context?: unknown]>;
+		childrenContext?: unknown;
 	};
 
 	export type ButtonGroupButtonItem = ButtonGroupBaseItem & {
@@ -118,7 +119,7 @@
 					ariaLabel={item.ariaLabel}
 					class={item.triggerClass}
 				>
-					{@render item.children()}
+					{@render item.children(item.childrenContext)}
 				</Trigger>
 			</Menu>
 		{:else}
@@ -140,7 +141,7 @@
 				onclick={item.onclick}
 				class={item.class}
 			>
-				{@render item.children()}
+				{@render item.children(item.childrenContext)}
 			</Button>
 		{/if}
 

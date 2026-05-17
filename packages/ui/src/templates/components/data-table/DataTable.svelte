@@ -3,6 +3,7 @@
 	import { Checkbox } from '../checkbox';
 	import { FiltersInput, countActiveFiltersInputValues } from '../filters-input';
 	import { Menu } from '../menu';
+	import { Multibar, type MultibarItem } from '../multibar';
 	import { Pagination } from '../pagination';
 	import { SearchInput } from '../search-input';
 	import { Trigger } from '../trigger';
@@ -26,6 +27,8 @@
 		type DataTableFilter,
 		type DataTableQuery,
 		type DataTableRowAction,
+		type DataTableRowActionsSize,
+		type DataTableRowActionsVariant,
 		type DataTableRowKey,
 		type DataTableRowUpdatePayload,
 		type DataTableSelection,
@@ -42,6 +45,11 @@
 		| 'sort'
 		| 'external';
 
+	type RowActionMultibarContext = {
+		row: T;
+		action: DataTableRowAction<T>;
+	};
+
 	interface Props {
 		data: T[];
 		columns: DataTableColumn<T>[];
@@ -56,6 +64,8 @@
 		onSelectionChange?: (selection: DataTableSelection) => void;
 		onRowUpdate?: (payload: DataTableRowUpdatePayload<T>) => void | Promise<void>;
 		rowActions?: DataTableRowAction<T>[];
+		rowActionsVariant?: DataTableRowActionsVariant;
+		rowActionsSize?: DataTableRowActionsSize;
 		batchActions?: DataTableBatchAction<T>[];
 		loading?: boolean;
 		searchPlaceholder?: string;
@@ -79,6 +89,8 @@
 		onSelectionChange,
 		onRowUpdate,
 		rowActions = [],
+		rowActionsVariant = 'menu',
+		rowActionsSize = 'xs',
 		batchActions = [],
 		loading = false,
 		searchPlaceholder = 'Search...',
@@ -104,6 +116,8 @@
 	);
 	const hasQuery = $derived(!areDataTableQueriesEqual(query, defaultQuery));
 	const hasRowActions = $derived(rowActions.length > 0);
+	const hasRowActionColumn = $derived(hasRowActions && rowActionsVariant !== 'floating-bar');
+	const hasFloatingRowActions = $derived(hasRowActions && rowActionsVariant === 'floating-bar');
 	const hasBatchActions = $derived(batchActions.length > 0);
 	const pageRowKeys = $derived(data.map((row, index) => getSelectionKey(row, index)));
 	const visibleSelectedCount = $derived.by(() => {
@@ -119,7 +133,7 @@
 	});
 	const allRowsSelected = $derived(selection.mode === 'all' && selection.excludedKeys.length === 0);
 	const colSpan = $derived(
-		Math.max(columns.length + (selectable ? 1 : 0) + (hasRowActions ? 1 : 0), 1)
+		Math.max(columns.length + (selectable ? 1 : 0) + (hasRowActionColumn ? 1 : 0), 1)
 	);
 
 	let urlStateReady = $state(false);
@@ -399,6 +413,50 @@
 		rowActions.find((action) => action.id === actionId)?.onSelect(row);
 	}
 
+	function getRowActionMultibarItems(row: T): MultibarItem[] {
+		return [
+			{
+				id: 'row-actions',
+				type: 'buttonGroup',
+				ariaLabel: 'Row actions',
+				items: rowActions.map((action) => ({
+					id: action.id,
+					type: 'button',
+					content: action.icon ? 'icon' : 'normal',
+					disabled: isRowActionDisabled(action, row),
+					ariaLabel: action.label,
+					title: action.label,
+					children: rowActionContent,
+					childrenContext: { row, action } satisfies RowActionMultibarContext,
+					onclick: () => selectRowAction(row, action.id),
+					class: action.icon ? undefined : 'max-w-28'
+				}))
+			}
+		];
+	}
+
+	function getRowActionsHeaderClass() {
+		return 'border-kl-base-300 w-px border-b px-4 py-3';
+	}
+
+	function getRowActionsCellClass() {
+		return 'px-4 py-3 text-right align-middle';
+	}
+
+	function getRowActionMultibarClass() {
+		const base =
+			'gap-1 rounded-kl-field border border-kl-base-300 bg-kl-base-100 p-1 shadow-[var(--kl-shadow-sm)]';
+
+		if (rowActionsVariant !== 'floating-bar') return base;
+
+		return cn(
+			base,
+			'absolute top-1/2 right-2 z-[var(--kl-z-dropdown)] -translate-y-1/2 bg-kl-base-100/85 shadow-[var(--kl-shadow-md)] backdrop-blur-md',
+			'pointer-events-none opacity-0 transition-opacity duration-[var(--kl-transition-fast)] group-hover/row:pointer-events-auto group-hover/row:opacity-100 group-focus-within/row:pointer-events-auto group-focus-within/row:opacity-100',
+			'[@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100'
+		);
+	}
+
 	function getBatchActionPayload(): DataTableBatchActionPayload<T> {
 		if (selection.mode === 'all') {
 			return {
@@ -469,6 +527,26 @@
 		});
 	}
 </script>
+
+{#snippet rowActionContent(context?: unknown)}
+	{@const rowActionContext = context as RowActionMultibarContext}
+	{#if rowActionContext.action.icon}
+		{@render rowActionContext.action.icon(rowActionContext.row)}
+	{:else}
+		<span class="truncate">{rowActionContext.action.label}</span>
+	{/if}
+{/snippet}
+
+{#snippet rowActionMultibar(row: T)}
+	<Multibar
+		items={getRowActionMultibarItems(row)}
+		variant="ghost"
+		color="base"
+		size={rowActionsSize}
+		ariaLabel="Row actions"
+		class={getRowActionMultibarClass()}
+	/>
+{/snippet}
 
 <div class={cn('space-y-4', className)}>
 	<div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
@@ -609,8 +687,8 @@
 							</th>
 						{/each}
 
-						{#if hasRowActions}
-							<th scope="col" class="border-kl-base-300 w-12 border-b px-4 py-3">
+						{#if hasRowActionColumn}
+							<th scope="col" class={getRowActionsHeaderClass()}>
 								<span class="sr-only">Actions</span>
 							</th>
 						{/if}
@@ -619,7 +697,9 @@
 				<tbody>
 					{#each data as row, index (getRowKey(row, index))}
 						{@const selectionKey = getSelectionKey(row, index)}
-						<tr class="border-kl-base-300 hover:bg-kl-base-200/60 border-b last:border-b-0">
+						<tr
+							class="group/row border-kl-base-300 hover:bg-kl-base-200/60 relative border-b last:border-b-0"
+						>
 							{#if selectable}
 								<td class="px-4 py-3 align-middle">
 									<Checkbox
@@ -631,11 +711,15 @@
 								</td>
 							{/if}
 
-							{#each columns as column (column.id)}
+							{#each columns as column, columnIndex (column.id)}
 								{@const value = getCellValue(row, column)}
 								{@const cell = cellSnippets[column.id] ?? column.cell}
 								<td
-									class="text-kl-base-content px-4 py-3 align-middle {getAlignClass(column.align)}"
+									class={cn(
+										'text-kl-base-content px-4 py-3 align-middle',
+										getAlignClass(column.align),
+										hasFloatingRowActions && columnIndex === columns.length - 1 && 'relative'
+									)}
 								>
 									{#if cell}
 										{@render cell(row, value, {
@@ -648,20 +732,28 @@
 									{:else}
 										{value}
 									{/if}
+
+									{#if hasFloatingRowActions && columnIndex === columns.length - 1}
+										{@render rowActionMultibar(row)}
+									{/if}
 								</td>
 							{/each}
 
-							{#if hasRowActions}
-								<td class="px-4 py-3 text-right align-middle">
-									<Menu
-										items={getRowActionItems(row)}
-										onSelect={(value) => selectRowAction(row, value)}
-										class="min-w-36"
-									>
-										<Trigger variant="ghost" size="sm" content="icon" ariaLabel="Row actions">
-											<MoreHorizontal size={16} />
-										</Trigger>
-									</Menu>
+							{#if hasRowActionColumn}
+								<td class={getRowActionsCellClass()}>
+									{#if rowActionsVariant === 'menu'}
+										<Menu
+											items={getRowActionItems(row)}
+											onSelect={(value) => selectRowAction(row, value)}
+											class="min-w-36"
+										>
+											<Trigger variant="ghost" size="sm" content="icon" ariaLabel="Row actions">
+												<MoreHorizontal size={16} />
+											</Trigger>
+										</Menu>
+									{:else if rowActionsVariant === 'bar'}
+										{@render rowActionMultibar(row)}
+									{/if}
 								</td>
 							{/if}
 						</tr>

@@ -156,6 +156,7 @@ export default defineConfig({
 					'checkbox',
 					'filters-input',
 					'menu',
+					'multibar',
 					'pagination',
 					'search-input',
 					'trigger'

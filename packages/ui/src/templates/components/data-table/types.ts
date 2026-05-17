@@ -62,6 +62,10 @@ export type DataTableOption = FiltersInputOption;
 
 export type DataTableFilter = FiltersInputConfig;
 
+export type DataTableRowActionsVariant = 'menu' | 'bar' | 'floating-bar';
+
+export type DataTableRowActionsSize = 'xs' | 'sm';
+
 export type DataTableColumn<T> = {
 	id: string;
 	label: string;
@@ -95,6 +99,7 @@ export type DataTableRowUpdatePayload<T> = {
 export type DataTableRowAction<T> = {
 	id: string;
 	label: string;
+	icon?: Snippet<[row: T]>;
 	disabled?: boolean | ((row: T) => boolean);
 	onSelect: (row: T) => void;
 };

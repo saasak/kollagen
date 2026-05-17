@@ -24,6 +24,7 @@
 	import { SearchInput } from '$ui/search-input';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
+	import { Eye, PauseCircle } from 'lucide-svelte';
 	import { onDestroy } from 'svelte';
 
 	type Customer = {
@@ -218,6 +219,8 @@
 	const initialQuery = createDataTableQueryFromUrl(page.url, tableUrlState);
 	let query: DataTableQuery = $state(initialQuery);
 	let simpleQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
+	let actionBarQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
+	let floatingActionsQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let loadingQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let emptyQuery: DataTableQuery = $state(createDataTableQuery({ perPage: 3 }));
 	let selection: DataTableSelection = $state(createDataTableSelection());
@@ -286,20 +289,41 @@ let query = $state(createDataTableQueryFromUrl(page.url, tableState));
   />
 {/snippet}
 
+{#snippet openIcon(_row)}<Eye />{/snippet}
+{#snippet pauseIcon(_row)}<PauseCircle />{/snippet}
+
 <DataTable
   data={rows}
   columns={columns}
   filters={filters}
   selectable
-  rowActions={rowActions}
   batchActions={batchActions}
   totalCount={total}
   bind:query
   bind:selection
   urlState={tableState}
+  rowActions={getRowActionsWithIcons(openIcon, pauseIcon)}
   onQueryChange={fetchRows}
   onRowUpdate={({ rowKey, patch }) => updateCustomer(rowKey, patch)}
   cellSnippets={{ owner: ownerCell }}
+/>`;
+
+	const actionBarCode = `<DataTable
+  data={rows}
+  {columns}
+  totalCount={total}
+  rowActions={rowActions}
+  rowActionsVariant="bar"
+  rowActionsSize="sm"
+/>`;
+
+	const floatingActionsCode = `<DataTable
+  data={rows}
+  {columns}
+  totalCount={total}
+  rowActions={rowActions}
+  rowActionsVariant="floating-bar"
+  rowActionsSize="xs"
 />`;
 
 	const standaloneInputsCode = `<SearchInput
@@ -463,7 +487,20 @@ export const load = async ({ url }) => {
 			name: 'rowActions',
 			type: 'DataTableRowAction<T>[]',
 			default: '[]',
-			description: 'Per-row menu actions. Each action receives the full row'
+			description:
+				'Per-row actions. Each action receives the full row and can define an icon snippet'
+		},
+		{
+			name: 'rowActionsVariant',
+			type: "'menu' | 'bar' | 'floating-bar'",
+			default: "'menu'",
+			description: 'Controls whether row actions render as a dropdown, always-on bar, or hover bar'
+		},
+		{
+			name: 'rowActionsSize',
+			type: "'xs' | 'sm'",
+			default: "'xs'",
+			description: 'Controls row action button size when rendered as a bar'
 		},
 		{
 			name: 'batchActions',
@@ -535,6 +572,16 @@ export const load = async ({ url }) => {
 		);
 		lastAction = `Updated ${payload.column.label} for ${payload.row.customer}`;
 	}
+
+	function getRowActionsWithIcons(
+		openIcon: DataTableRowAction<Customer>['icon'],
+		pauseIcon: DataTableRowAction<Customer>['icon']
+	) {
+		return rowActions.map((action) => ({
+			...action,
+			icon: action.id === 'open' ? openIcon : action.id === 'pause' ? pauseIcon : action.icon
+		}));
+	}
 </script>
 
 {#snippet customerCell(row: Customer, value: unknown)}
@@ -568,6 +615,14 @@ export const load = async ({ url }) => {
 		class="min-w-32"
 		onValueChange={({ value }) => updateRow({ owner: value })}
 	/>
+{/snippet}
+
+{#snippet openActionIcon(_row: Customer)}
+	<Eye size={14} />
+{/snippet}
+
+{#snippet pauseActionIcon(_row: Customer)}
+	<PauseCircle size={14} />
 {/snippet}
 
 <div class="space-y-8">
@@ -640,7 +695,7 @@ export const load = async ({ url }) => {
 					bind:selection
 					urlState={tableUrlState}
 					selectable
-					{rowActions}
+					rowActions={getRowActionsWithIcons(openActionIcon, pauseActionIcon)}
 					{batchActions}
 					{loading}
 					onQueryChange={handleQueryChange}
@@ -677,6 +732,41 @@ export const load = async ({ url }) => {
 					</div>
 				</div>
 			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Always-on row actions"
+			description="Render row actions as a compact multibar in the final column."
+			code={actionBarCode}
+		>
+			<DataTable
+				data={customers.slice(0, 3)}
+				columns={columns.slice(0, 4)}
+				totalCount={3}
+				bind:query={actionBarQuery}
+				rowKey="id"
+				rowActions={getRowActionsWithIcons(openActionIcon, pauseActionIcon)}
+				rowActionsVariant="bar"
+				rowActionsSize="sm"
+				pageSizeOptions={[3]}
+			/>
+		</DemoCard>
+
+		<DemoCard
+			title="Floating row actions"
+			description="Reveal row actions as an overlay on hover or keyboard focus."
+			code={floatingActionsCode}
+		>
+			<DataTable
+				data={customers.slice(0, 3)}
+				columns={columns.slice(0, 4)}
+				totalCount={3}
+				bind:query={floatingActionsQuery}
+				rowKey="id"
+				rowActions={getRowActionsWithIcons(openActionIcon, pauseActionIcon)}
+				rowActionsVariant="floating-bar"
+				pageSizeOptions={[3]}
+			/>
 		</DemoCard>
 
 		<DemoCard

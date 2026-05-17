@@ -16,6 +16,8 @@ export {
 	type DataTableOption,
 	type DataTableQuery,
 	type DataTableRowAction,
+	type DataTableRowActionsSize,
+	type DataTableRowActionsVariant,
 	type DataTableRowKey,
 	type DataTableRowUpdatePayload,
 	type DataTableSelection,
