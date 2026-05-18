@@ -10,8 +10,12 @@
 		{ value: 'date', label: 'Date', disabled: true }
 	];
 
+	type Fruit = (typeof fruits)[number];
+
 	let value = $state('banana');
 	let values = $state(['apple', 'cherry']);
+	let selectedFruits = $state<Fruit[]>([fruits[0], fruits[2]]);
+	let listBoxApi = $state<{ removeSelected: (item: Fruit) => void }>();
 	let formResult = $state('');
 
 	const propsData = [
@@ -33,6 +37,12 @@
 			type: 'string | string[]',
 			default: "'' | []",
 			description: 'Selected value(s). Supports bind:value.'
+		},
+		{
+			name: 'selected',
+			type: 'T | T[]',
+			default: '—',
+			description: 'Selected item object(s). Supports bind:selected.'
 		},
 		{
 			name: 'multiple',
@@ -89,6 +99,48 @@
 						>{values.join(', ') || 'none'}</code
 					>
 				</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Selected objects"
+			description="Bind selected item objects and remove a selected item from outside."
+			code={`let selectedFruits = $state([fruits[0], fruits[2]]);
+let listBoxApi;
+
+<ListBox
+  bind:this={listBoxApi}
+  label="Fruits"
+  items={fruits}
+  multiple
+  bind:selected={selectedFruits}
+/>
+
+{#each selectedFruits as fruit}
+  <button type="button" onclick={() => listBoxApi.removeSelected(fruit)}>
+    Remove {fruit.label}
+  </button>
+{/each}`}
+		>
+			<div class="max-w-sm space-y-3">
+				<ListBox
+					bind:this={listBoxApi}
+					label="Fruits"
+					items={fruits}
+					multiple={true}
+					bind:selected={selectedFruits}
+				/>
+				<div class="flex flex-wrap gap-2">
+					{#each selectedFruits as fruit (fruit.value)}
+						<button
+							type="button"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 border px-2.5 py-1 text-sm transition-colors"
+							onclick={() => listBoxApi?.removeSelected(fruit)}
+						>
+							Remove {fruit.label}
+						</button>
+					{/each}
+				</div>
 			</div>
 		</DemoCard>
 

@@ -11,6 +11,7 @@
 		itemToLabel?: (item: T) => string;
 		itemToValue?: (item: T) => string;
 		value?: string | string[];
+		selected?: T | T[];
 		defaultValue?: string | string[];
 		multiple?: boolean;
 		placeholder?: string;
@@ -35,6 +36,7 @@
 		itemToLabel = (item: T) => (item as any).label ?? String(item),
 		itemToValue = (item: T) => (item as any).value ?? String(item),
 		value = $bindable(),
+		selected = $bindable(),
 		defaultValue,
 		multiple = false,
 		placeholder = '',
@@ -46,6 +48,8 @@
 		onValueChange,
 		class: className
 	}: Props = $props();
+
+	const selectedControlsValue = untrack(() => selected) !== undefined;
 
 	// Intentional initial-value capture — async/sync mode is a design-time decision
 	const isAsync = !!untrack(() => onSearch);
@@ -70,11 +74,6 @@
 			if (anchor === node) anchor = null;
 		};
 	};
-
-	// Initialize value from defaultValue if not set
-	if (untrack(() => value) === undefined && untrack(() => defaultValue) !== undefined) {
-		value = untrack(() => defaultValue)!;
-	}
 
 	// --- Sync filtering ---
 	function matchesFilter(itemLabel: string, input: string): boolean {
@@ -101,6 +100,24 @@
 			disabled: (item as any).disabled ?? false
 		}))
 	);
+	const selectedItems = $derived.by(() => {
+		if (Array.isArray(selected)) return selected;
+		return selected ? [selected] : [];
+	});
+	const candidateItems = $derived(
+		isAsync ? [...items, ...asyncItems, ...selectedItems] : [...items, ...selectedItems]
+	);
+	const itemMap = $derived(new Map(candidateItems.map((item) => [itemToValue(item), item])));
+
+	if (untrack(() => selected) !== undefined) {
+		value = selectedToValue(untrack(() => selected));
+	} else if (untrack(() => value) === undefined && untrack(() => defaultValue) !== undefined) {
+		value = untrack(() => defaultValue)!;
+	}
+
+	if (untrack(() => selected) === undefined && untrack(() => value) !== undefined) {
+		selected = valueToSelected(untrack(() => value));
+	}
 
 	// Handle input changes for filtering/searching
 	function handleInput(e: Event) {
@@ -143,17 +160,76 @@
 	function handleClear(e: MouseEvent) {
 		e.stopPropagation();
 		e.preventDefault();
-		if (multiple) {
-			value = [];
-		} else {
-			value = '';
-		}
+		updateSelection(multiple ? [] : '');
 		searchValue = '';
 		if (isAsync) {
 			asyncItems = [];
 			asyncLoading = false;
 		}
-		onValueChange?.(value);
+	}
+
+	function valueToArray(nextValue: string | string[] | undefined): string[] {
+		if (Array.isArray(nextValue)) return nextValue;
+		if (typeof nextValue === 'string' && nextValue !== '') return [nextValue];
+		return [];
+	}
+
+	function selectedToValue(selection: T | T[] | undefined): string | string[] {
+		if (multiple) {
+			return Array.isArray(selection) ? selection.map((item) => itemToValue(item)) : [];
+		}
+		if (Array.isArray(selection)) return selection[0] ? itemToValue(selection[0]) : '';
+		return selection ? itemToValue(selection) : '';
+	}
+
+	function valueToSelected(nextValue: string | string[] | undefined): T | T[] | undefined {
+		const values = valueToArray(nextValue);
+		if (multiple) {
+			return values
+				.map((itemValue) => itemMap.get(itemValue))
+				.filter((item): item is T => item !== undefined);
+		}
+		return values[0] ? itemMap.get(values[0]) : undefined;
+	}
+
+	function updateSelection(nextValue: string | string[]) {
+		value = nextValue;
+		selected = valueToSelected(nextValue);
+		onValueChange?.(nextValue);
+	}
+
+	const selectedValue = $derived.by(() => selectedToValue(selected));
+	const currentValues = $derived.by(() => valueToArray(value));
+	const selectedValues = $derived.by(() => valueToArray(selectedValue));
+	const selectedMatchesValue = $derived(
+		currentValues.length === selectedValues.length &&
+			currentValues.every((itemValue, index) => itemValue === selectedValues[index])
+	);
+	const nextSelected = $derived.by(() => valueToSelected(value));
+
+	$effect(() => {
+		if (selected === undefined) return;
+		if (!selectedMatchesValue) value = selectedValue;
+	});
+
+	$effect(() => {
+		if (selectedControlsValue) return;
+		if (!selectedMatchesValue) {
+			selected = nextSelected;
+		}
+	});
+
+	function handleValueChange(nextValue: string | string[]) {
+		updateSelection(nextValue);
+	}
+
+	export function removeSelected(item: T) {
+		const itemValue = itemToValue(item);
+		if (multiple) {
+			updateSelection(valueToArray(value).filter((currentValue) => currentValue !== itemValue));
+			return;
+		}
+		if (valueToArray(value)[0] === itemValue) updateSelection('');
 	}
 
 	const hasValue = $derived(
@@ -171,7 +247,7 @@
 		bind:value={value as string[]}
 		bind:open
 		onOpenChange={handleOpenChange}
-		{onValueChange}
+		onValueChange={handleValueChange}
 	>
 		<div class={cn(`relative w-full`, className)}>
 			<div {@attach setAnchor} class={classes.fieldShell()}>
@@ -236,7 +312,7 @@
 		bind:value={value as string}
 		bind:open
 		onOpenChange={handleOpenChange}
-		{onValueChange}
+		onValueChange={handleValueChange}
 	>
 		<div class={cn(`relative w-full`, className)}>
 			<div {@attach setAnchor} class={classes.fieldShell()}>

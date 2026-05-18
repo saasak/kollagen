@@ -15,7 +15,11 @@
 		{ value: 'enterprise', label: 'Enterprise', disabled: true }
 	];
 
+	type Fruit = (typeof fruits)[number];
+
 	let selectedFruit = $state('banana');
+	let selectedFruitItem = $state<Fruit | undefined>(fruits[1]);
+	let radioGroupApi = $state<{ removeSelected: (item: Fruit) => void }>();
 	let formResult = $state('');
 
 	const propsData = [
@@ -42,6 +46,12 @@
 			type: 'string',
 			default: '—',
 			description: 'Controlled selected value. Supports bind:value'
+		},
+		{
+			name: 'selected',
+			type: 'T',
+			default: '—',
+			description: 'Controlled selected item object. Supports bind:selected'
 		},
 		{ name: 'label', type: 'string', default: '—', description: 'Display label for the group' },
 		{
@@ -131,6 +141,44 @@
 			code={`<RadioGroup label="Fruit" items={fruits} orientation="horizontal" />`}
 		>
 			<RadioGroup label="Fruit" items={fruits} orientation="horizontal" />
+		</DemoCard>
+
+		<DemoCard
+			title="Selected object"
+			description="Bind the selected item object and clear it from outside."
+			code={`let selectedFruitItem = $state(fruits[1]);
+let radioGroupApi;
+
+<RadioGroup
+  bind:this={radioGroupApi}
+  label="Fruit"
+  items={fruits}
+  bind:selected={selectedFruitItem}
+/>
+
+{#if selectedFruitItem}
+  <button type="button" onclick={() => radioGroupApi.removeSelected(selectedFruitItem)}>
+    Clear {selectedFruitItem.label}
+  </button>
+{/if}`}
+		>
+			<div class="space-y-3">
+				<RadioGroup
+					bind:this={radioGroupApi}
+					label="Fruit"
+					items={fruits}
+					bind:selected={selectedFruitItem}
+				/>
+				{#if selectedFruitItem}
+					<button
+						type="button"
+						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 border px-2.5 py-1 text-sm transition-colors"
+						onclick={() => selectedFruitItem && radioGroupApi?.removeSelected(selectedFruitItem)}
+					>
+						Clear {selectedFruitItem.label}
+					</button>
+				{/if}
+			</div>
 		</DemoCard>
 
 		<DemoCard

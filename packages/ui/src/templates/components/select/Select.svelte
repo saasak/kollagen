@@ -16,6 +16,7 @@
 		itemToLabel?: (item: T) => string;
 		itemToValue?: (item: T) => string;
 		value?: string | string[];
+		selected?: T | T[];
 		defaultValue?: string | string[];
 		multiple?: boolean;
 		placeholder?: string;
@@ -36,6 +37,7 @@
 		itemToLabel = (item: T) => (item as any).label ?? String(item),
 		itemToValue = (item: T) => (item as any).value ?? String(item),
 		value = $bindable(),
+		selected = $bindable(),
 		defaultValue,
 		multiple = false,
 		placeholder = 'Select...',
@@ -48,6 +50,8 @@
 		class: className
 	}: Props = $props();
 
+	const selectedControlsValue = untrack(() => selected) !== undefined;
+
 	// Map generic items to bits-ui format
 	const mappedItems: SelectItem[] = $derived(
 		items.map((item) => ({
@@ -59,20 +63,92 @@
 
 	// Build a lookup map for value -> label
 	const labelMap = $derived(new Map(items.map((item) => [itemToValue(item), itemToLabel(item)])));
+	const selectedItems = $derived.by(() => {
+		if (Array.isArray(selected)) return selected;
+		return selected ? [selected] : [];
+	});
+	const itemMap = $derived(
+		new Map([...items, ...selectedItems].map((item) => [itemToValue(item), item]))
+	);
 
 	// Initialize value from defaultValue if not set
-	if (untrack(() => value) === undefined && untrack(() => defaultValue) !== undefined) {
+	if (untrack(() => selected) !== undefined) {
+		value = selectedToValue(untrack(() => selected));
+	} else if (untrack(() => value) === undefined && untrack(() => defaultValue) !== undefined) {
 		value = untrack(() => defaultValue)!;
 	}
 
+	if (untrack(() => selected) === undefined && untrack(() => value) !== undefined) {
+		selected = valueToSelected(untrack(() => value));
+	}
+
+	function valueToArray(nextValue: string | string[] | undefined): string[] {
+		if (Array.isArray(nextValue)) return nextValue;
+		if (typeof nextValue === 'string' && nextValue !== '') return [nextValue];
+		return [];
+	}
+
+	function selectedToValue(selection: T | T[] | undefined): string | string[] {
+		if (multiple) {
+			return Array.isArray(selection) ? selection.map((item) => itemToValue(item)) : [];
+		}
+		if (Array.isArray(selection)) return selection[0] ? itemToValue(selection[0]) : '';
+		return selection ? itemToValue(selection) : '';
+	}
+
+	function valueToSelected(nextValue: string | string[] | undefined): T | T[] | undefined {
+		const values = valueToArray(nextValue);
+		if (multiple) {
+			return values
+				.map((itemValue) => itemMap.get(itemValue))
+				.filter((item): item is T => item !== undefined);
+		}
+		return values[0] ? itemMap.get(values[0]) : undefined;
+	}
+
+	function updateSelection(nextValue: string | string[]) {
+		value = nextValue;
+		selected = valueToSelected(nextValue);
+		onValueChange?.(nextValue);
+	}
+
+	const selectedValue = $derived.by(() => selectedToValue(selected));
+	const currentValues = $derived.by(() => valueToArray(value));
+	const selectedValues = $derived.by(() => valueToArray(selectedValue));
+	const selectedMatchesValue = $derived(
+		currentValues.length === selectedValues.length &&
+			currentValues.every((itemValue, index) => itemValue === selectedValues[index])
+	);
+	const nextSelected = $derived.by(() => valueToSelected(value));
+
+	$effect(() => {
+		if (selected === undefined) return;
+		if (!selectedMatchesValue) value = selectedValue;
+	});
+
+	$effect(() => {
+		if (selectedControlsValue) return;
+		if (!selectedMatchesValue) {
+			selected = nextSelected;
+		}
+	});
+
 	function handleClear(e: MouseEvent) {
 		e.stopPropagation();
+		updateSelection(multiple ? [] : '');
+	}
+
+	function handleValueChange(nextValue: string | string[]) {
+		updateSelection(nextValue);
+	}
+
+	export function removeSelected(item: T) {
+		const itemValue = itemToValue(item);
 		if (multiple) {
-			value = [];
-		} else {
-			value = '';
+			updateSelection(valueToArray(value).filter((currentValue) => currentValue !== itemValue));
+			return;
 		}
-		onValueChange?.(value);
+		if (valueToArray(value)[0] === itemValue) updateSelection('');
 	}
 
 	// Determine if there's a selection
@@ -101,7 +177,7 @@
 		{disabled}
 		{name}
 		bind:value={value as string[]}
-		{onValueChange}
+		onValueChange={handleValueChange}
 		{onOpenChange}
 	>
 		{#if label}
@@ -168,7 +244,7 @@
 		{name}
 		{allowDeselect}
 		bind:value={value as string}
-		{onValueChange}
+		onValueChange={handleValueChange}
 		{onOpenChange}
 	>
 		{#if label}

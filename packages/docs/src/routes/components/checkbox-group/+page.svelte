@@ -9,7 +9,11 @@
 		{ value: 'support', label: 'Support', disabled: true }
 	];
 
+	type ModuleItem = (typeof items)[number];
+
 	let value = $state(['analytics']);
+	let selectedModules = $state<ModuleItem[]>([items[0], items[1]]);
+	let checkboxGroupApi = $state<{ removeSelected: (item: ModuleItem) => void }>();
 	let formResult = $state('');
 
 	const propsData = [
@@ -31,6 +35,12 @@
 			type: 'string[]',
 			default: '[]',
 			description: 'Selected values. Supports bind:value.'
+		},
+		{
+			name: 'selected',
+			type: 'T[]',
+			default: '—',
+			description: 'Selected item object(s). Supports bind:selected.'
 		},
 		{ name: 'label', type: 'string', default: '—', description: 'Display label for the group.' },
 		{ name: 'name', type: 'string', default: '—', description: 'Form field name.' },
@@ -90,6 +100,46 @@
 			code={`<CheckboxGroup label="Modules" items={items} orientation="horizontal" />`}
 		>
 			<CheckboxGroup label="Modules" {items} orientation="horizontal" />
+		</DemoCard>
+
+		<DemoCard
+			title="Selected objects"
+			description="Bind selected item objects and remove a selected item from outside."
+			code={`let selectedModules = $state([items[0], items[1]]);
+let checkboxGroupApi;
+
+<CheckboxGroup
+  bind:this={checkboxGroupApi}
+  label="Modules"
+  items={items}
+  bind:selected={selectedModules}
+/>
+
+{#each selectedModules as item}
+  <button type="button" onclick={() => checkboxGroupApi.removeSelected(item)}>
+    Remove {item.label}
+  </button>
+{/each}`}
+		>
+			<div class="space-y-3">
+				<CheckboxGroup
+					bind:this={checkboxGroupApi}
+					label="Modules"
+					{items}
+					bind:selected={selectedModules}
+				/>
+				<div class="flex flex-wrap gap-2">
+					{#each selectedModules as item (item.value)}
+						<button
+							type="button"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 border px-2.5 py-1 text-sm transition-colors"
+							onclick={() => checkboxGroupApi?.removeSelected(item)}
+						>
+							Remove {item.label}
+						</button>
+					{/each}
+				</div>
+			</div>
 		</DemoCard>
 
 		<DemoCard

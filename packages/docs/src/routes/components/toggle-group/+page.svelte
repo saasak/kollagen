@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ToggleGroup } from '$ui/toggle-group';
+	import type { ToggleGroupItem } from '$ui/toggle-group';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 	import { AlignCenter, AlignLeft, AlignRight } from 'lucide-svelte';
@@ -8,6 +9,8 @@
 	let multipleValue = $state(['day', 'month']);
 	let density = $state('comfortable');
 	let alignment = $state('left');
+	let selectedPeriods = $state<ToggleGroupItem[]>([]);
+	let toggleGroupApi = $state<{ removeSelected: (item: ToggleGroupItem) => void }>();
 
 	const propsData = [
 		{
@@ -21,6 +24,12 @@
 			type: 'string | string[]',
 			default: "''",
 			description: 'Selected value(s). Supports bind:value.'
+		},
+		{
+			name: 'selected',
+			type: 'ToggleGroupItem | ToggleGroupItem[]',
+			default: '—',
+			description: 'Selected item object(s). Supports bind:selected.'
 		},
 		{
 			name: 'multiple',
@@ -220,6 +229,54 @@
 					]}
 				/>
 				<p class="text-kl-muted-content text-sm">Density: {density}</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Selected objects"
+			description="Bind selected item objects and remove a selected item from outside."
+			code={`let selectedPeriods = $state([]);
+let toggleGroupApi;
+
+<ToggleGroup
+  bind:this={toggleGroupApi}
+  multiple
+  bind:selected={selectedPeriods}
+  items={[
+    { value: "day", children: dayContent },
+    { value: "week", children: weekContent },
+    { value: "month", children: monthContent }
+  ]}
+/>
+
+{#each selectedPeriods as item}
+  <button type="button" onclick={() => toggleGroupApi.removeSelected(item)}>
+    Remove {item.value}
+  </button>
+{/each}`}
+		>
+			<div class="space-y-3">
+				<ToggleGroup
+					bind:this={toggleGroupApi}
+					multiple
+					bind:selected={selectedPeriods}
+					items={[
+						{ value: 'day', children: dayContent },
+						{ value: 'week', children: weekContent },
+						{ value: 'month', children: monthContent }
+					]}
+				/>
+				<div class="flex flex-wrap gap-2">
+					{#each selectedPeriods as item (item.value)}
+						<button
+							type="button"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 border px-2.5 py-1 text-sm transition-colors"
+							onclick={() => toggleGroupApi?.removeSelected(item)}
+						>
+							Remove {item.value}
+						</button>
+					{/each}
+				</div>
 			</div>
 		</DemoCard>
 

@@ -1,4 +1,5 @@
 export { default as Command } from './Command.svelte';
+export type { CommandItem } from './Command.svelte';
 export { default as Root } from './CommandRoot.svelte';
 export { default as Input } from './CommandInput.svelte';
 export { default as List } from './CommandList.svelte';

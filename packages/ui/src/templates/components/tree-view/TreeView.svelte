@@ -1,18 +1,22 @@
-<script lang="ts">
-	import { cn } from '$lib/utils/cn';
-	import { ChevronRight } from 'lucide-svelte';
-
-	interface TreeNode {
+<script module lang="ts">
+	export interface TreeNode {
 		value: string;
 		label: string;
 		children?: TreeNode[];
 		disabled?: boolean;
 	}
+</script>
+
+<script lang="ts">
+	import { cn } from '$lib/utils/cn';
+	import { ChevronRight } from 'lucide-svelte';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		nodes: TreeNode[];
 		label?: string;
 		selectedValue?: string[];
+		selected?: TreeNode[];
 		expandedValue?: string[];
 		selectionMode?: 'single' | 'multiple';
 		onSelectionChange?: (details: { value: string[] }) => void;
@@ -24,12 +28,71 @@
 		nodes,
 		label,
 		selectedValue = $bindable<string[]>([]),
+		selected = $bindable(),
 		expandedValue = $bindable<string[]>([]),
 		selectionMode = 'single',
 		onSelectionChange,
 		onExpandedChange,
 		class: className
 	}: Props = $props();
+
+	const selectedControlsValue = untrack(() => selected) !== undefined;
+	const selectedNodes = $derived(selected ?? []);
+	const nodeLookup = $derived.by(() => {
+		const lookup: Record<string, TreeNode> = {};
+		function collect(nodeList: TreeNode[]) {
+			for (const node of nodeList) {
+				lookup[node.value] = node;
+				if (node.children?.length) collect(node.children);
+			}
+		}
+		collect(nodes);
+		for (const node of selectedNodes) lookup[node.value] = node;
+		return lookup;
+	});
+
+	if (untrack(() => selected) !== undefined) {
+		selectedValue = selectedToValue(untrack(() => selected));
+	} else {
+		selected = valueToSelected(untrack(() => selectedValue));
+	}
+
+	function selectedToValue(selection: TreeNode[] | undefined): string[] {
+		return selection?.map((node) => node.value) ?? [];
+	}
+
+	function valueToSelected(value: string[] | undefined): TreeNode[] {
+		return (value ?? [])
+			.map((nodeValue) => nodeLookup[nodeValue])
+			.filter((node): node is TreeNode => node !== undefined);
+	}
+
+	function valuesMatch(first: string[], second: string[]) {
+		return (
+			first.length === second.length &&
+			first.every((nodeValue, index) => nodeValue === second[index])
+		);
+	}
+
+	function updateSelection(nextValue: string[]) {
+		selectedValue = nextValue;
+		selected = valueToSelected(nextValue);
+		onSelectionChange?.({ value: nextValue });
+	}
+
+	const selectedNodeValues = $derived(selectedToValue(selected));
+	const selectedMatchesValue = $derived(valuesMatch(selectedValue, selectedNodeValues));
+	const nextSelected = $derived(valueToSelected(selectedValue));
+
+	$effect(() => {
+		if (selected === undefined) return;
+		if (!selectedMatchesValue) selectedValue = selectedNodeValues;
+	});
+
+	$effect(() => {
+		if (selectedControlsValue) return;
+		if (!selectedMatchesValue) selected = nextSelected;
+	});
 
 	function isExpanded(value: string): boolean {
 		return expandedValue.includes(value);
@@ -51,15 +114,18 @@
 	function select(value: string, nodeDisabled?: boolean) {
 		if (nodeDisabled) return;
 		if (selectionMode === 'single') {
-			selectedValue = isSelected(value) ? [] : [value];
+			updateSelection(isSelected(value) ? [] : [value]);
 		} else {
 			if (isSelected(value)) {
-				selectedValue = selectedValue.filter((v) => v !== value);
+				updateSelection(selectedValue.filter((v) => v !== value));
 			} else {
-				selectedValue = [...selectedValue, value];
+				updateSelection([...selectedValue, value]);
 			}
 		}
-		onSelectionChange?.({ value: selectedValue });
+	}
+
+	export function removeSelected(node: TreeNode) {
+		updateSelection(selectedValue.filter((value) => value !== node.value));
 	}
 
 	function handleKeydown(event: KeyboardEvent, node: TreeNode) {

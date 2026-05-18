@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { TreeView } from '$ui/tree-view';
+	import type { TreeNode } from '$ui/tree-view';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	const fileSystem = [
+	const fileSystem: TreeNode[] = [
 		{
 			value: 'src',
 			label: 'src',
@@ -34,7 +35,7 @@
 		}
 	];
 
-	const orgChart = [
+	const orgChart: TreeNode[] = [
 		{
 			value: 'engineering',
 			label: 'Engineering',
@@ -67,7 +68,7 @@
 		}
 	];
 
-	const disabledNodes = [
+	const disabledNodes: TreeNode[] = [
 		{
 			value: 'docs',
 			label: 'docs',
@@ -81,6 +82,8 @@
 	];
 
 	let selectedValue = $state<string[]>([]);
+	let selectedNodes = $state<TreeNode[]>([fileSystem[1]]);
+	let treeViewApi = $state<{ removeSelected: (node: TreeNode) => void }>();
 	const scriptClose = '</' + 'script>';
 	const controlledSelectionCode = `<script>
   let selectedValue = $state([]);
@@ -112,6 +115,12 @@ ${scriptClose}
 			type: 'string[]',
 			default: '[]',
 			description: 'Controlled selected node values. Supports bind:selectedValue'
+		},
+		{
+			name: 'selected',
+			type: 'TreeNode[]',
+			default: '—',
+			description: 'Controlled selected node object(s). Supports bind:selected'
 		},
 		{
 			name: 'expandedValue',
@@ -194,6 +203,46 @@ ${scriptClose}
 						>
 					</p>
 				{/if}
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Selected nodes"
+			description="Bind selected node objects and remove a selected node from outside."
+			code={`let selectedNodes = $state([fileSystem[1]]);
+let treeViewApi;
+
+<TreeView
+  bind:this={treeViewApi}
+  nodes={fileSystem}
+  selectionMode="multiple"
+  bind:selected={selectedNodes}
+/>
+
+{#each selectedNodes as node}
+  <button type="button" onclick={() => treeViewApi.removeSelected(node)}>
+    Remove {node.label}
+  </button>
+{/each}`}
+		>
+			<div class="max-w-xs space-y-3">
+				<TreeView
+					bind:this={treeViewApi}
+					nodes={fileSystem}
+					selectionMode="multiple"
+					bind:selected={selectedNodes}
+				/>
+				<div class="flex flex-wrap gap-2">
+					{#each selectedNodes as node (node.value)}
+						<button
+							type="button"
+							class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 border px-2.5 py-1 text-sm transition-colors"
+							onclick={() => treeViewApi?.removeSelected(node)}
+						>
+							Remove {node.label}
+						</button>
+					{/each}
+				</div>
 			</div>
 		</DemoCard>
 

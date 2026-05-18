@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Command } from '$ui/command';
+	import type { CommandItem } from '$ui/command';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -20,8 +21,10 @@
 	];
 
 	let selected = $state('');
+	let selectedCommand = $state<CommandItem | undefined>();
 	let search = $state('owner');
 	let lastSelected = $state('Nothing selected');
+	let commandApi = $state<{ clearSelected: () => void }>();
 
 	const propsData = [
 		{
@@ -35,6 +38,12 @@
 			type: 'string',
 			default: "''",
 			description: 'Selected command value. Supports bind:value.'
+		},
+		{
+			name: 'selected',
+			type: 'CommandItem',
+			default: '—',
+			description: 'Selected command item object. Supports bind:selected.'
 		},
 		{
 			name: 'search',
@@ -117,6 +126,38 @@
 					class="max-w-md"
 				/>
 				<p class="text-kl-muted-content text-sm">{lastSelected}</p>
+			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Selected object"
+			description="Bind the selected command object and clear it from outside."
+			code={`let selectedCommand = $state();
+let commandApi;
+
+<Command
+  bind:this={commandApi}
+  {items}
+  bind:selected={selectedCommand}
+/>
+
+{#if selectedCommand}
+  <button type="button" onclick={() => commandApi.clearSelected()}>
+    Clear {selectedCommand.label}
+  </button>
+{/if}`}
+		>
+			<div class="space-y-3">
+				<Command bind:this={commandApi} {items} bind:selected={selectedCommand} class="max-w-md" />
+				{#if selectedCommand}
+					<button
+						type="button"
+						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 border px-2.5 py-1 text-sm transition-colors"
+						onclick={() => commandApi?.clearSelected()}
+					>
+						Clear {selectedCommand.label}
+					</button>
+				{/if}
 			</div>
 		</DemoCard>
 
