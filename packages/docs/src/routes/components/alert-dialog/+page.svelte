@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { Action as AlertDialogAction, AlertDialog } from '$ui/alert-dialog';
+	import {
+		Action as AlertDialogAction,
+		AlertDialog,
+		Cancel as AlertDialogCancel
+	} from '$ui/alert-dialog';
 	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -71,15 +75,15 @@
 		},
 		{
 			name: 'body',
-			type: 'Snippet<[{ close: () => void }]>',
+			type: 'Snippet<[{ close: () => void; cancel: () => void; action: () => void }]>',
 			default: '-',
-			description: 'Dialog body content. Receives a close function.'
+			description: 'Dialog body content. Receives close, cancel, and action functions.'
 		},
 		{
 			name: 'footer',
-			type: 'Snippet<[{ close: () => void }]>',
+			type: 'Snippet<[{ close: () => void; cancel: () => void; action: () => void }]>',
 			default: '-',
-			description: 'Custom footer actions. Receives a close function.'
+			description: 'Custom footer actions. Receives close, cancel, and action functions.'
 		},
 		{
 			name: 'class',
@@ -189,9 +193,9 @@
   {#snippet body()}
     <p>The workspace remains searchable and can be restored by an admin.</p>
   {/snippet}
-  {#snippet footer({ close })}
-    <button onclick={close}>Cancel</button>
-    <AlertDialogAction>Archive</AlertDialogAction>
+  {#snippet footer({ cancel, action })}
+    <AlertDialogCancel onclick={cancel}>Cancel</AlertDialogCancel>
+    <AlertDialogAction onclick={action}>Archive</AlertDialogAction>
   {/snippet}
 </AlertDialog>`}
 		>
@@ -200,14 +204,10 @@
 				{#snippet body()}
 					<p>The workspace remains searchable and can be restored by an admin.</p>
 				{/snippet}
-				{#snippet footer({ close })}
-					<button
-						onclick={close}
-						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md cursor-pointer border px-3 text-sm font-medium transition-colors duration-150"
-					>
-						Cancel
-					</button>
+				{#snippet footer({ cancel, action })}
+					<AlertDialogCancel onclick={cancel}>Cancel</AlertDialogCancel>
 					<AlertDialogAction
+						onclick={action}
 						class="rounded-kl-field bg-kl-primary text-kl-primary-content h-kl-field-md cursor-pointer border border-transparent px-3 text-sm font-medium transition-colors duration-150 hover:brightness-95"
 					>
 						Archive

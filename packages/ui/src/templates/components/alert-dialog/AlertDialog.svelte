@@ -7,6 +7,8 @@
 
 	type OverlaySnippetContext = {
 		close: () => void;
+		cancel: () => void;
+		action: () => void;
 	};
 
 	interface Props {
@@ -44,6 +46,15 @@
 	function close() {
 		open = false;
 	}
+
+	function cancel() {
+		onCancel?.();
+		close();
+	}
+
+	function action() {
+		onAction?.();
+	}
 </script>
 
 <AlertDialog.Root bind:open {onOpenChange}>
@@ -68,6 +79,8 @@
 			)}
 		>
 			<AlertDialog.Cancel
+				aria-label="Close dialog"
+				onclick={cancel}
 				class="rounded-kl-selector text-kl-muted-content hover:bg-kl-muted hover:text-kl-base-content absolute top-4 right-4 flex cursor-pointer items-center justify-center p-1 transition-colors duration-150"
 			>
 				<X size={16} />
@@ -85,21 +98,21 @@
 			{/if}
 			{#if body}
 				<div class="text-kl-base-content mt-4 text-sm">
-					{@render body({ close })}
+					{@render body({ close, cancel, action })}
 				</div>
 			{/if}
 			<div class="mt-6 flex items-center justify-end gap-2">
 				{#if footer}
-					{@render footer({ close })}
+					{@render footer({ close, cancel, action })}
 				{:else}
 					<AlertDialog.Cancel
-						onclick={onCancel}
+						onclick={cancel}
 						class="rounded-kl-field border-kl-base-300 bg-kl-base-100 text-kl-base-content hover:bg-kl-base-200 h-kl-field-md cursor-pointer border px-3 text-sm font-medium transition-colors duration-150"
 					>
 						{cancelLabel}
 					</AlertDialog.Cancel>
 					<AlertDialog.Action
-						onclick={onAction}
+						onclick={action}
 						class="rounded-kl-field bg-kl-error text-kl-error-content h-kl-field-md cursor-pointer border border-transparent px-3 text-sm font-medium transition-colors duration-150 hover:brightness-95"
 					>
 						{actionLabel}
