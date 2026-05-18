@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { browser } from '$app/environment';
+	import { pushState } from '$app/navigation';
+	import { page } from '$app/state';
 	import TriggerProvider from '../trigger/TriggerProvider.svelte';
 	import { AlertDialog } from 'bits-ui';
 	import { X } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
+
+	type PageState = Parameters<typeof pushState>[1];
+	const alertDialogId = $props.id();
 
 	type OverlaySnippetContext = {
 		close: () => void;
@@ -18,6 +24,8 @@
 		actionLabel?: string;
 		cancelLabel?: string;
 		disabled?: boolean;
+		shallowRouting?: boolean;
+		shallowStateKey?: string;
 		onAction?: () => void;
 		onCancel?: () => void;
 		onOpenChange?: (open: boolean) => void;
@@ -34,6 +42,8 @@
 		actionLabel = 'Continue',
 		cancelLabel = 'Cancel',
 		disabled = false,
+		shallowRouting = true,
+		shallowStateKey = `alert-dialog-${alertDialogId}`,
 		onAction,
 		onCancel,
 		onOpenChange,
@@ -43,8 +53,55 @@
 		class: className
 	}: Props = $props();
 
+	const shallowPageState = $derived(page.state as Record<string, unknown>);
+	const shallowStateOpen = $derived(Boolean(shallowPageState[shallowStateKey]));
+	const shallowRuntime = {
+		entryActive: false
+	};
+
+	function setOpen(nextOpen: boolean) {
+		if (open === nextOpen) return;
+		open = nextOpen;
+		onOpenChange?.(nextOpen);
+		syncShallowHistory(nextOpen);
+	}
+
+	function handleOpenChange(nextOpen: boolean) {
+		open = nextOpen;
+		onOpenChange?.(nextOpen);
+		syncShallowHistory(nextOpen);
+	}
+
+	function handlePopState() {
+		if (!shallowRouting || !browser) return;
+
+		queueMicrotask(() => {
+			const nextOpen = Boolean((page.state as Record<string, unknown>)[shallowStateKey]);
+			shallowRuntime.entryActive = nextOpen;
+			if (open === nextOpen) return;
+
+			open = nextOpen;
+			onOpenChange?.(nextOpen);
+		});
+	}
+
+	function syncShallowHistory(nextOpen: boolean) {
+		if (!shallowRouting || !browser) return;
+
+		if (nextOpen) {
+			if (shallowStateOpen || shallowRuntime.entryActive) return;
+			pushState('', { ...shallowPageState, [shallowStateKey]: true } as PageState);
+			shallowRuntime.entryActive = true;
+			return;
+		}
+
+		if (!shallowStateOpen && !shallowRuntime.entryActive) return;
+		shallowRuntime.entryActive = false;
+		history.back();
+	}
+
 	function close() {
-		open = false;
+		setOpen(false);
 	}
 
 	function cancel() {
@@ -57,7 +114,9 @@
 	}
 </script>
 
-<AlertDialog.Root bind:open {onOpenChange}>
+<svelte:window onpopstate={handlePopState} />
+
+<AlertDialog.Root bind:open onOpenChange={handleOpenChange}>
 	{#if children}
 		<AlertDialog.Trigger {disabled}>
 			{#snippet child({ props })}

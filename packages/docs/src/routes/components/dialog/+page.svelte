@@ -33,6 +33,18 @@
 			description: 'Close when clicking outside the dialog'
 		},
 		{
+			name: 'shallowRouting',
+			type: 'boolean',
+			default: 'true',
+			description: 'Add a SvelteKit history entry so browser back dismisses the dialog'
+		},
+		{
+			name: 'shallowStateKey',
+			type: 'string',
+			default: 'auto',
+			description: 'Custom SvelteKit page.state key for shallow routing'
+		},
+		{
 			name: 'preventScroll',
 			type: 'boolean',
 			default: 'true',
@@ -192,30 +204,30 @@
 		<DemoCard
 			title="Controlled"
 			description="Programmatically control the open state with bind:open."
-			code={`<button onclick={() => open = true}>Open externally</button>
-<Dialog bind:open title="Controlled Dialog">
+			code={`<Dialog bind:open title="Controlled Dialog">
+  <Trigger>Open controlled dialog</Trigger>
   {#snippet body()}
     <p>Opened via external state.</p>
   {/snippet}
 </Dialog>`}
 		>
-			<div class="flex items-center gap-3">
-				<Trigger color="primary" onclick={() => (controlledOpen = true)}>Open externally</Trigger>
+			<div class="flex flex-wrap items-center gap-3">
+				<Dialog
+					bind:open={controlledOpen}
+					title="Controlled Dialog"
+					description="This dialog is controlled via bind:open."
+				>
+					<Trigger color="primary">Open controlled dialog</Trigger>
+					{#snippet body()}
+						<p class="text-kl-base-content text-sm">
+							Opened via controlled state. Close me with the X button or Escape key.
+						</p>
+					{/snippet}
+				</Dialog>
 				<span class="text-kl-muted-content text-sm">
 					State: {controlledOpen ? 'open' : 'closed'}
 				</span>
 			</div>
-			<Dialog
-				bind:open={controlledOpen}
-				title="Controlled Dialog"
-				description="This dialog is controlled via bind:open."
-			>
-				{#snippet body()}
-					<p class="text-kl-base-content text-sm">
-						Opened via external state. Close me with the X button or Escape key.
-					</p>
-				{/snippet}
-			</Dialog>
 		</DemoCard>
 
 		<DemoCard

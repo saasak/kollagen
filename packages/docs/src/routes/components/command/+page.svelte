@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Command } from '$ui/command';
 	import type { CommandItem } from '$ui/command';
+	import { Trigger } from '$ui/trigger';
 	import DemoCard from '$lib/components/DemoCard.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
@@ -24,6 +25,7 @@
 	let selectedCommand = $state<CommandItem | undefined>();
 	let search = $state('owner');
 	let lastSelected = $state('Nothing selected');
+	let controlledOpen = $state(false);
 	let commandApi = $state<{ clearSelected: () => void }>();
 
 	const propsData = [
@@ -32,6 +34,18 @@
 			type: 'CommandItem[]',
 			default: '-',
 			description: 'Items to render and filter.'
+		},
+		{
+			name: 'children',
+			type: 'Snippet',
+			default: '—',
+			description: 'Implicit trigger content.'
+		},
+		{
+			name: 'open',
+			type: 'boolean',
+			default: 'false',
+			description: 'Controlled palette open state. Supports bind:open.'
 		},
 		{
 			name: 'value',
@@ -76,6 +90,36 @@
 			description: 'Loop keyboard navigation.'
 		},
 		{
+			name: 'shortcut',
+			type: 'boolean',
+			default: 'true',
+			description: 'Open with Cmd+K or Ctrl+K.'
+		},
+		{
+			name: 'shallowRouting',
+			type: 'boolean',
+			default: 'true',
+			description: 'Add a SvelteKit history entry so browser back dismisses the palette.'
+		},
+		{
+			name: 'shallowStateKey',
+			type: 'string',
+			default: 'auto',
+			description: 'Custom SvelteKit page.state key for shallow routing.'
+		},
+		{
+			name: 'disabled',
+			type: 'boolean',
+			default: 'false',
+			description: 'Disable the trigger.'
+		},
+		{
+			name: 'preventScroll',
+			type: 'boolean',
+			default: 'true',
+			description: 'Prevent background scrolling when open.'
+		},
+		{
 			name: 'onSelect',
 			type: '(value: string) => void',
 			default: '-',
@@ -86,6 +130,12 @@
 			type: '(value: string) => void',
 			default: '-',
 			description: 'Called when value changes.'
+		},
+		{
+			name: 'onOpenChange',
+			type: '(open: boolean) => void',
+			default: '-',
+			description: 'Called when open state changes.'
 		},
 		{
 			name: 'class',
@@ -99,14 +149,22 @@
 <div class="space-y-8">
 	<div>
 		<h1 class="text-3xl font-bold">Command</h1>
-		<p class="text-kl-muted-content mt-2">A command menu with built-in filtering.</p>
+		<p class="text-kl-muted-content mt-2">A dialog command palette with built-in filtering.</p>
 	</div>
 
 	<section class="space-y-4">
 		<h2 class="text-xl font-semibold">Examples</h2>
 
-		<DemoCard title="Palette" description="Data-driven command items." code="<Command {items} />">
-			<Command {items} class="max-w-md" />
+		<DemoCard
+			title="Palette"
+			description="Open a data-driven command palette."
+			code={`<Command {items}>
+  <Trigger color="primary">Open command</Trigger>
+</Command>`}
+		>
+			<Command {items}>
+				<Trigger color="primary">Open command</Trigger>
+			</Command>
 		</DemoCard>
 
 		<DemoCard
@@ -116,17 +174,34 @@
   {items}
   bind:value={selected}
   onSelect={(value) => (lastSelected = value)}
-/>`}
+>
+  <Trigger>Search actions</Trigger>
+</Command>`}
 		>
 			<div class="space-y-3">
 				<Command
 					{items}
 					bind:value={selected}
 					onSelect={(value) => (lastSelected = `Selected ${value}`)}
-					class="max-w-md"
-				/>
+				>
+					<Trigger>Search actions</Trigger>
+				</Command>
 				<p class="text-kl-muted-content text-sm">{lastSelected}</p>
 			</div>
+		</DemoCard>
+
+		<DemoCard
+			title="Controlled open"
+			description="Control the palette state from outside."
+			code={`<Command {items} bind:open={controlledOpen}>
+  <Trigger color="primary">
+    {controlledOpen ? 'Close command' : 'Open command'}
+  </Trigger>
+</Command>`}
+		>
+			<Command {items} bind:open={controlledOpen}>
+				<Trigger color="primary">{controlledOpen ? 'Close command' : 'Open command'}</Trigger>
+			</Command>
 		</DemoCard>
 
 		<DemoCard
@@ -139,7 +214,9 @@ let commandApi;
   bind:this={commandApi}
   {items}
   bind:selected={selectedCommand}
-/>
+>
+  <Trigger>Select command</Trigger>
+</Command>
 
 {#if selectedCommand}
   <button type="button" onclick={() => commandApi.clearSelected()}>
@@ -148,7 +225,9 @@ let commandApi;
 {/if}`}
 		>
 			<div class="space-y-3">
-				<Command bind:this={commandApi} {items} bind:selected={selectedCommand} class="max-w-md" />
+				<Command bind:this={commandApi} {items} bind:selected={selectedCommand}>
+					<Trigger>Select command</Trigger>
+				</Command>
 				{#if selectedCommand}
 					<button
 						type="button"
@@ -167,14 +246,13 @@ let commandApi;
 			code={`<Command
   items={adminItems}
   placeholder="Search admin actions..."
-/>`}
+>
+  <Trigger>Admin actions</Trigger>
+</Command>`}
 		>
-			<Command
-				items={adminItems}
-				placeholder="Search admin actions..."
-				label="Admin actions"
-				class="max-w-md"
-			/>
+			<Command items={adminItems} placeholder="Search admin actions..." label="Admin actions">
+				<Trigger>Admin actions</Trigger>
+			</Command>
 		</DemoCard>
 
 		<DemoCard
@@ -184,14 +262,13 @@ let commandApi;
   items={emptyItems}
   bind:search
   emptyText="No customer command matches."
-/>`}
+>
+  <Trigger>Search customers</Trigger>
+</Command>`}
 		>
-			<Command
-				items={emptyItems}
-				bind:search
-				emptyText="No customer command matches."
-				class="max-w-md"
-			/>
+			<Command items={emptyItems} bind:search emptyText="No customer command matches.">
+				<Trigger>Search customers</Trigger>
+			</Command>
 		</DemoCard>
 	</section>
 

@@ -50,6 +50,18 @@
 			description: 'Disable the trigger.'
 		},
 		{
+			name: 'shallowRouting',
+			type: 'boolean',
+			default: 'true',
+			description: 'Add a SvelteKit history entry so browser back dismisses the dialog.'
+		},
+		{
+			name: 'shallowStateKey',
+			type: 'string',
+			default: 'auto',
+			description: 'Custom SvelteKit page.state key for shallow routing.'
+		},
+		{
 			name: 'onAction',
 			type: '() => void',
 			default: '-',
@@ -167,22 +179,24 @@
 		<DemoCard
 			title="Controlled open state"
 			description="Drive the dialog from external state and reflect the current status."
-			code={`<Trigger onclick={() => (open = true)}>Open controlled dialog</Trigger>
-<AlertDialog bind:open title="Rotate API key" />`}
+			code={`<AlertDialog bind:open title="Rotate API key">
+  <Trigger>Open controlled dialog</Trigger>
+</AlertDialog>`}
 		>
 			<div class="flex flex-wrap items-center gap-3">
-				<Trigger onclick={() => (controlledOpen = true)}>Open controlled dialog</Trigger>
+				<AlertDialog
+					bind:open={controlledOpen}
+					title="Rotate API key"
+					description="Existing integrations must be updated before the old key expires."
+					actionLabel="Rotate key"
+					cancelLabel="Not now"
+				>
+					<Trigger>Open controlled dialog</Trigger>
+				</AlertDialog>
 				<span class="text-kl-muted-content text-sm">
 					State: {controlledOpen ? 'open' : 'closed'}
 				</span>
 			</div>
-			<AlertDialog
-				bind:open={controlledOpen}
-				title="Rotate API key"
-				description="Existing integrations must be updated before the old key expires."
-				actionLabel="Rotate key"
-				cancelLabel="Not now"
-			/>
 		</DemoCard>
 
 		<DemoCard

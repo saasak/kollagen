@@ -104,6 +104,7 @@ export default defineConfig({
 			{
 				name: 'command',
 				type: 'component',
+				registryDependencies: ['trigger'],
 				files: [{ path: 'packages/ui/src/templates/components/command' }]
 			},
 			{
