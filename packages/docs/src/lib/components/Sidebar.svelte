@@ -69,8 +69,10 @@
 			aria-label="Close sidebar"
 			onclick={close}
 		></button>
-		<aside class="bg-kl-base-200 shadow-kl-lg absolute top-0 left-0 flex h-full w-64 flex-col p-4">
-			<div class="mb-4 flex items-center justify-between">
+		<aside
+			class="bg-kl-base-200 shadow-kl-lg absolute top-0 left-0 flex h-full w-64 flex-col overflow-hidden p-4"
+		>
+			<div class="mb-4 flex shrink-0 items-center justify-between">
 				<h2 class="text-kl-muted-content text-xs font-semibold tracking-wider uppercase">Theme</h2>
 				<button
 					onclick={close}
@@ -79,56 +81,58 @@
 					<X size={18} />
 				</button>
 			</div>
-			<nav class="flex flex-col gap-0.5">
-				<a
-					href="/theme"
-					onclick={close}
-					class="rounded-kl-field px-3 py-1.5 text-sm transition-colors {$page.url.pathname ===
-					'/theme'
-						? 'bg-kl-primary text-kl-primary-content'
-						: 'text-kl-base-content hover:bg-kl-muted'}"
+			<div class="min-h-0 flex-1 overflow-y-auto">
+				<nav class="flex flex-col gap-0.5">
+					<a
+						href="/theme"
+						onclick={close}
+						class="rounded-kl-field px-3 py-1.5 text-sm transition-colors {$page.url.pathname ===
+						'/theme'
+							? 'bg-kl-primary text-kl-primary-content'
+							: 'text-kl-base-content hover:bg-kl-muted'}"
+					>
+						Current theme
+					</a>
+				</nav>
+				<h2
+					class="text-kl-muted-content mt-6 mb-2 px-2 text-xs font-semibold tracking-wider uppercase"
 				>
-					Current theme
-				</a>
-			</nav>
-			<h2
-				class="text-kl-muted-content mt-6 mb-2 px-2 text-xs font-semibold tracking-wider uppercase"
-			>
-				Components
-			</h2>
-			<nav class="flex flex-col gap-0.5">
-				{#each componentNav as item (item.href)}
-					<a
-						href={item.href}
-						onclick={close}
-						class="rounded-kl-field px-3 py-1.5 text-sm transition-colors {$page.url.pathname ===
-						item.href
-							? 'bg-kl-primary text-kl-primary-content'
-							: 'text-kl-base-content hover:bg-kl-muted'}"
-					>
-						{item.label}
-					</a>
-				{/each}
-			</nav>
-			<h2
-				class="text-kl-muted-content mt-6 mb-2 px-2 text-xs font-semibold tracking-wider uppercase"
-			>
-				Blocks
-			</h2>
-			<nav class="flex flex-col gap-0.5">
-				{#each blockNav as item (item.href)}
-					<a
-						href={item.href}
-						onclick={close}
-						class="rounded-kl-field px-3 py-1.5 text-sm transition-colors {$page.url.pathname ===
-						item.href
-							? 'bg-kl-primary text-kl-primary-content'
-							: 'text-kl-base-content hover:bg-kl-muted'}"
-					>
-						{item.label}
-					</a>
-				{/each}
-			</nav>
+					Components
+				</h2>
+				<nav class="flex flex-col gap-0.5">
+					{#each componentNav as item (item.href)}
+						<a
+							href={item.href}
+							onclick={close}
+							class="rounded-kl-field px-3 py-1.5 text-sm transition-colors {$page.url.pathname ===
+							item.href
+								? 'bg-kl-primary text-kl-primary-content'
+								: 'text-kl-base-content hover:bg-kl-muted'}"
+						>
+							{item.label}
+						</a>
+					{/each}
+				</nav>
+				<h2
+					class="text-kl-muted-content mt-6 mb-2 px-2 text-xs font-semibold tracking-wider uppercase"
+				>
+					Blocks
+				</h2>
+				<nav class="flex flex-col gap-0.5">
+					{#each blockNav as item (item.href)}
+						<a
+							href={item.href}
+							onclick={close}
+							class="rounded-kl-field px-3 py-1.5 text-sm transition-colors {$page.url.pathname ===
+							item.href
+								? 'bg-kl-primary text-kl-primary-content'
+								: 'text-kl-base-content hover:bg-kl-muted'}"
+						>
+							{item.label}
+						</a>
+					{/each}
+				</nav>
+			</div>
 		</aside>
 	</div>
 {/if}

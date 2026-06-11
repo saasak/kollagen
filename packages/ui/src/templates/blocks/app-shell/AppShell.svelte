@@ -519,12 +519,15 @@
 			</div>
 		{/if}
 
-		<NavigationList
-			groups={navbar.groups}
-			currentPath={shell.currentPath}
-			{collapsed}
-			label={navbar.label ?? `${side} navigation`}
-		/>
+		<div class="min-h-0 flex-1 overflow-hidden">
+			<NavigationList
+				groups={navbar.groups}
+				currentPath={shell.currentPath}
+				{collapsed}
+				label={navbar.label ?? `${side} navigation`}
+				class="h-full flex-none"
+			/>
+		</div>
 
 		{#if navbar.userMenu}
 			<div class="shrink-0 px-[var(--kl-nav-px)] py-[var(--kl-nav-py)]">

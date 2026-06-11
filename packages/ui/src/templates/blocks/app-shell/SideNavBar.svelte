@@ -306,13 +306,16 @@
 			</div>
 		{/if}
 
-		<NavigationList
-			{groups}
-			{currentPath}
-			collapsed={isCollapsed}
-			{label}
-			onNavigate={overlay ? closeMobileNavigation : undefined}
-		/>
+		<div class="min-h-0 flex-1 overflow-hidden">
+			<NavigationList
+				{groups}
+				{currentPath}
+				collapsed={isCollapsed}
+				{label}
+				onNavigate={overlay ? closeMobileNavigation : undefined}
+				class="h-full flex-none"
+			/>
+		</div>
 
 		{#if userMenu}
 			<div class="shrink-0 px-[var(--kl-nav-px)] py-[var(--kl-nav-py)]">
